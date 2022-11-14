@@ -1,0 +1,13 @@
+<script>
+	import { Row, Section } from '@smui/top-app-bar';
+	import IconButton from '@smui/icon-button';
+	import User from './User.svelte';
+</script>
+<Row>
+	<Section>
+		<IconButton class="material-icons">menu</IconButton>
+	</Section>
+	<Section align="end" toolbar>
+		<User />
+	</Section>
+</Row>

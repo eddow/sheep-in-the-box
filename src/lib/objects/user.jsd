@@ -1,0 +1,18 @@
+import {
+    JsonSchema, Format, Required, MinLength, MaxLength
+} from 'ts-decorator-json-schema-generator'
+
+@JsonSchema({
+    id: 'https://example.com/my-schema.schema.json',
+    title: 'Application user'
+})
+export default class User {
+	@Required()
+	@Format('email')
+	email!: string
+	
+	@Required()
+	@MinLength(2)
+	@MaxLength(2)
+	locale!: string
+}

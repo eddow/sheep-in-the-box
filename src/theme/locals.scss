@@ -1,0 +1,35 @@
+// See https://github.com/material-components/material-components-web/tree/v14.0.0/packages/mdc-snackbar
+//@forward '@material/snackbar/mixins';
+// See https://github.com/material-components/material-components-web/tree/v14.0.0/packages/mdc-theme
+//@use '@material/theme/color-palette';
+//@use '@material/theme/theme-color';
+
+$success: #4caf50 !default;
+$warning: #ff9800 !default;
+$error: #b71c1c !default;
+
+.mdc-button__label {
+  text-transform: none;
+}
+.mdc-fab__label {
+  text-transform: none;
+}
+/*
+.mdc-snackbar.success {
+	@include mixins.fill-color($success);
+	@include mixins.label-ink-color(
+		theme-color.accessible-ink-color($success)
+	);
+}
+.mdc-snackbar.error {
+	@include mixins.fill-color($error);
+	@include mixins.label-ink-color(
+		theme-color.accessible-ink-color($error)
+	);
+}
+.mdc-snackbar.warning {
+	@include mixins.fill-color($warning);
+	@include mixins.label-ink-color(
+		theme-color.accessible-ink-color($warning)
+	);
+}*/
