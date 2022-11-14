@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import {
 		Collapse,
 		Navbar,
@@ -13,9 +13,12 @@
 		DropdownItem
 	} from 'sveltestrap';
 	import User from './User.svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 	let isOpen = false;
 
-	function handleUpdate(event) {
+	function handleUpdate(event: any) {
 		isOpen = event.detail.isOpen;
 	}
 </script>
@@ -30,6 +33,8 @@
 		</Nav>
 	</Collapse>
 	<Nav>
-		<User />
+		<NavItem>
+			<User on:set-user={x=> { dispatch('set-user', x.detail); }} />
+		</NavItem>
 	</Nav>
 </Navbar>
