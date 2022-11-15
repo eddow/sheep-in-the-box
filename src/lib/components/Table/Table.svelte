@@ -3,7 +3,6 @@
 	import {specialRow, setTblCtx} from './utils'
   	import {exclude} from './utils/exclude'
   	import {prefixFilter} from './utils/prefixFilter'
-	import {readable} from 'svelte/store'
 	import { Table } from 'sveltestrap';
 	import { privateStore } from '$lib/privateStore';
 
@@ -28,7 +27,7 @@ $:	dataStore.value = data;
 		return key ? row[key] : ndx;
 	}
 	export let displayedData: any[] = [];
-$:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');
+//$:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');
 $:	displayedData = data.filter(row=> Array.from(filters.values()).every(filter=> filter(row)))
 </script>
 <Table {...exclude($$props, ['use', 'tr$'])}>

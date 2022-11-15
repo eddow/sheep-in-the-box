@@ -1,8 +1,13 @@
+<script lang="ts" context="module">
+	export function getUser() {
+		return getContext('user');
+	}
+</script>
 <script lang="ts">
 	import Menu from './Menu.svelte';
 	import Alerts from './Alerts.svelte';
 	import './styles.scss';
-	import { setContext } from 'svelte';
+	import { getContext, setContext } from 'svelte';
 	import type { LayoutData } from './$types';
 	import type { Role } from "$lib/constants"
 	import { beforeNavigate, goto } from '$app/navigation';

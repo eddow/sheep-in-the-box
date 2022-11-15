@@ -25,3 +25,8 @@ export async function tree(language: Language, roles: string[]) {
 	}
 	return rv;
 }
+
+export async function getDevDictionary(lng: Language) {
+	return (await dictionary.find({lng}).exec())
+		.map((o: any)=> ({key: o.key, text: o.text, role: o.role}));
+}

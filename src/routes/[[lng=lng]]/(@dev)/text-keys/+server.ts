@@ -1,6 +1,7 @@
-import { error, json } from '@sveltejs/kit';
-import type { RequestHandler } from '@sveltejs/kit';
+import { json } from '@sveltejs/kit';
+import { getDevDictionary } from '$lib/server/intl';
+import type { RequestEvent } from './$types';
 
-export const GET: RequestHandler = async (event) => {	//authed
-	return json(true);
+export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
+	return json(await getDevDictionary(event.locals.user.language));
 }

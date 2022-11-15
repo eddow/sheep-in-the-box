@@ -1,13 +1,13 @@
 import { error, json } from '@sveltejs/kit';
-import type { RequestHandler } from '@sveltejs/kit';
 import { login, logout, authed, changePass, register } from "$lib/server/auth";
 import { tree } from '$lib/server/intl';
+import type { RequestEvent } from './$types';
 
-export const GET: RequestHandler = async (event) => {	//authed
+export async function GET(event: RequestEvent) {	//authed
 	return json(await authed(event));
 }
 
-export const POST: RequestHandler = async (event) => {	//login
+export async function POST(event: RequestEvent) {	//login
 	const {email, password, roles} = await event.request.json();
 	// roles is the list of roles for whom the client has the dictionary already
 	let user = await login(event, email, password);
@@ -21,18 +21,18 @@ export const POST: RequestHandler = async (event) => {	//login
 	return json(rv);
 }
 
-export const PUT: RequestHandler = async (event) => {	//register
+export async function PUT(event: RequestEvent) {	//register
 	const {email} = await event.request.json();
 	return json(register(event, email));
 }
 
-export const PATCH: RequestHandler = async (event) => {	//change pass
+export async function PATCH(event: RequestEvent) {	//change pass
 	if(!event.locals.user) throw error(400, 'Not logged in.')
 	const {oldPass, newPass} = await event.request.json();
 	
 	return new Response(null, {status: await changePass(event, oldPass, newPass) ? 200 : 401});
 }
 
-export const DELETE: RequestHandler = async (event) => {	//logout
+export async function DELETE(event: RequestEvent) {	//logout
 	return json(logout(event) ? event.locals.language : false);
 }

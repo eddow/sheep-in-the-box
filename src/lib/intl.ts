@@ -5,9 +5,13 @@ interface Dictionary {
 	tree: any;
 	roles: Role[]
 }
-const dics: Record<string, Dictionary> = {};
+let dics: Record<string, Dictionary> = {};
 export const language = writable<Language>();
 export let dictionary: Dictionary;
+export function resetDictionaries() {
+	dics = {};
+	dictionary = {tree: {}, roles: []};
+}
 export async function setLanguage(lng: Language) {
 	language.set(lng);
 	const rv = await fetch('/intl', {

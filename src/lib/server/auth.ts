@@ -90,8 +90,5 @@ export function register(event: RequestEvent<Partial<Record<string, string>>, st
 }
 
 export async function setLanguage(email: string, language: Language) {
-	await users.update({
-		q: {email},
-		u: {$set:{language}}
-	}).exec();
+	await users.findOneAndUpdate({email}, {$set:{language}}).exec();
 }

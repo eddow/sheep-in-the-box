@@ -2,15 +2,11 @@
 	import Edition from "$lib/components/Table/edition/Edition.svelte";
 	import Text from "$lib/components/Table/edition/Text.svelte";
 	import Table from "$lib/components/Table/edition/Table.svelte";
-	import { debug } from "svelte/internal";
+	import Loading from "$lib/components/Loading.svelte";
+	import type { PageData } from "./$types";
+
+	export let data: PageData;
 	
-	const rows = [{
-		key: 'cmd.test',
-		text: 'Test me'
-	}, {
-		key: 'msg.test',
-		text: 'Test done.'
-	}];
 	function save(e: CustomEvent) {
 		debugger;
 	}
@@ -18,8 +14,8 @@
 		debugger;
 	}
 </script>
-<Table data={rows}>
-	<Text prop="key" title="Key" />
-	<Text prop="text" title="Text" />
+<Table data={data.dictionary}>
+	<Text prop="key" title="Key" required />
+	<Text prop="text" area title="Text" />
 	<Edition on:save={save} on:remove={remove} />
 </Table>

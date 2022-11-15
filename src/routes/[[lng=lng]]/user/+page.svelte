@@ -1,18 +1,16 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
-	import { error } from "@sveltejs/kit";
 	import { getContext } from "svelte";
 	import { Button, Card, CardBody, CardFooter, CardTitle, FormGroup, Input } from "sveltestrap";
 
 	const user = getContext<SvelteStore<any>>('user');
-	// TODO goto server-side
-$:	if(!$user) throw error(401, "Not logged in");
+$:	if(!$user) goto('/');
 	const alert: (spec: AlertSpec)=> void = getContext('alert');
 	let oldPass: string, cnfPass: string, newPass: string,
 		cnfError: string | false;
 	function validateCnf() {
-		cnfError = cnfPass !== newPass && "Wrong confirmation";
+		cnfError = cnfPass !== newPass && "Wrong confirmation";	// TODO && !cnfPass.hasFocus
 	}
 	async function setPW({cancel}: {cancel: ()=> void}) {
 		cancel();

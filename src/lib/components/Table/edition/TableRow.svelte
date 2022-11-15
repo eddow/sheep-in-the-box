@@ -1,8 +1,10 @@
 <script context="module" lang="ts">
 	import { writable, type Writable } from 'svelte/store';
 	import type { RowContext } from '../utils';
-	export interface EditingContext extends RowContext {
+	export type Dialog = 'body' | 'footer' | false;
+	export interface EditingRowContext<T=any> extends RowContext<T> {
 		editing: Writable<boolean>;
+		dialog: Dialog;
 	}
 </script>
 <script lang="ts">
@@ -10,7 +12,7 @@
 
 	export let row: any;
 	export let id: string|number;
-	const ctx = {editing: writable<boolean>(false)};
+	const ctx = {editing: writable<boolean>(false), dialog: false};
 </script>
 <TableRow {row} {id} {...$$props} context={ctx}>
 	<slot />
