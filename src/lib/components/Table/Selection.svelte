@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Column from './Column.svelte'
-	import {getContext} from 'svelte';
 	import {getRowCtx, getTblCtx} from './utils'
 
 	export let selection: Set<any>;
@@ -24,14 +23,12 @@
 	}
 	getTblCtx().data.subscribe((v: any[])=> { data = v; });
 </script>
-<template>
-	<Column>
-		<th class="selection" slot="header" scope="col">
-			<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
-				on:change={onChangeAll} />
-		</th>
-		<th class="selection" scope="row">
-			<input type="checkbox" checked={selected} on:change={onChangeOne} />
-		</th>
-	</Column>
-</template>
+<Column>
+	<th class="selection" slot="header" scope="col">
+		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
+			on:change={onChangeAll} />
+	</th>
+	<th class="selection" scope="row">
+		<input type="checkbox" checked={selected} on:change={onChangeOne} />
+	</th>
+</Column>

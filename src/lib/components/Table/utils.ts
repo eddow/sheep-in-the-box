@@ -15,15 +15,16 @@ export interface TableContext<T=any> {
 	setFilter(key: any, filter?: (row: T)=> boolean): void;
 }
 export interface RowContext<T=any> {
-	row: Readable<T>;
+	row: T;
+	id: string | number;
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;
 	value?: Writable<T>;
 }
-export function setTblCtx(c: TableContext) { setContext(tableContextKey, c); }
-export function getTblCtx() { return <TableContext>getContext(tableContextKey); }
-export function setRowCtx(c: RowContext) { setContext(rowContextKey, c); }
-export function getRowCtx() { return <RowContext>getContext(rowContextKey); }
-export function setClmnCtx(c: ColumnContext) { setContext(columnContextKey, c); }
-export function getClmnCtx() { return <ColumnContext>getContext(columnContextKey); }
+export function setTblCtx<T=TableContext>(c: T) { setContext(tableContextKey, c); }
+export function getTblCtx<T=TableContext>() { return <T>getContext(tableContextKey); }
+export function setRowCtx<T=RowContext>(c: T) { setContext(rowContextKey, c); }
+export function getRowCtx<T=RowContext>() { return <T>getContext(rowContextKey); }
+export function setClmnCtx<T=ColumnContext>(c: T) { setContext(columnContextKey, c); }
+export function getClmnCtx<T=ColumnContext>() { return <T>getContext(columnContextKey); }

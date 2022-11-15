@@ -3,7 +3,8 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { getContext } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { T, dictionary, gotTree } from '$lib/intl';
+	import { T, dictionary, gotTree, language } from '$lib/intl';
+	import type { PageData } from './$types';
 
 	const dispatch = createEventDispatcher();
 
@@ -14,6 +15,7 @@
 	let email: string = '';
 	let password: string = '';
 	let isMenuOpen = false;
+	let data: PageData
 	const user = getContext<SvelteStore<any>>('user');
 	
 	function anonOpen() {
@@ -47,20 +49,24 @@
 			body: JSON.stringify({email, password, roles: dictionary.roles})
 		});
 		if(Math.floor(rv.status/100) === 4) {
+			const cnt = await(rv.json());
+			if(cnt) language.set(cnt);
 			alert({message: 'Wrong login', color: 'danger'});
 			dispatch('set-user', null);
 		} else {
 			const login = await rv.json();
 			dispatch('set-user', login.user);
+			language.set(login.user.language);
 			if(login.dictionary)
 				gotTree(login.dictionary);
 		}
 		email = password = '';
 	})(x); }
 	async function logout() {
-		let rv = await fetch('/user', {
+		const rv = await fetch('/user', {
 			method: 'DELETE'
-		});
+		}), cnt = await(rv.json());
+		if(cnt) language.set(cnt);
 		dispatch('set-user', null);
 	}
 </script>

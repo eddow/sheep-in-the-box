@@ -3,20 +3,21 @@
 	import {specialRow, setTblCtx} from './utils'
   	import {exclude} from './utils/exclude'
   	import {prefixFilter} from './utils/prefixFilter'
-	import {useActions} from './utils/useActions'
 	import {readable} from 'svelte/store'
+	import { Table } from 'sveltestrap';
+	import { privateStore } from '$lib/privateStore';
 
 	export let data: any[];
-	export let key: string = null;
-	export let columnFilters: boolean = true;
+	export let key: string | null = null;
+	export let columnFilters: boolean = false;
 	export let columnHeaders: boolean = true;
 	export let columnFooters: boolean = false;
-	export let use = [];
 	export let filters = new Map<any, (row: any)=> boolean>();
-	let setRawData: (raw: any[])=> void;
-	$: setRawData && setRawData(data);
+	export let rowType = TableRow;
+	const dataStore = privateStore(data);
+$:	dataStore.value = data;
 	setTblCtx({
-		data: readable(data, (set: (raw: any[])=> void)=> { setRawData = set; }),
+		data: dataStore.store,
 		setFilter(key: any, filter?: (row: any)=> boolean) {
 			if(filter) filters.set(key, filter);
 			else filters.delete(key);
@@ -26,39 +27,37 @@
 	function rowId(row: any, ndx: number) {
 		return key ? row[key] : ndx;
 	}
-	export let displayedData: any[];
-	$: console.assert(key || !filters.size, 'A table with `filters` needs a `key`');
-	$: displayedData = data.filter(row=> Array.from(filters.values()).every(filter=> filter(row)))
+	export let displayedData: any[] = [];
+$:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');
+$:	displayedData = data.filter(row=> Array.from(filters.values()).every(filter=> filter(row)))
 </script>
-<template>
-	<table use:useActions={use} {...exclude($$props, ['use', 'class', 'tr$'])}>
-		{#if columnHeaders}
-			<thead>
-				<TableRow id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>
-					<slot row={specialRow.header} />
-				</TableRow>
-			</thead>
-		{/if}
-		{#if columnFilters}
-			<thead>
-				<TableRow id="filter" row={specialRow.filter} {...prefixFilter($$props, 'tr$')}>
-					<slot row={specialRow.filter} />
-				</TableRow>
-			</thead>
-		{/if}
-		<tbody>
-			{#each displayedData as row, ndx (rowId(row, ndx))}
-				<TableRow id={rowId(row, ndx)} row={row} {...prefixFilter($$props, 'tr$')}>
-					<slot row={row} />
-				</TableRow>
-			{/each}
-		</tbody>
-		{#if columnFooters}
-			<tfoot>
-				<TableRow id="footer" row={specialRow.footer} {...prefixFilter($$props, 'tr$')}>
-					<slot row={specialRow.footer} />
-				</TableRow>
-			</tfoot>
-		{/if}
-	</table>
-</template>
+<Table {...exclude($$props, ['use', 'tr$'])}>
+	{#if columnHeaders}
+		<thead>
+			<svelte:component this={rowType} id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>
+				<slot row={specialRow.header} />
+			</svelte:component>
+		</thead>
+	{/if}
+	{#if columnFilters}
+		<thead>
+			<svelte:component this={rowType} id="filter" row={specialRow.filter} {...prefixFilter($$props, 'tr$')}>
+				<slot row={specialRow.filter} />
+			</svelte:component>
+		</thead>
+	{/if}
+	<tbody>
+		{#each displayedData as row, ndx (rowId(row, ndx))}
+			<svelte:component this={rowType} id={rowId(row, ndx)} row={row} {...prefixFilter($$props, 'tr$')}>
+				<slot row={row} />
+			</svelte:component>
+		{/each}
+	</tbody>
+	{#if columnFooters}
+		<tfoot>
+			<svelte:component this={rowType} id="footer" row={specialRow.footer} {...prefixFilter($$props, 'tr$')}>
+				<slot row={specialRow.footer} />
+			</svelte:component>
+		</tfoot>
+	{/if}
+</Table>

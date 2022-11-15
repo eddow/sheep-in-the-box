@@ -10,15 +10,16 @@
 		Dropdown,
 		DropdownToggle,
 		DropdownMenu,
-		DropdownItem
+		DropdownItem,
+		Icon
 	} from 'sveltestrap';
 	import User from './User.svelte';
-	import { createEventDispatcher } from 'svelte';
 	import Languages from './Languages.svelte';
+	import { getContext } from 'svelte';
 	
-	const dispatch = createEventDispatcher();
 	let isOpen = false;
 
+	const roles = getContext<SvelteStore<any>>('roles');
 	function handleUpdate(event: any) {
 		isOpen = event.detail.isOpen;
 	}
@@ -31,17 +32,22 @@
 			<NavItem>
 				<NavLink href="#components/">Components</NavLink>
 			</NavItem>
+			{#if $roles.dev}
+				<NavItem>
+					<NavLink href="/text-keys"><Icon name="key" />Text keys</NavLink>
+				</NavItem>
+			{/if}
 		</Nav>
 	</Collapse>
 	<Nav>
 		<NavItem>
-			<User on:set-user={x=> { dispatch('set-user', x.detail); }} />
+			<User on:set-user />
 		</NavItem>
 		<NavItem>
 			<div style="width: .5em;">&nbsp;</div>
 		</NavItem>
 		<NavItem>
-			<Languages on:set-language={x=> { dispatch('set-language', x.detail); }} />
+			<Languages on:set-language />
 		</NavItem>
 	</Nav>
 </Navbar>

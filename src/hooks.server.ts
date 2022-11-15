@@ -2,16 +2,7 @@ import { error, type Handle } from '@sveltejs/kit';
 import { authed } from '$lib/server/auth';
 import type { RequestEvent } from "@sveltejs/kit";
 import { languages } from "$lib/server/objects/intl";
-
-function allGroups(rex: RegExp, hay: string, grpIndex: number) {
-	const rv = [];
-	let m = rex.exec(hay);
-	while(m) {
-		rv.push(m[grpIndex]);
-		m = rex.exec(hay)
-	}
-	return rv;
-}
+import { accessible } from '$lib/auth';
 
 export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Partial<Record<string, string>>, string | null>, resolve: any}) => {
 	const user = await authed(event);
@@ -28,10 +19,7 @@ export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Pa
 			maxAge: 60 * 60 * 24 * 30
 		});
 	}
-	if(event.route.id) {
-		for(const group of allGroups(/\/\(@(.*?)\)\//g, event.route.id, 1))
-			if(!user || !!~user.roles.indexOf(group))
-				throw error(401, `Unauthorized (@${group})`)
-	}
+	if(event.route.id && !accessible(event.route.id, user))
+		return new Response(null, {status: 303, headers: {location: '/'}});
 	return await resolve(event);
 };

@@ -3,6 +3,7 @@ import User from '$lib/server/objects/user';
 import type { RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
 import { LOGGEDIN_TIMEOUT }  from "$env/static/private";
+import type { Language } from './objects/intl';
 
 interface LoggedIn {
 	user: User|string;
@@ -71,6 +72,8 @@ export function logout(event: RequestEvent<Partial<Record<string, string>>, stri
 	const authKey = event.cookies.get('session');
 	if(!authKey) return false;
 	delete loggedIn[authKey];
+	delete event.locals.user;
+	event.locals.language = event.cookies.get('language');
 	return true;
 }
 
@@ -84,4 +87,11 @@ export async function changePass(event: RequestEvent<Partial<Record<string, stri
 
 export function register(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string) {
 	//TODO send emails
+}
+
+export async function setLanguage(email: string, language: Language) {
+	await users.update({
+		q: {email},
+		u: {$set:{language}}
+	}).exec();
 }

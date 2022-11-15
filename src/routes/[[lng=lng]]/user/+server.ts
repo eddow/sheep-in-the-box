@@ -11,7 +11,10 @@ export const POST: RequestHandler = async (event) => {	//login
 	const {email, password, roles} = await event.request.json();
 	// roles is the list of roles for whom the client has the dictionary already
 	let user = await login(event, email, password);
-	if(!user) throw error(401, 'Bad login')
+	if(!user) {
+		logout(event);
+		return json(event.locals.language, {status: 401});
+	}
 	const toSendRoles = user.roles.split(' ').concat(['']).filter(r=> !~roles.indexOf(r)), rv: any = {user};
 	if(toSendRoles.length)
 		rv.dictionary = {roles: toSendRoles, tree: await tree(user.language, toSendRoles)}
@@ -31,5 +34,5 @@ export const PATCH: RequestHandler = async (event) => {	//change pass
 }
 
 export const DELETE: RequestHandler = async (event) => {	//logout
-	return json(logout(event));
+	return json(logout(event) ? event.locals.language : false);
 }

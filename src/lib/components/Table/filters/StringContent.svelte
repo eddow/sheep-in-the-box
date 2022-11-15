@@ -4,8 +4,9 @@
 	export let beginsWith: boolean = false;
 	export let caseSensitive: boolean = false;
 	const setFilter = getClmnCtx().setFilter;
-$: setFilter(value &&
-	((v:string)=> RegExp((beginsWith?'^':'')+value, caseSensitive?'':'i').test(v)));
+$:	setFilter(value ?
+		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v)) :
+		undefined);
 </script>
 <template>
 	<input type="text" bind:value />

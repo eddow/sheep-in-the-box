@@ -11,7 +11,5 @@ await connect(MONGO_URI!);
 
 export function map(definition: any/*AnyParamConstructor<any>*/, parms?: IModelOptions) {
 	const model = getModelForClass(definition, parms);
-	//console.dir(definition);
-	//console.dir(model);
 	return model;
 }

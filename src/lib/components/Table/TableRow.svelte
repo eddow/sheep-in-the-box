@@ -1,20 +1,17 @@
 <script lang="ts">
-	import {setRowCtx} from './utils'
-  	import {exclude} from './utils/exclude'
-	import {useActions} from './utils/useActions'
-	import {readable} from 'svelte/store'
+	import { setRowCtx } from './utils'
+  	import { exclude } from './utils/exclude'
+	import { useActions } from './utils/useActions'
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 	
 	export let row: any;
 	export let id: string|number;
-	export let use = [];
-	let setRowData: (row: any[])=> void;
-	$: setRowData && setRowData(row);
-	setRowCtx({
-		row: readable(row, (set: (row: any[])=> void)=> { setRowData = set; })
-	});
+	export let use: any[] = [];
+	export let context: any = {};
+	Object.assign(context, {row: row, id})
+	setRowCtx(context);
 </script>
-<template>
-	<tr row-id={id} use:useActions={use} {...exclude($$props, ['use', 'class', 'row', 'id'])}>
-		<slot />
-	</tr>
-</template>
+<tr data-row-id={''+id} use:useActions={use} {...exclude($$props, ['use', 'row', 'id'])}>
+	<slot />
+</tr>
