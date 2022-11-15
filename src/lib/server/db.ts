@@ -1,4 +1,5 @@
 import { getModelForClass } from '@typegoose/typegoose';
+import type { IModelOptions } from '@typegoose/typegoose/lib/types';
 import { connect } from 'mongoose';
 
 /*const adapter = new MongoDBAdapter({
@@ -7,8 +8,8 @@ import { connect } from 'mongoose';
 });*/
 await connect(process.env.MONGO_URI!);
 
-export function map(definition: any/*AnyParamConstructor<any>*/) {
-	const model = getModelForClass(definition);
+export function map(definition: any/*AnyParamConstructor<any>*/, parms?: IModelOptions) {
+	const model = getModelForClass(definition, parms);
 	//console.dir(definition);
 	//console.dir(model);
 	return model;

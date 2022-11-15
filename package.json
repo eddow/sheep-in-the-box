@@ -1,5 +1,5 @@
 {
-	"name": "sk-sitb",
+	"name": "sitb",
 	"version": "0.0.1",
 	"scripts": {
 		"dev": "vite dev",

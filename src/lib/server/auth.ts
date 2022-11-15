@@ -10,6 +10,8 @@ interface LoggedIn {
 const loggedIn: Record<string, LoggedIn> = {};
 const liTimeout = +(process.env.LOGGEDIN_TIMEOUT || 300) * 1000;
 
+const users = map(User);
+
 export function userPublic(user: User) {
 	return user && {email: user.email, language: user.language, roles: user.roles};
 }
@@ -23,7 +25,7 @@ export function clean() {
 
 export async function authed(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
 	const authKey = event.cookies.get('session');
-	if(!authKey) return false;
+	if(!authKey) return null;
 	const ts = (new Date).getTime();
 	let rv: LoggedIn|undefined = loggedIn[authKey];
 	if(rv && ts-rv.lastInterraction > liTimeout) {
@@ -34,13 +36,12 @@ export async function authed(event: RequestEvent<Partial<Record<string, string>>
 	if(rv) {
 		user = rv.user;
 		if(!(user instanceof User)) {
-			const users = map(User);
 			user = await users.findById(user);
 		}
 	}
 	if(!user) {
 		if(authKey) event.cookies.delete('session', {path: '/'});
-		return false;
+		return null;
 	}
 	rv!.lastInterraction = ts;
 	return event.locals.user = userPublic(user);
@@ -48,9 +49,8 @@ export async function authed(event: RequestEvent<Partial<Record<string, string>>
 
 export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string, password: string) {
 	const uuid = md5(crypto.randomUUID());
-	const users = map(User);
 	const one = await users.findOne({email, password: md5(password)});
-	if(!one) return false;
+	if(!one) return null;
 	event.locals.user = userPublic(one);
 	const li: LoggedIn = {
 		user: one.get('id'),
@@ -70,6 +70,14 @@ export function logout(event: RequestEvent<Partial<Record<string, string>>, stri
 	const authKey = event.cookies.get('session');
 	if(!authKey) return false;
 	delete loggedIn[authKey];
+	return true;
+}
+
+export async function changePass(event: RequestEvent<Partial<Record<string, string>>, string | null>, oldPass: string, newPass: string) {
+	const one = await users.findOne({email: event.locals.user.email, password: md5(oldPass)});
+	if(!one) return false;
+	one.password = md5(newPass);
+	await one.save();
 	return true;
 }
 
