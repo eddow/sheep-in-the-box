@@ -1,6 +1,5 @@
 import { readable, writable } from "svelte/store";
-import type { Language } from "./objects/intl";
-import type { Role } from "./objects/user";
+import type { Language, Role } from "./constants";
 
 interface Dictionary {
 	tree: any;

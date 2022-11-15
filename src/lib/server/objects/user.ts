@@ -1,5 +1,5 @@
 import { prop } from '@typegoose/typegoose';
-import { languages, roles, type Language, type Role } from './constants';
+import { languages, roles, type Language, type Role } from '../../constants';
 export { Role, roles }
 
 interface Roles {
@@ -20,13 +20,13 @@ export default class User {
 	
 	@prop({
 		type: String, required: true/*, Simply does nothing
-		get: (val: string)=> val.split(',').reduce<Roles>((p: Roles, c: string)=> ({...p, [c]: true}), {
+		get: (val: string)=> val.split(' ').reduce<Roles>((p: Roles, c: string)=> ({...p, [c]: true}), {
 			adm: false,
 			trad: false,
 			sell: false,
 			dev: false
 		}),
-		set: (val: Roles)=> (<Role[]>Object.keys(val)).filter((r: Role)=> val[r]).join(',')*/
+		set: (val: Roles)=> (<Role[]>Object.keys(val)).filter((r: Role)=> val[r]).join(' ')*/
 	})
 	roles!: string;	//Roles;
 }

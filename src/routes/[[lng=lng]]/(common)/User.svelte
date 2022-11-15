@@ -23,7 +23,6 @@
 	async function setEmail({cancel}: {cancel: ()=> void}) {
 		cancel();
 		if(registering) {
-			// TODO fetch
 			anonOpened = false;
 			let rv = await fetch('/user', {
 				method: 'PUT',
@@ -82,7 +81,7 @@
 		{#if state === 'email'}
 			<form style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;" use:enhance={x=> { setEmail(x); }}>
 				<FormGroup floating label="E-mail">
-					<Input required bind:value={email} placeholder="E-mail" type="text" style="min-width: 200px;" autofocus />
+					<Input required bind:value={email} name="identifier" autocomplete="username" placeholder="E-mail" type="text" style="min-width: 200px;" autofocus />
 				</FormGroup>
 				<ButtonGroup class="prefix-icon">
 					<Button name="submit" color="primary">
@@ -98,7 +97,7 @@
 		{:else if state === 'password'}
 			<form style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;" use:enhance={login}>
 				<FormGroup floating label="Passphrase">
-					<Input required bind:value={password} placeholder="Passphrase" name="password" type="password" style="min-width: 200px;" autofocus />
+					<Input required bind:value={password} placeholder="Passphrase" name="password" autocomplete="current-password" type="password" style="min-width: 200px;" autofocus />
 				</FormGroup>
 				<Button name="submit" color="primary" class="prefix-icon">
 					<Icon name="person-check-fill" />

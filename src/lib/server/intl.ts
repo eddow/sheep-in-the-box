@@ -1,4 +1,4 @@
-import Intl, { type Language } from "$lib/objects/intl";
+import Intl, { type Language } from "$lib/server/objects/intl";
 import { map } from "./db";
 
 const dictionary = map(Intl);

@@ -1,5 +1,5 @@
 import { prop } from '@typegoose/typegoose';
-import { languages, type Language } from './constants';
+import { languages, type Language } from '../../constants';
 export { languages, Language }
 
 export default class Intl {

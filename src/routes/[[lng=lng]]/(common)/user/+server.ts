@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
-import { login, logout, authed, changePass } from "$lib/server/auth";
-import type { Role } from '$lib/objects/user';
+import { login, logout, authed, changePass, register } from "$lib/server/auth";
 import { tree } from '$lib/server/intl';
 
 export const GET: RequestHandler = async (event) => {	//authed
@@ -13,15 +12,15 @@ export const POST: RequestHandler = async (event) => {	//login
 	// roles is the list of roles for whom the client has the dictionary already
 	let user = await login(event, email, password);
 	if(!user) throw error(401, 'Bad login')
-	const toSendRoles = user.roles.split(',').concat(['']).filter(r=> !~roles.indexOf(r)), rv: any = {user};
+	const toSendRoles = user.roles.split(' ').concat(['']).filter(r=> !~roles.indexOf(r)), rv: any = {user};
 	if(toSendRoles.length)
 		rv.dictionary = {roles: toSendRoles, tree: await tree(user.language, toSendRoles)}
 	return json(rv);
 }
 
 export const PUT: RequestHandler = async (event) => {	//register
-	//TODO send emails
-	return json(true);
+	const {email} = await event.request.json();
+	return json(register(event, email));
 }
 
 export const PATCH: RequestHandler = async (event) => {	//change pass

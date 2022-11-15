@@ -1,19 +1,20 @@
 import { map } from './db';
-import User from '$lib/objects/user';
+import User from '$lib/server/objects/user';
 import type { RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
+import { LOGGEDIN_TIMEOUT }  from "$env/static/private";
 
 interface LoggedIn {
 	user: User|string;
 	lastInterraction: number;
 }
 const loggedIn: Record<string, LoggedIn> = {};
-const liTimeout = +(process.env.LOGGEDIN_TIMEOUT || 300) * 1000;
+const liTimeout = +(LOGGEDIN_TIMEOUT || 300) * 1000;
 
 const users = map(User);
 
 export function userPublic(user: User) {
-	return user && {email: user.email, language: user.language, roles: user.roles};
+	return user && {email: user.email, language: user.language, roles: ('lgdn '+user.roles).trimEnd()};
 }
 
 export function clean() {
@@ -81,6 +82,6 @@ export async function changePass(event: RequestEvent<Partial<Record<string, stri
 	return true;
 }
 
-export function register(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string, password: string) {
-	//TODO
+export function register(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string) {
+	//TODO send emails
 }

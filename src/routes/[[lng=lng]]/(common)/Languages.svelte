@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { languages, type Language } from "$lib/objects/constants";
+	import { languages, type Language } from "$lib/constants";
 	import { language, setLanguage } from "$lib/intl";
 	
 	import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "sveltestrap";

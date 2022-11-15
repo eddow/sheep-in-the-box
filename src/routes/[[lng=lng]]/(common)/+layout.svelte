@@ -8,6 +8,7 @@
 
 	export let data: LayoutData;
 	let updateUser: (user: any)=> void;
+	debugger;
 	setContext('user', readable(data.user, (set)=> { updateUser = set; }));
 	let alert: any;
 	setContext('alert', (alertSpec: AlertSpec)=> { alert(alertSpec); });
