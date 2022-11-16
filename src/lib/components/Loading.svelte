@@ -4,7 +4,7 @@
 	export let promise: Promise<any>;
 </script>
 {#await promise}
-	<Spinner>Loading...</Spinner>
+	<Spinner size="lg">Loading...</Spinner>
 {:then value}
 	<slot {value} />
 {/await}

@@ -16,7 +16,7 @@ export interface TableContext<T=any> {
 }
 export interface RowContext<T=any> {
 	row: T;
-	id: string | number;
+	id?: string | number;
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;

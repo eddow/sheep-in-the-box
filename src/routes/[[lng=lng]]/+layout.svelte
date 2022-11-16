@@ -4,6 +4,7 @@
 	}
 </script>
 <script lang="ts">
+	import { hookFetch } from "$lib/fetch-hook";
 	import Menu from './Menu.svelte';
 	import Alerts from './Alerts.svelte';
 	import './styles.scss';
@@ -14,7 +15,6 @@
 	import { accessible } from '$lib/auth';
 	import { page } from '$app/stores';
 	import { privateStore } from '$lib/privateStore';
-
 
 	type allRoles = Role | 'cust';
 	function analyseRoles(str?: string) {
@@ -44,7 +44,7 @@
 			goto('/');
 	}
 	let alert: any;
-	setContext('alert', (alertSpec: AlertSpec)=> { alert(alertSpec); });
+	setContext('alert', hookFetch((alertSpec: AlertSpec)=> { alert(alertSpec); }));
 </script>
 <div class="app">
 	<Menu on:set-user={user=> setUser(user.detail)} />

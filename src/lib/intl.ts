@@ -55,7 +55,7 @@ export const T = readable<(key: string)=> string>(x=> `[${x}]`, (set: (t: (key: 
 			let brwsr = dictionary.tree, keys = key.split('.'), i;
 			for(i = 0; i < keys.length && brwsr instanceof Object; ++i)
 				brwsr = brwsr[keys[i]];
-			if(i >= keys.length) {
+			if(i >= keys.length && brwsr) {
 				if(typeof brwsr === 'string') return brwsr;
 				if(brwsr.hasOwnProperty('')) return brwsr[''];
 			}

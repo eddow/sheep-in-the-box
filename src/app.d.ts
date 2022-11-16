@@ -8,7 +8,5 @@ declare namespace App {
 	interface Locals {
 		user: User;
 		language: Language;
-		SSR?: boolean;
-		CSR?: boolean;
 	}
 }

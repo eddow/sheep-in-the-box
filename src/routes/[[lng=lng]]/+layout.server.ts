@@ -5,6 +5,6 @@ export const load = async (event: Partial<Record<string, any>>) => {
 	return {
 		user: event.locals.user,
 		language,
-		dictionary: await tree(language, (event.locals.user?.roles.split(' ') || []).concat(['']))
+		dictionary: await tree(event.locals.dictionary)
 	};
 }

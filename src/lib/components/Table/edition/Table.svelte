@@ -1,54 +1,92 @@
-<script context="module" lang="ts">
-	export interface EditionModalControl {
-		close: ()=> void;
-		add: ()=> void;
-		edit: (row: any, id: string | number)=> void;
-	}
-</script>
 <script lang="ts">
 	import TableRow from "./TableRow.svelte";
 	import Table from "../Table.svelte";
-	import { Modal, ModalHeader } from "sveltestrap";
-	import Body from "./modal/Body.svelte";
+	import { Modal, ModalBody, ModalFooter, ModalHeader } from "sveltestrap";
 	import { enhance } from "$app/forms";
-	import Footer from "./modal/Footer.svelte";
 	import { setContext } from "svelte";
+	import ModalPart from "./ModalPart.svelte";
+	import { writable, type Writable } from "svelte/store";
+	import { exclude } from "../utils/exclude";
+	import { clone } from "./utils";
 
 	export let data: any[];
-
-	let modalOpened: boolean = false;
-	let dialogRow: any = {}, dialogId: string | number;
+	let added: any[] = [];
+$:	allRows = [...added, ...data];
+	let modalOpened = false;
+	let dialogRow: any = null, dialogId: string | number | undefined;
+	let dialogEdit: Writable<any>;
+	// TODO titles
 	const modal = {
-		close() { modalOpened = false; },
-		add() {
-			dialogRow = {};
-			dialogId = <string><unknown>null;
+		close() {
+			modalOpened = false;
+		},
+		add(row: Writable<any>) {
+			dialogRow = clone(row);
+			dialogEdit = writable(row);
+			dialogId = undefined;
 			modalOpened = true;
 		},
-		edit(row: any, id: string | number) {
+		edit(editing: Writable<any>, row: any, id: string | number) {
 			dialogRow = row;
+			dialogEdit = editing;
 			dialogId = id;
 			modalOpened = true;
 		}
-	}
-	setContext('modal', modal);
+	};
+	const editions = new Map<any, SvelteStore<any>>();
+	const rowCreation = {
+		add(row: any) {
+			added = [row, ...added];
+			editions.set(row, writable(clone(row)));
+		},
+		save(row: any, old: any) {
+			let ndxAdded = added.indexOf(old), ndxData = data.indexOf(old);
+			if(~ndxAdded) {
+				added = [...added.slice(0, ndxAdded), ...added.slice(ndxAdded+1)];
+				data = [row, ...data];
+			} else if(~ndxData) {
+				for(const k of Object.keys(old)) delete old[k];
+				setTimeout(()=> {
+					Object.assign(old, row);
+					data = [...data];
+				});
+				data = [...data];
+			} else if(old === dialogRow)
+				data = [row, ...data];
+			else throw "Inconsistent saving behaviour";
+		},
+		cancel(row: any) {
+			const ndx = added.indexOf(row);
+			if(~ndx)
+				added = [...added.slice(0, ndx), ...added.slice(ndx+1)];
+		},
+		delete(row: any) {
+			const ndx = data.indexOf(row);
+			if(~ndx)
+				data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
+		}
+	};
+	setContext('edition', {modal, rowCreation, editions});
+	
 	async function submitModal({cancel}: {cancel: ()=> void}) {
 		cancel();
-		debugger;
-		//TODO
 	}
 </script>
-<Table {data} {...$$props} rowType={TableRow} context={{modal}}>
+<Table key="key" {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
 	<slot />
 </Table>
-<Modal size="lg" isOpen={!!modalOpened}>
+<Modal keyboard={true} size="lg" isOpen={modalOpened}>
 	<form use:enhance={x=> { submitModal(x); }}>
-		<ModalHeader toggle={modal.close}>Modal title</ModalHeader>
-		<Body row={dialogRow} id={dialogId}>
-			<slot />
-		</Body>
-		<Footer row={dialogRow} id={dialogId}>
-			<slot />
-		</Footer>
+		<ModalHeader>Modal title</ModalHeader>
+		<ModalBody>
+			<ModalPart row={dialogRow} id={dialogId} dialog="body" editing={dialogEdit}>
+				<slot />
+			</ModalPart>
+		</ModalBody>
+		<ModalFooter>
+			<ModalPart row={dialogRow} id={dialogId} dialog="footer" editing={dialogEdit}>
+				<slot />
+			</ModalPart>
+		</ModalFooter>
 	</form>
 </Modal>

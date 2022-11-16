@@ -15,7 +15,7 @@ $:	if(!$user) goto('/');
 	async function setPW({cancel}: {cancel: ()=> void}) {
 		cancel();
 		if(cnfPass === newPass) {
-			let rv = await fetch('/user', {
+			let rv = await fetch('', {
 				method: 'PATCH',
 				body: JSON.stringify({oldPass, newPass})
 			});
