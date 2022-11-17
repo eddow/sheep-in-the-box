@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Alert } from "sveltestrap";
-	import type { Color } from "sveltestrap/src/shared";
 
 	const timeOut = 6000;	// ms
 

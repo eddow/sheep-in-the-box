@@ -1,0 +1,274 @@
+{
+"intlkeys":
+    [
+        {
+        "key": "cmd.register",
+        "role": ""
+        },
+        {
+        "key": "role.none",
+        "role": "adm"
+        },
+        {
+        "key": "role.dev",
+        "role": "adm"
+        },
+        {
+        "key": "role.adm",
+        "role": "adm"
+        },
+        {
+        "key": "role.lgdn",
+        "role": "dev"
+        },
+        {
+        "key": "role.trad",
+        "role": "adm"
+        },
+        {
+        "key": "err.key.dup",
+        "role": "dev"
+        },
+        {
+        "key": "role.sell",
+        "role": "adm"
+        },
+        {
+        "key": "err.key.no",
+        "role": "dev"
+        },
+        {
+        "key": "fld.key",
+        "role": "dev"
+        },
+        {
+        "key": "fld.text",
+        "role": "dev"
+        },
+        {
+        "key": "fld.role",
+        "role": "adm"
+        },
+        {
+        "key": "cmd.pw.new",
+        "role": "lgdn"
+        },
+        {
+        "key": "ttl.pw.new",
+        "role": "lgdn"
+        },
+        {
+        "key": "err.pw.conf",
+        "role": "lgdn"
+        },
+        {
+        "key": "msg.mail-sent",
+        "role": "",
+        "template": true
+        },
+        {
+        "key": "err.pw.wrong",
+        "role": ""
+        },
+        {
+        "key": "msg.pw.changed",
+        "role": ""
+        },
+        {
+        "key": "cmd.configure",
+        "role": "lgdn"
+        },
+        {
+        "key": "cmd.logout",
+        "role": "lgdn"
+        },
+        {
+        "key": "cmd.login",
+        "role": ""
+        },
+        {
+        "key": "cmd.cancel",
+        "role": ""
+        },
+        {
+        "key": "cmd.save",
+        "role": ""
+        },
+        {
+        "key": "cmd.preview",
+        "role": ""
+        },
+        {
+        "key": "err.login",
+        "role": ""
+        }
+    ],
+"intls":
+    [
+        {
+        "key": "cmd.register",
+        "lng": "en",
+        "text": "Register<br />Lost&nbsp;passphrase",
+        "ts": 1668620619811
+        },
+        {
+        "key": "role.none",
+        "lng": "en",
+        "text": "Public",
+        "ts": 1668644865043
+        },
+        {
+        "key": "role.dev",
+        "lng": "en",
+        "text": "Developer",
+        "ts": 1668620619811
+        },
+        {
+        "key": "role.adm",
+        "lng": "en",
+        "text": "Administrator",
+        "ts": 1668620619811
+        },
+        {
+        "key": "role.lgdn",
+        "lng": "en",
+        "text": "Registered user",
+        "ts": 1668620619811
+        },
+        {
+        "key": "role.trad",
+        "lng": "en",
+        "text": "Translator",
+        "ts": 1668620619811
+        },
+        {
+        "key": "err.key.dup",
+        "lng": "en",
+        "text": "The key already exists",
+        "ts": 1668620619811
+        },
+        {
+        "key": "role.sell",
+        "lng": "en",
+        "text": "Seller",
+        "ts": 1668620619811
+        },
+        {
+        "key": "err.key.no",
+        "lng": "en",
+        "text": "No key specified",
+        "ts": 1668620619811
+        },
+        {
+        "key": "fld.key",
+        "lng": "en",
+        "text": "Key",
+        "ts": 1668620619811
+        },
+        {
+        "key": "fld.text",
+        "lng": "en",
+        "text": "Text",
+        "ts": 1668620619811
+        },
+        {
+        "key": "fld.role",
+        "lng": "en",
+        "text": "Role",
+        "ts": 1668645772264
+        },
+        {
+        "key": "cmd.pw.new",
+        "lng": "en",
+        "text": "Set new passphrase",
+        "ts": 1668621191059
+        },
+        {
+        "key": "ttl.pw.new",
+        "lng": "en",
+        "text": "Change passphrase",
+        "ts": 1668621225193
+        },
+        {
+        "key": "err.pw.conf",
+        "lng": "en",
+        "text": "Wrong confirmation",
+        "ts": 1668621292478
+        },
+        {
+        "key": "msg.mail-sent",
+        "lng": "en",
+        "text": "An email has been sent to {email}",
+        "ts": 1668621469935
+        },
+        {
+        "key": "role.none",
+        "lng": "fr",
+        "text": "Publique",
+        "ts": 1668620619811
+        },
+        {
+        "key": "err.pw.wrong",
+        "lng": "en",
+        "text": "Wrong passphrase",
+        "ts": 1668634926978
+        },
+        {
+        "key": "msg.pw.changed",
+        "lng": "en",
+        "text": "Passphrase changed",
+        "ts": 1668635016211
+        },
+        {
+        "key": "cmd.configure",
+        "lng": "en",
+        "text": "Configure",
+        "ts": 1668636125676
+        },
+        {
+        "key": "cmd.logout",
+        "lng": "en",
+        "text": "Log out",
+        "ts": 1668636148414
+        },
+        {
+        "key": "cmd.login",
+        "lng": "en",
+        "text": "Log&#8209;in",
+        "ts": 1668636222283
+        },
+        {
+        "key": "cmd.cancel",
+        "lng": "en",
+        "text": "Cancel",
+        "ts": 1668637971802
+        },
+        {
+        "key": "cmd.save",
+        "lng": "en",
+        "text": "Save",
+        "ts": 1668637987318
+        },
+        {
+        "key": "cmd.preview",
+        "lng": "en",
+        "text": "Preview",
+        "ts": 1668638017684
+        },
+        {
+        "key": "err.login",
+        "lng": "en",
+        "text": "Wrong login",
+        "ts": 1668676457665
+        }
+    ],
+"users":
+    [
+        {
+        "email": "qwe@qwe.qwe",
+        "language": "en",
+        "password": "76d80224611fc919a5d54f0ff9fba446",
+        "roles": "dev adm trad"
+        }
+    ]
+}

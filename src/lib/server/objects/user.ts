@@ -2,13 +2,6 @@ import { prop } from '@typegoose/typegoose';
 import { languages, roles, type Language, type Role } from '../../constants';
 export { Role, roles }
 
-interface Roles {
-	adm: boolean;
-	trad: boolean;
-	sell: boolean;
-	dev: boolean;
-}
-
 export default class User {
 	@prop({type: String, required: true, unique: true, trim: true, validate: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})
 	email!: string;

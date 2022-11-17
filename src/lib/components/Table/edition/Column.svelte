@@ -9,7 +9,7 @@
 	export let title: string = '';
 	export let headers: boolean = false;
 	export let html: boolean = false;
-	export let transform = (x:string)=> x;
+	export let getDisplay = (x:string)=> x;
 	let thProps: any;
 $:	thProps = headers ? {scope: 'row'} : {};
 </script>
@@ -29,9 +29,9 @@ $:	thProps = headers ? {scope: 'row'} : {};
 			<slot name="display">
 				<svelte:element this={headers?'th':'td'} {...thProps}>
 					{#if html}
-						{@html transform(row[prop])}
+						{@html getDisplay(row[prop])}
 					{:else}
-						{transform(row[prop])}
+						{getDisplay(row[prop])}
 					{/if}
 				</svelte:element>
 			</slot>

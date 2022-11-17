@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
-import { tree } from '$lib/server/intl';
+import { flat, tree } from '$lib/server/intl';
 import { setLanguage } from '$lib/server/auth';
 
 export const POST: RequestHandler = async (event) => {	//set language
@@ -18,6 +18,6 @@ export const POST: RequestHandler = async (event) => {	//set language
 			maxAge: 60 * 60 * 24 * 30
 		});
 	if(toSendRoles.length)
-		return json({roles: toSendRoles, tree: await tree(language, toSendRoles)});
+		return json({roles: toSendRoles, tree: tree(await flat(language, toSendRoles))});
 	return json(false)
 }

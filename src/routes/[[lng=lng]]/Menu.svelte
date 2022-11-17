@@ -15,11 +15,10 @@
 	} from 'sveltestrap';
 	import User from './User.svelte';
 	import Languages from './Languages.svelte';
-	import { getContext } from 'svelte';
+	import { user } from '$lib/globals';
 	
 	let isOpen = false;
 
-	const roles = getContext<SvelteStore<any>>('roles');
 	function handleUpdate(event: any) {
 		isOpen = event.detail.isOpen;
 	}
@@ -32,10 +31,9 @@
 			<NavItem>
 				<NavLink href="#components/">Components</NavLink>
 			</NavItem>
-			{#if $roles.dev}
-				<NavItem>
-					<NavLink href="/text-keys"><Icon name="key" />Text keys</NavLink>
-				</NavItem>
+			{#if $user?.roles.dev}
+				<NavItem><NavLink href="/text-keys"><Icon name="key" />Text keys</NavLink></NavItem>
+				<NavItem><a data-sveltekit-reload href="/export"><Icon name="download" />Download DB</a></NavItem>
 			{/if}
 		</Nav>
 	</Collapse>

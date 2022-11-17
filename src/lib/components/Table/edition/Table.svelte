@@ -15,7 +15,7 @@ $:	allRows = [...added, ...data];
 	let modalOpened = false;
 	let dialogRow: any = null, dialogId: string | number | undefined;
 	let dialogEdit: Writable<any>;
-	// TODO titles
+	// TODO Configure dialog titles
 	const modal = {
 		close() {
 			modalOpened = false;
@@ -75,7 +75,7 @@ $:	allRows = [...added, ...data];
 <Table key="key" {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
 	<slot />
 </Table>
-<Modal keyboard={true} size="lg" isOpen={modalOpened}>
+<Modal keyboard={true} size="xl" isOpen={modalOpened}>
 	<form use:enhance={x=> { submitModal(x); }}>
 		<ModalHeader>Modal title</ModalHeader>
 		<ModalBody>

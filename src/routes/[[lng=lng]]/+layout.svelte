@@ -1,26 +1,20 @@
-<script lang="ts" context="module">
-	export function getUser() {
-		return getContext('user');
-	}
-</script>
 <script lang="ts">
-	import { hookFetch } from "$lib/fetch-hook";
+	import { setGlobalAlertCenter } from "$lib/globals";
+	import { accessible, setGlobalUser } from "$lib/auth";
 	import Menu from './Menu.svelte';
 	import Alerts from './Alerts.svelte';
 	import './styles.scss';
 	import { getContext, setContext } from 'svelte';
 	import type { LayoutData } from './$types';
 	import type { Role } from "$lib/constants"
-	import { beforeNavigate, goto } from '$app/navigation';
-	import { accessible } from '$lib/auth';
-	import { page } from '$app/stores';
-	import { privateStore } from '$lib/privateStore';
+	import { page } from "$app/stores";
+	import { beforeNavigate } from "$app/navigation";
 
-	type allRoles = Role | 'cust';
+	type allRoles = Role | 'lgdn';
 	function analyseRoles(str?: string) {
-		const rv = {adm: false, trad: false, sell: false, dev: false, cust: false};
+		const rv = {adm: false, trad: false, sell: false, dev: false, lgdn: false};
 		if(typeof str === 'string') {
-			rv.cust = true;
+			rv.lgdn = true;
 			if(str)
 				for(const r of str.split(' '))
 					if(rv.hasOwnProperty(r))
@@ -29,25 +23,18 @@
 		return rv;
 	}
 	export let data: LayoutData;
-	// TODO? User is layout-specific while language is global. Chose one system only ?
-	const user = privateStore(data.user), roles = privateStore(analyseRoles(data.user?.roles));
-	setContext('user', user.store);
-	setContext('roles', roles.store);
+	
+	setGlobalUser(data.user, $page.route.id);
 	beforeNavigate(async ({to, cancel})=> {
-		if(to?.route.id && !accessible(to.route.id, user.value))
+		if(to?.route.id && !accessible(to.route.id))
 			cancel();
 	});
-	function setUser(nwUser: any) {
-		user.value = nwUser;
-		roles.value = analyseRoles(nwUser?.roles);
-		if($page.route.id && !accessible($page.route.id, nwUser))
-			goto('/');
-	}
-	let alert: any;
-	setContext('alert', hookFetch((alertSpec: AlertSpec)=> { alert(alertSpec); }));
+
+	let alert: (alertSpec: AlertSpec | string)=> void;
+$:	setGlobalAlertCenter(alert);
 </script>
 <div class="app">
-	<Menu on:set-user={user=> setUser(user.detail)} />
+	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
 	<main>
 		<slot />
 	</main>

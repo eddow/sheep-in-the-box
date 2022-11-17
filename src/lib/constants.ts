@@ -7,3 +7,10 @@ export const languages: Record<string, string> = {
 
 export type Role = 'adm' | 'trad' | 'sell' | 'dev';
 export const roles = ['adm', 'trad', 'sell', 'dev'];
+
+export interface Roles {
+	adm: boolean;
+	trad: boolean;
+	sell: boolean;
+	dev: boolean;
+}

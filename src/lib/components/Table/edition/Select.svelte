@@ -10,11 +10,11 @@
 	export let required: boolean = false;
 	export let autofocus: boolean = false;
 	export let options: any[];
-	function transform(value: string) {
+	function getDisplay(value: string) {
 		return options.find(o=> o.value === value)?.text || value;
 	}
 </script>
-<Column {...$$props} {prop} {transform}>
+<Column {...$$props} {prop} {getDisplay}>
 	{#if $editing}
 		<Input {autofocus} {required} type="select" bind:value={$editing[prop]} placeholder={title}>
 			{#each options as option}

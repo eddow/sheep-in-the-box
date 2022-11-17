@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { login, logout, authed, changePass, register } from "$lib/server/auth";
-import { tree } from '$lib/server/intl';
+import { flat, tree } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
 
 export async function GET(event: RequestEvent) {	//authed
@@ -17,7 +17,7 @@ export async function POST(event: RequestEvent) {	//login
 	}
 	const toSendRoles = user.roles.split(' ').concat(['']).filter(r=> !~roles.indexOf(r)), rv: any = {user};
 	if(toSendRoles.length)
-		rv.dictionary = {roles: toSendRoles, tree: await tree(user.language, toSendRoles)}
+		rv.dictionary = {roles: toSendRoles, tree: tree(await flat(user.language, toSendRoles))}
 	return json(rv);
 }
 

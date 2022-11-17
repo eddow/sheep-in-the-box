@@ -9,7 +9,7 @@ interface LoggedIn {
 	user: User|string;
 	lastInterraction: number;
 }
-const loggedIn: Record<string, LoggedIn> = {};
+const loggedIn: Record<string, LoggedIn> = {};	// TODO Persist log-ins
 const liTimeout = +(LOGGEDIN_TIMEOUT || 300) * 1000;
 
 const users = map(User);

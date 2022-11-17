@@ -3,20 +3,19 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { getContext } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { T, dictionary, gotTree, language } from '$lib/intl';
+	import { T, dictionary, gotTree, language, languageStore } from '$lib/intl';
 	import type { PageData } from './$types';
+	import { ajax, user, alert } from '$lib/globals';
 
 	const dispatch = createEventDispatcher();
 
-	const alert: (spec: AlertSpec)=> void = getContext('alert');
 	let state = 'email';
 	let registering = false;
 	let anonOpened = false;
 	let email: string = '';
 	let password: string = '';
 	let isMenuOpen = false;
-	let data: PageData
-	const user = getContext<SvelteStore<any>>('user');
+	let data: PageData;
 	
 	function anonOpen() {
 		state = 'email';
@@ -26,11 +25,8 @@
 		cancel();
 		if(registering) {
 			anonOpened = false;
-			let rv = await fetch('/user', {
-				method: 'PUT',
-				body: JSON.stringify({email})
-			});
-			if(await rv.json()) alert({message: `An email has been sent to ${email}`});
+			let rv = await ajax.put({email}, '/user');
+			if(await rv.json()) $alert({message: $T('msg.mail-sent', {email})});
 			email = password = '';
 		} else {
 			state = 'password';
@@ -44,29 +40,24 @@
 	const login: SubmitFunction<Record<string, any>, Record<string, any>> = x=> { (async ({cancel}: {cancel: ()=> void}) => {
 		cancel();
 		anonOpened = false;
-		let rv = await fetch('/user', {
-			method: 'POST',
-			body: JSON.stringify({email, password, roles: dictionary.roles})
-		});
-		if(Math.floor(rv.status/100) === 4) {
-			const cnt = await(rv.json());
-			if(cnt) language.set(cnt);
-			alert({message: 'Wrong login', color: 'danger'});
-			dispatch('set-user', null);
-		} else {
+		let rv = await ajax.post({email, password, roles: dictionary.roles}, '/user', [401]);
+		if(rv.ok) {
 			const login = await rv.json();
 			dispatch('set-user', login.user);
-			language.set(login.user.language);
+			languageStore.value = login.user.language;
 			if(login.dictionary)
 				gotTree(login.dictionary);
+		} else if(rv.status === 401) {
+			const cnt = await(rv.json());
+			if(cnt) languageStore.value = cnt;
+			$alert({message: $T('err.login'), color: 'danger'});
+			dispatch('set-user', null);
 		}
 		email = password = '';
 	})(x); }
 	async function logout() {
-		const rv = await fetch('/user', {
-			method: 'DELETE'
-		}), cnt = await(rv.json());
-		if(cnt) language.set(cnt);
+		const rv = await ajax.delete({}, '/user'), cnt = await(rv.json());
+		if(cnt) languageStore.value = cnt;
 		dispatch('set-user', null);
 	}
 </script>
@@ -76,9 +67,9 @@
 			<Icon name="person-fill" />{$user.email}
 		</DropdownToggle>
 		<DropdownMenu>
-			<DropdownItem href="/user" class="prefix-icon"><Icon name="gear-fill" />Configure</DropdownItem>
+			<DropdownItem href="/user" class="prefix-icon"><Icon name="gear-fill" />{$T('cmd.configure')}</DropdownItem>
 			<DropdownItem divider />
-			<DropdownItem on:click={logout} class="prefix-icon"><Icon name="box-arrow-left" />Log out</DropdownItem>
+			<DropdownItem on:click={logout} class="prefix-icon"><Icon name="box-arrow-left" />{$T('cmd.logout')}</DropdownItem>
 		</DropdownMenu>
 	</ButtonDropdown>
 {:else}
@@ -92,7 +83,7 @@
 				<ButtonGroup class="prefix-icon">
 					<Button name="submit" color="primary">
 						<Icon name="box-arrow-in-right" />
-						Log&#8209;in
+						{@html $T('cmd.login')}
 					</Button>
 					<Button color="secondary" on:click={register}>
 						<Icon name="person-fill-add" />
@@ -107,7 +98,7 @@
 				</FormGroup>
 				<Button name="submit" color="primary" class="prefix-icon">
 					<Icon name="person-check-fill" />
-					Log&#8209;in
+					{@html $T('cmd.login')}
 				</Button>
 			</form>
 		{/if}

@@ -15,8 +15,22 @@ export default class Intl {
 
 	@prop({type: String, trim: true})
 	role!: string;
+
+	@prop({type: Number})
+	ts!: number;
 }
 
 let col = map(Intl).db.collections.intls;
 col.createIndex({ key: 1, lng: 1 }, { unique: true });
 col.createIndex({ lng: 1 });
+
+export class IntlKey {
+	@prop({type: String, required: true, unique: true, trim: true})
+	key!: string;
+	
+	@prop({type: String, trim: true})
+	role!: string;
+
+	@prop({type: Boolean})
+	template!: boolean;
+}

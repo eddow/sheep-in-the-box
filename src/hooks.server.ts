@@ -2,9 +2,19 @@ import type { Handle, HandleServerError } from '@sveltejs/kit';
 import { authed } from '$lib/server/auth';
 import type { RequestEvent } from "@sveltejs/kit";
 import { languages } from "$lib/server/objects/intl";
-import { accessible } from '$lib/auth';
+import { allGroups } from '$lib/auth';
 import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
+
+// Version when `user.roles` is still a string
+function accessible(routeId: string, user: any) {
+	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))
+		if(!user || (group !== 'lgdn' && !~user.roles.indexOf(group))) {
+			console.log('CS-401', `Unauthorized (@${group})`);
+			return false;
+		}
+	return true;
+}
 
 export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Partial<Record<string, string>>, string | null>, resolve: any}) => {
 	const user = await authed(event);
@@ -22,13 +32,18 @@ export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Pa
 		});
 	}
 	event.locals.dictionary = await flat(event.locals.language, (event.locals.user?.roles.split(' ') || []).concat(['']));
-	if(event.route.id && !accessible(event.route.id, user))
-		return new Response(null, {status: 303, headers: {location: '/'}});
-	return await resolve(event);
+	if(event.route.id && !accessible(event.route.id, user)) {
+		return new Response(null, /^text\/html/.test(event.request.headers.get('accept') || '') ? 
+			{status: 303, headers: {location: '/'}} :
+			{status: 401, statusText: 'Not authorized'});
+	}
+	return await resolve(event, {transformPageChunk(opts: { html: string, done: boolean }) {
+		return opts.html.replaceAll('%language%', event.locals.language);
+	}});
 };
 
 const codes: Record<string, string> = {
-	11000: 'err.dup-key'
+	11000: 'err.key.dup'
 }
 export function handleError({error, event}: {error: {code: number}, event: RequestEvent<Partial<Record<string, string>>, string | null>}, stuff: any) {
 	if(!codes[error.code]) {

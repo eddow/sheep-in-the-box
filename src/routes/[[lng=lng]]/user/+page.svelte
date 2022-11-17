@@ -1,28 +1,23 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
-	import { getContext } from "svelte";
+	import { ajax, T, user, alert } from "$lib/globals";
 	import { Button, Card, CardBody, CardFooter, CardTitle, FormGroup, Input } from "sveltestrap";
 
-	const user = getContext<SvelteStore<any>>('user');
 $:	if(!$user) goto('/');
-	const alert: (spec: AlertSpec)=> void = getContext('alert');
 	let oldPass: string, cnfPass: string, newPass: string,
 		cnfError: string | false;
 	function validateCnf() {
-		cnfError = cnfPass !== newPass && "Wrong confirmation";	// TODO && !cnfPass.hasFocus
+		cnfError = cnfPass !== newPass && $T('err.pw.conf');	// TODO && !cnfPass.hasFocus
 	}
 	async function setPW({cancel}: {cancel: ()=> void}) {
 		cancel();
 		if(cnfPass === newPass) {
-			let rv = await fetch('', {
-				method: 'PATCH',
-				body: JSON.stringify({oldPass, newPass})
-			});
+			let rv = await ajax.patch({oldPass, newPass});
 			if(Math.floor(rv.status/100) === 4)
-				alert({message: 'Wrong passphrase', color: 'danger'});
+				$alert({message: $T('err.pw.wrong'), color: 'danger'});
 			else {
-				alert({message: 'Passphrase changed', color: 'success'});
+				$alert({message: $T('msg.pw.changed'), color: 'success'});
 				oldPass = newPass = cnfPass = cnfError = '';
 			}
 		}
@@ -30,7 +25,7 @@ $:	if(!$user) goto('/');
 </script>
 <form use:enhance={x=> { setPW(x); }}>
 	<Card>
-		<CardTitle>Change passphrase</CardTitle>
+		<CardTitle>{$T('ttl.pw.new')}</CardTitle>
 		<CardBody>
 			<FormGroup floating label="Current passphrase">
 				<Input required bind:value={oldPass} placeholder="Current passphrase" name="oldPass" type="password" style="min-width: 200px;" autofocus />
@@ -45,7 +40,7 @@ $:	if(!$user) goto('/');
 		</CardBody>
 		<CardFooter>
 			<Button name="submit" color="primary">
-				Set new passphrase
+				{$T('cmd.pw.new')}
 			</Button>
 		</CardFooter>
 	</Card>

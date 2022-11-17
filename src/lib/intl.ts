@@ -1,23 +1,24 @@
-import { readable, writable } from "svelte/store";
+import { readable } from "svelte/store";
+import { ajax } from "./ajax";
 import type { Language, Role } from "./constants";
+import { privateStore } from "./privateStore";
 
 interface Dictionary {
 	tree: any;
 	roles: Role[]
 }
 let dics: Record<string, Dictionary> = {};
-export const language = writable<Language>();
+export const languageStore = privateStore<Language>(),
+	language = languageStore.store;
 export let dictionary: Dictionary;
 export function resetDictionaries() {
 	dics = {};
 	dictionary = {tree: {}, roles: []};
 }
 export async function setLanguage(lng: Language) {
-	language.set(lng);
-	const rv = await fetch('/intl', {
-		method: 'POST',
-		body: JSON.stringify({language: lng, roles: dictionary.roles})
-	}), content = await rv.json();
+	languageStore.value = lng;
+	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/intl'),
+		content = await rv.json();
 	if(content) gotTree(content);
 	else updateTexts();
 }
@@ -49,15 +50,22 @@ export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 }
 
 let updateTexts = ()=> {}
-export const T = readable<(key: string)=> string>(x=> `[${x}]`, (set: (t: (key: string)=> string)=> void)=> {
+type translationFunction = (key: string, parms?: any)=> string;
+export const T = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
 	updateTexts = ()=> {
-		function entry(key: string) {
+		function entry(key: string, parms?: any) {
 			let brwsr = dictionary.tree, keys = key.split('.'), i;
 			for(i = 0; i < keys.length && brwsr instanceof Object; ++i)
 				brwsr = brwsr[keys[i]];
 			if(i >= keys.length && brwsr) {
-				if(typeof brwsr === 'string') return brwsr;
-				if(brwsr.hasOwnProperty('')) return brwsr[''];
+				let rv = typeof brwsr === 'string' ? brwsr :
+					brwsr.hasOwnProperty('') ? brwsr[''] :
+					null;
+				if(rv) {
+					if(parms) for(const parm in parms)
+						rv = rv.replaceAll(`{${parm}}`, parms[parm]);
+					return rv
+				}
 			}
 			return `[${key}]`;
 		}

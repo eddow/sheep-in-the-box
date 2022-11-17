@@ -5,7 +5,7 @@ export interface PrivateStore<T=any> {
 	value: T;
 }
 
-export function privateStore<T=any>(value: any) {
+export function privateStore<T=any>(value?: any) {
 	let set: Subscriber<T> = ()=> {};
 	const store = readable<T>(value, setFct=> {
 		set = setFct;

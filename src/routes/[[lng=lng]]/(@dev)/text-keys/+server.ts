@@ -16,7 +16,7 @@ export async function POST(event: RequestEvent) {	// create
 export async function PUT(event: RequestEvent) {	// rename key
 	const {oldK, newK} = await event.request.json();
 	const krv = await renameKey(oldK, newK);
-	if(!krv) throw error(400, await t('err.dup-key'));
+	if(!krv) throw error(400, await t('err.key.dup'));
 	return json(krv);
 }
 
