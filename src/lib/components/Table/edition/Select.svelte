@@ -1,12 +1,14 @@
 <script lang="ts">
-	import { FormGroup, Input } from 'sveltestrap';
-	import Column from './Column.svelte'
-	import {getRowCtx} from '../utils'
+	import { Input } from 'sveltestrap';
+	import Editor from './Editor.svelte'
+	import {getClmnCtx, getRowCtx} from '../utils'
 	import type { EditingRowContext } from './utils';
 
-	const {row, editing, dialog} = getRowCtx<EditingRowContext>();
-	export let prop: string;
-	export let title: string = '';
+	const {editing} = getRowCtx<EditingRowContext>();
+	const { config } = getClmnCtx();
+	let prop: string, title: string;
+$:	prop = <string>$config.prop;
+$:	title = <string>$config.title;
 	export let required: boolean = false;
 	export let autofocus: boolean = false;
 	export let options: any[];
@@ -14,7 +16,7 @@
 		return options.find(o=> o.value === value)?.text || value;
 	}
 </script>
-<Column {...$$props} {prop} {getDisplay}>
+<Editor {...$$props} {getDisplay}>
 	{#if $editing}
 		<Input {autofocus} {required} type="select" bind:value={$editing[prop]} placeholder={title}>
 			{#each options as option}
@@ -26,4 +28,4 @@
 			{/each}
 		</Input>
 	{/if}
-</Column>
+</Editor>

@@ -20,7 +20,13 @@ export interface RowContext<T=any> {
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;
-	value?: Writable<T>;
+	config: Writable<{
+		value?: T,
+		prop?: string,
+		title?: string,
+		headers?: boolean,
+		html?: boolean
+	}>;
 }
 export function setTblCtx<T=TableContext>(c: T) { setContext(tableContextKey, c); }
 export function getTblCtx<T=TableContext>() { return <T>getContext(tableContextKey); }

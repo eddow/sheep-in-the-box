@@ -1,5 +1,6 @@
 <script lang="ts">
-	import {getClmnCtx} from '../utils'
+	import { Input } from 'sveltestrap';
+	import { getClmnCtx } from '../utils';
 	export let value: string = '';
 	export let beginsWith: boolean = false;
 	export let caseSensitive: boolean = false;
@@ -8,6 +9,6 @@ $:	setFilter(value ?
 		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v)) :
 		undefined);
 </script>
-<template>
-	<input type="text" bind:value />
-</template>
+<th scope="col">
+	<Input type="search" bind:value />
+</th>

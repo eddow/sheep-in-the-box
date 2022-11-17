@@ -11,15 +11,21 @@
 $:	thProps = headers ? {scope: 'row'} : {};
 	let row: any = getRowCtx().row;
 	const tblSetFilter = getTblCtx().setFilter;
+	export let value: any = prop && (typeof row === 'object') && row[prop];
+	const config = writable({});
+$:	config.set({...$config, value});
+$:	config.set({...$config, prop});
+$:	config.set({...$config, title});
+$:	config.set({...$config, headers});
+$:	config.set({...$config, html});
 	let ctx: any = {
 		setFilter(filter: (name: any)=> boolean) {
 			console.assert(!!prop, 'A filtered column must define a `prop`')
 			// TODO: `prop` -> `thisControl` : find back that API
 			tblSetFilter(prop, filter && ((row: any)=> filter(row[prop])));
-		}
+		},
+		config
 	};
-	export let value: any = prop && (typeof row === 'object') && row[prop];
-	ctx.value = value;
 	setClmnCtx(ctx);
 </script>
 {#if !row}

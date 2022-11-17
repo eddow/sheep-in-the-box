@@ -8,6 +8,7 @@
 	import { roles } from "$lib/constants";
 	import { language, T, ajax, alert } from "$lib/globals";
 	import { Button, Icon } from "sveltestrap";
+	import Column from "$lib/components/Table/Column.svelte";
 
 	export let data: PageData;
 	let textRoles: any[];
@@ -43,11 +44,18 @@ $:	textRoles = ['', 'lgdn'].concat(roles).map(r=> ({value: r, text: $T('role.'+(
 	}
 	// TODO Edit boolean `template`
 </script>
-<Table data={data.dictionary}>
-	<Text prop="key" title={$T('fld.key')} required>
-	</Text>
-	<Text autofocus prop="text" area title={$T('fld.text')} />
-	<Select prop="role" title={$T('fld.role')} options={textRoles} />
+<Table data={data.dictionary} columnFilters>
+	<Column prop="key" title={$T('fld.key')}>
+		<StringContent slot="filter" />
+		<Text required />
+	</Column>
+	<Column prop="text" title={$T('fld.text')}>
+		<StringContent slot="filter" />
+		<Text area />
+	</Column>
+	<Column prop="role" title={$T('fld.role')}>
+		<Select options={textRoles} />
+	</Column>
 	<Edition on:save={save} on:remove={remove} create="both" edition="both">
 		<svelte:fragment slot="row" let:row={row}>
 			{#if row.template}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
