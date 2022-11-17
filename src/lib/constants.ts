@@ -14,3 +14,6 @@ export interface Roles {
 	sell: boolean;
 	dev: boolean;
 }
+
+export const textTypes = ['txt', 'tpl', 'html', 'md'];
+export type TextType = 'txt' | 'tpl' | 'html' | 'md';

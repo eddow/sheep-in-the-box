@@ -21,7 +21,6 @@ $:	config.set({...$config, html});
 	let ctx: any = {
 		setFilter(filter: (name: any)=> boolean) {
 			console.assert(!!prop, 'A filtered column must define a `prop`')
-			// TODO: `prop` -> `thisControl` : find back that API
 			tblSetFilter(prop, filter && ((row: any)=> filter(row[prop])));
 		},
 		config

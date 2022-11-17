@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { Alert } from "sveltestrap";
+	import { setGlobalAlertCenter } from "$lib/globals";
 
 	const timeOut = 6000;	// ms
 
-	export const alert = (desc: AlertSpec | string)=> {
+	function alert(desc: AlertSpec | string) {
 		if(typeof desc === 'string') desc = {message: desc};
 		let alert = Object.assign({color: 'info'}, desc);
 		alerts = [...alerts, alert];
@@ -13,6 +14,7 @@
 				alerts = alerts.slice(0, ndx).concat(alerts.slice(ndx+1));
 		}, timeOut);
 	};
+	setGlobalAlertCenter(alert);
 	let alerts: AlertSpec[] = [];
 </script>
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">

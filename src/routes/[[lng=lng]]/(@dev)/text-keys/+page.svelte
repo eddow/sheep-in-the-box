@@ -5,19 +5,22 @@
 	import StringContent from "$lib/components/Table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
 	import Select from "$lib/components/Table/edition/Select.svelte";
-	import { roles } from "$lib/constants";
+	import { roles, textTypes } from "$lib/constants";
 	import { language, T, ajax, alert } from "$lib/globals";
-	import { Button, Icon } from "sveltestrap";
+	import { Button, Icon, Input, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/Table/Column.svelte";
+	import Checkbox from "$lib/components/Table/edition/Checkbox.svelte";
+	import po from "./previewObject";
+	import { parmed } from "$lib/intl";
 
 	export let data: PageData;
 	let textRoles: any[];
-$:	textRoles = ['', 'lgdn'].concat(roles).map(r=> ({value: r, text: $T('role.'+(r||'none'))}));
+$:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('role.'+(r||'none'))}));
 	async function save(e: CustomEvent) {
 		e.preventDefault();
 		const {diff, row, old, effect, cancel} = e.detail;
 		if(!row.key) {
-			$alert({message: $T('err.key.no'), color: 'danger'});
+			alert({message: $T('err.key.no'), color: 'danger'});
 			cancel();
 			return;
 		}
@@ -25,11 +28,10 @@ $:	textRoles = ['', 'lgdn'].concat(roles).map(r=> ({value: r, text: $T('role.'+(
 			const rv = await ajax.put({oldK: old.key, newK: row.key});
 			if(!rv.ok) return cancel();
 		}
-		if(diff.hasOwnProperty('text') || diff.hasOwnProperty('role')) {
-			const chg: any = {key: row.key, language: $language};
-			if(diff.hasOwnProperty('text')) chg.text = diff.text;
-			if(diff.hasOwnProperty('role')) chg.role = diff.role;
-			const rv = await ajax[old.key?'patch':'post'](chg);
+		const chg: any = {};
+		for(const k of ['text', 'role', 'type']) if(k in diff) chg[k] = diff[k];
+		if(Object.keys(chg).length) {
+			const rv = await ajax[old.key?'patch':'post']({key: row.key, language: $language, ...chg});
 			if(rv.ok) effect(); else cancel();
 		} else effect();
 	}
@@ -39,12 +41,13 @@ $:	textRoles = ['', 'lgdn'].concat(roles).map(r=> ({value: r, text: $T('role.'+(
 		let rv = await ajax.delete({key: row.key});
 		if(rv.ok) effect(); else cancel();
 	}
+	let previewText = '', previewHtml = false;
 	function preview(row: any) {
-		// TODO Preview
+		previewText = parmed(row.text || '', po);
 	}
-	// TODO Edit boolean `template`
+	// TODO Preview with type
 </script>
-<Table data={data.dictionary} columnFilters>
+<Table data={data.dictionary} columnFilters title={$T('ttl.text-keys')}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />
 		<Text required />
@@ -56,12 +59,29 @@ $:	textRoles = ['', 'lgdn'].concat(roles).map(r=> ({value: r, text: $T('role.'+(
 	<Column prop="role" title={$T('fld.role')}>
 		<Select options={textRoles} />
 	</Column>
-	<Edition on:save={save} on:remove={remove} create="both" edition="both">
+	<Column prop="type" title={$T('fld.type')}>
+		<Select options={textTypes} />
+	</Column>
+	<Edition on:save={save} on:remove={remove}
+		create="both" edition="both"
+		creation={()=> ({type: 'txt'})}
+		deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}
+	>
 		<svelte:fragment slot="row" let:row={row}>
-			{#if row.template}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
+			{#if row.type !== 'txt'}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="dialog" let:row={row}>
-			{#if row.template}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
+			{#if row.type !== 'txt'}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>
 </Table>
+<Modal isOpen={!!previewText}>
+	<ModalHeader toggle={()=> { previewText = ''; }}>{$T('ttl.preview')}</ModalHeader>
+	<ModalBody>
+		{#if previewHtml}
+			{@html previewText}
+		{:else}
+			{previewText}
+		{/if}
+	</ModalBody>
+</Modal>

@@ -3,104 +3,243 @@
     [
         {
         "key": "cmd.register",
-        "role": ""
+        "role": "",
+        "type": "html"
         },
         {
         "key": "role.none",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "role.dev",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "role.adm",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "role.lgdn",
-        "role": "dev"
+        "role": "dev",
+        "type": "txt"
         },
         {
         "key": "role.trad",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "err.key.dup",
-        "role": "dev"
+        "role": "dev",
+        "type": "txt"
         },
         {
         "key": "role.sell",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "err.key.no",
-        "role": "dev"
+        "role": "dev",
+        "type": "txt"
         },
         {
         "key": "fld.key",
-        "role": "dev"
+        "role": "dev",
+        "type": "txt"
         },
         {
         "key": "fld.text",
-        "role": "dev"
+        "role": "dev",
+        "type": "txt"
         },
         {
         "key": "fld.role",
-        "role": "adm"
+        "role": "adm",
+        "type": "txt"
         },
         {
         "key": "cmd.pw.new",
-        "role": "lgdn"
+        "role": "",
+        "type": "tpl"
         },
         {
         "key": "ttl.pw.new",
-        "role": "lgdn"
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "err.pw.conf",
-        "role": "lgdn"
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "msg.mail-sent",
         "role": "",
-        "template": true
+        "type": "tpl"
         },
         {
         "key": "err.pw.wrong",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "msg.pw.changed",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "cmd.configure",
-        "role": "lgdn"
+        "role": "lgdn",
+        "type": "txt"
         },
         {
         "key": "cmd.logout",
-        "role": "lgdn"
+        "role": "lgdn",
+        "type": "txt"
         },
         {
         "key": "cmd.login",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "cmd.cancel",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "cmd.save",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "cmd.preview",
-        "role": ""
+        "role": "",
+        "type": "txt"
         },
         {
         "key": "err.login",
-        "role": ""
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "err.internal",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "msg.delete-key",
+        "role": "dev",
+        "type": "txt"
+        },
+        {
+        "key": "ttl.delete-key",
+        "role": "dev",
+        "type": "txt"
+        },
+        {
+        "key": "cmd.delete",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "ttl.text-keys",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "fld.template",
+        "role": "dev",
+        "type": "txt"
+        },
+        {
+        "key": "ttl.preview",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "mail.register.md",
+        "role": "srv",
+        "type": "md"
+        },
+        {
+        "key": "role.srv",
+        "role": "adm",
+        "type": "txt"
+        },
+        {
+        "key": "mail.chg-pw.md",
+        "role": "srv",
+        "type": "md"
+        },
+        {
+        "key": "mail.register.txt",
+        "role": "srv",
+        "type": "tpl"
+        },
+        {
+        "key": "mail.chg-pw.txt",
+        "role": "srv",
+        "type": "tpl"
+        },
+        {
+        "key": "mail.register.topic",
+        "role": "srv",
+        "type": "txt"
+        },
+        {
+        "key": "mail.chg-pw.topic",
+        "role": "srv",
+        "type": "txt"
+        },
+        {
+        "key": "ttl.pw.set",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "fld.pw",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "fld.pw.new",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "fld.pw.cur",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "fld.pw.cnf",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "err.pw.code",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "msg.pw.code",
+        "role": "",
+        "type": "txt"
+        },
+        {
+        "key": "cmd.pw",
+        "role": "",
+        "type": "tpl"
+        },
+        {
+        "key": "fld.type",
+        "role": "",
+        "type": "txt"
         }
     ],
 "intls":
@@ -109,7 +248,7 @@
         "key": "cmd.register",
         "lng": "en",
         "text": "Register<br />Lost&nbsp;passphrase",
-        "ts": 1668620619811
+        "ts": 1668705374337
         },
         {
         "key": "role.none",
@@ -260,6 +399,144 @@
         "lng": "en",
         "text": "Wrong login",
         "ts": 1668676457665
+        },
+        {
+        "key": "err.internal",
+        "lng": "en",
+        "text": "Internal error",
+        "ts": 1668681002380
+        },
+        {
+        "key": "msg.delete-key",
+        "lng": "en",
+        "text": "This will remove all the information and all the translations for this key.",
+        "ts": 1668684054118
+        },
+        {
+        "key": "ttl.delete-key",
+        "lng": "en",
+        "text": "Key removal",
+        "ts": 1668684071175
+        },
+        {
+        "key": "cmd.delete",
+        "lng": "en",
+        "text": "Delete",
+        "ts": 1668684796902
+        },
+        {
+        "key": "ttl.text-keys",
+        "lng": "en",
+        "text": "Text entries",
+        "ts": 1668685053669
+        },
+        {
+        "key": "fld.template",
+        "lng": "en",
+        "text": "Tpl",
+        "ts": 1668686905950
+        },
+        {
+        "key": "ttl.preview",
+        "lng": "en",
+        "text": "Preview",
+        "ts": 1668687779572
+        },
+        {
+        "key": "mail.register.md",
+        "lng": "en",
+        "text": "Hello,\n\nPlease register [here]({code-url}).\n\nCiao!",
+        "ts": 1668690078438
+        },
+        {
+        "key": "role.srv",
+        "lng": "en",
+        "text": "Server-side",
+        "ts": 1668689022697
+        },
+        {
+        "key": "mail.chg-pw.md",
+        "lng": "en",
+        "text": "Hello,\n\nPlease change your passphrase [here]({code-url}).\n\nCiao!",
+        "ts": 1668697931050
+        },
+        {
+        "key": "mail.register.txt",
+        "lng": "en",
+        "text": "Hello,\n\nPlease register here: {code-url} .\n\nCiao!",
+        "ts": 1668690072355
+        },
+        {
+        "key": "mail.chg-pw.txt",
+        "lng": "en",
+        "text": "Hello,\n\nPlease change your passphrase here: {code-url} .\n\nCiao!",
+        "ts": 1668697941084
+        },
+        {
+        "key": "mail.register.topic",
+        "lng": "en",
+        "text": "Registering to SITB",
+        "ts": 1668691241237
+        },
+        {
+        "key": "mail.chg-pw.topic",
+        "lng": "en",
+        "text": "Changing your SITB passphrase",
+        "ts": 1668697949452
+        },
+        {
+        "key": "ttl.pw.set",
+        "lng": "en",
+        "text": "Set the passphrase",
+        "ts": 1668694095608
+        },
+        {
+        "key": "fld.pw",
+        "lng": "en",
+        "text": "Passphrase",
+        "ts": 1668697976403
+        },
+        {
+        "key": "fld.pw.new",
+        "lng": "en",
+        "text": "New passphrase",
+        "ts": 1668698057667
+        },
+        {
+        "key": "fld.pw.cur",
+        "lng": "en",
+        "text": "Current passphrase",
+        "ts": 1668698101470
+        },
+        {
+        "key": "fld.pw.cnf",
+        "lng": "en",
+        "text": "Confirm new passphrase",
+        "ts": 1668698228989
+        },
+        {
+        "key": "err.pw.code",
+        "lng": "en",
+        "text": "Code unexistent",
+        "ts": 1668698595958
+        },
+        {
+        "key": "msg.pw.code",
+        "lng": "en",
+        "text": "New passphrase set",
+        "ts": 1668698702900
+        },
+        {
+        "key": "cmd.pw",
+        "lng": "en",
+        "text": "Set passphrase",
+        "ts": 1668698730185
+        },
+        {
+        "key": "fld.type",
+        "lng": "en",
+        "text": "Type",
+        "ts": 1668709726983
         }
     ],
 "users":

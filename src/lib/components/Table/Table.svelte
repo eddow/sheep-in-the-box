@@ -60,4 +60,11 @@ $:	displayedData = data.filter((row: any)=>
 			</svelte:component>
 		</tfoot>
 	{/if}
+	{#if $$slots.once}
+		<tr style="display: none">
+			<td>
+					<slot name="once" />
+			</td>
+		</tr>
+	{/if}
 </Table>

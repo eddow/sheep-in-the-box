@@ -2,6 +2,7 @@ import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import { flat, tree } from '$lib/server/intl';
 import { setLanguage } from '$lib/server/auth';
+import { dev } from '$app/environment';
 
 export const POST: RequestHandler = async (event) => {	//set language
 	const {language, roles} = await event.request.json();
@@ -14,7 +15,7 @@ export const POST: RequestHandler = async (event) => {	//set language
 		event.cookies.set('language', language, {
 			path: '/',
 			sameSite: 'strict',
-			//secure: !dev,
+			secure: !dev,
 			maxAge: 60 * 60 * 24 * 30
 		});
 	if(toSendRoles.length)

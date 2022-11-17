@@ -1,4 +1,4 @@
-import { alert as alertStore } from "./globals";
+import { alert } from "./globals";
 
 interface Ajax {
 	(input: RequestInfo | URL, init?: RequestInit, throughStatus?: number[]): Promise<Response>;
@@ -14,9 +14,6 @@ function shortCut(method: string, body?: any, url?: string, throughStatus?: numb
 	if(body) init.body = JSON.stringify(body);
 	return ajax(url || '', init, throughStatus)
 }
-
-let alert: (alertSpec: string | AlertSpec) => void;
-alertStore.subscribe((v: (alertSpec: string | AlertSpec) => void)=> alert = v);
 
 export const ajax: Ajax = Object.assign(async (input: RequestInfo | URL, init?: RequestInit, throughStatus?: number[]): Promise<Response>=> {
 	const rv = await fetch(input, init);

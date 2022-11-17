@@ -33,7 +33,7 @@ function analyseRoles(str?: string) {
 		rv.lgdn = true;
 		if(str)
 			for(const r of str.split(' '))
-				if(rv.hasOwnProperty(r))
+				if(r in rv)
 					rv[<Role>r] = true;
 	}
 	return rv;

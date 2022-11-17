@@ -8,5 +8,8 @@ declare namespace App {
 	interface Locals {
 		user: User;
 		language: Language;
+		dictionary: Record<string, string>;
 	}
 }
+
+declare module 'markdown';

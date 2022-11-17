@@ -3,8 +3,7 @@
 	import { enhance, type SubmitFunction } from '$app/forms';
 	import { getContext } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
-	import { T, dictionary, gotTree, language, languageStore } from '$lib/intl';
-	import type { PageData } from './$types';
+	import { T, dictionary, gotTree, languageStore } from '$lib/intl';
 	import { ajax, user, alert } from '$lib/globals';
 
 	const dispatch = createEventDispatcher();
@@ -15,7 +14,6 @@
 	let email: string = '';
 	let password: string = '';
 	let isMenuOpen = false;
-	let data: PageData;
 	
 	function anonOpen() {
 		state = 'email';
@@ -26,7 +24,7 @@
 		if(registering) {
 			anonOpened = false;
 			let rv = await ajax.put({email}, '/user');
-			if(await rv.json()) $alert({message: $T('msg.mail-sent', {email})});
+			if(await rv.json()) alert({message: $T('msg.mail-sent', {email})});
 			email = password = '';
 		} else {
 			state = 'password';
@@ -50,7 +48,7 @@
 		} else if(rv.status === 401) {
 			const cnt = await(rv.json());
 			if(cnt) languageStore.value = cnt;
-			$alert({message: $T('err.login'), color: 'danger'});
+			alert({message: $T('err.login'), color: 'danger'});
 			dispatch('set-user', null);
 		}
 		email = password = '';

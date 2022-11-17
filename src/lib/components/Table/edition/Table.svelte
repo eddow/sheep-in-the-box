@@ -15,7 +15,7 @@ $:	allRows = [...added, ...data];
 	let modalOpened = false;
 	let dialogRow: any = null, dialogId: string | number | undefined;
 	let dialogEdit: Writable<any>;
-	// TODO Configure dialog titles
+	export let title: string = '';
 	const modal = {
 		close() {
 			modalOpened = false;
@@ -74,19 +74,22 @@ $:	allRows = [...added, ...data];
 </script>
 <Table key="key" {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
 	<slot />
+	<svelte:fragment slot="once">
+		<Modal keyboard={true} size="xl" isOpen={modalOpened}>
+			<form use:enhance={x=> { submitModal(x); }}>
+				{#if title}<ModalHeader>{title}</ModalHeader>{/if}
+				<ModalBody>
+					<ModalPart row={dialogRow} id={dialogId} dialog="body" editing={dialogEdit}>
+						<slot />
+					</ModalPart>
+				</ModalBody>
+				<ModalFooter>
+					<ModalPart row={dialogRow} id={dialogId} dialog="footer" editing={dialogEdit}>
+						<slot />
+					</ModalPart>
+				</ModalFooter>
+			</form>
+		</Modal>
+		<slot name="once" />
+	</svelte:fragment>
 </Table>
-<Modal keyboard={true} size="xl" isOpen={modalOpened}>
-	<form use:enhance={x=> { submitModal(x); }}>
-		<ModalHeader>Modal title</ModalHeader>
-		<ModalBody>
-			<ModalPart row={dialogRow} id={dialogId} dialog="body" editing={dialogEdit}>
-				<slot />
-			</ModalPart>
-		</ModalBody>
-		<ModalFooter>
-			<ModalPart row={dialogRow} id={dialogId} dialog="footer" editing={dialogEdit}>
-				<slot />
-			</ModalPart>
-		</ModalFooter>
-	</form>
-</Modal>

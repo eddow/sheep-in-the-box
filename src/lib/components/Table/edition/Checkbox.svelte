@@ -1,20 +1,18 @@
 <script lang="ts">
-	import { Input } from 'sveltestrap';
+	import { Icon, Input } from 'sveltestrap';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
 
-	const { editing } = getRowCtx<EditingRowContext>();
+	const { row, editing, dialog } = getRowCtx<EditingRowContext>();
 	const { config } = getClmnCtx();
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
-	export let area: boolean = false;
-	export let required: boolean = false;
-	export let autofocus: boolean = false;
 </script>
 <Editor {...$$restProps}>
+	<Icon slot="display" name={row[prop]?'check':'x'} color={row[prop]?'primary':'secondary'} />
 	{#if $editing}
-		<Input {autofocus} {required} type={area ? 'textarea' : 'text'} bind:value={$editing[prop]} name={prop} placeholder={title} />
+		<Input type="checkbox" bind:checked={$editing[prop]} name={prop} label={dialog?title:''} />
 	{/if}
 </Editor>

@@ -1,7 +1,7 @@
 import { error, json } from '@sveltejs/kit';
-import { create, deleteKey, getDevDictionary, renameKey, setRoles, setTexts } from '$lib/server/intl';
+import { create, deleteKey, getDevDictionary, renameKey, setKeyInfo, setTexts } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
-import type { Role } from '$lib/constants';
+import type { Role, TextType } from '$lib/constants';
 import { t } from '$lib/server/intl';
 
 export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
@@ -9,8 +9,8 @@ export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
 }
 
 export async function POST(event: RequestEvent) {	// create
-	const {language, key, text, role} = await event.request.json();
-	return json(await create(language, key, text, role));
+	const {language, key, text, role, type} = await event.request.json();
+	return json(await create(language, key, text, role, type));
 }
 
 export async function PUT(event: RequestEvent) {	// rename key
@@ -26,9 +26,13 @@ export async function DELETE(event: RequestEvent) {	// delete ALL from key
 }
 
 export async function PATCH(event: RequestEvent) {	// modify
-	const {language, key, text, role} = await event.request.json();
+	const {language, key, text, role, type} = await event.request.json();
 	const promises = [];
-	if(typeof text !== 'undefined') promises.push(setTexts(key, {[language]: text}));
-	if(typeof role !== 'undefined') promises.push(setRoles(key, <Role>role));
+	if(typeof text !== 'undefined') promises.push(setTexts(key, {[language]: text})
+		.then(x=> { if(!x) throw error(500, 'Key does not exists'); }));
+	let keyInfo:any = {};
+	if(typeof role !== 'undefined') keyInfo.role = role;
+	if(typeof type !== 'undefined') keyInfo.type = type;
+	if(Object.keys(keyInfo).length) promises.push(setKeyInfo(key, keyInfo));
 	return json(await Promise.all(promises));
 }

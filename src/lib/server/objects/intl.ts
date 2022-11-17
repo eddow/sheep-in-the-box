@@ -1,13 +1,13 @@
 import { prop } from '@typegoose/typegoose';
-import { languages, type Language } from '../../constants';
+import { languages, textTypes, type Language, type TextType } from '../../constants';
 import { map } from '../db';
-export { languages, Language }
+export { languages, textTypes, Language, TextType }
 
 export default class Intl {
 	@prop({type: String, required: true, trim: true})
 	key!: string;
 	
-	@prop({type: String, required: true, trim: true})
+	@prop({type: String, required: true, trim: true, enum: Object.keys(languages)})
 	lng!: Language
 
 	@prop({type: String, trim: true})
@@ -31,6 +31,6 @@ export class IntlKey {
 	@prop({type: String, trim: true})
 	role!: string;
 
-	@prop({type: Boolean})
-	template!: boolean;
+	@prop({type: String, required: true, enum: textTypes})
+	type!: TextType;
 }

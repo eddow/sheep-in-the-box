@@ -15,9 +15,9 @@ $:	if(!$user) goto('/');
 		if(cnfPass === newPass) {
 			let rv = await ajax.patch({oldPass, newPass});
 			if(Math.floor(rv.status/100) === 4)
-				$alert({message: $T('err.pw.wrong'), color: 'danger'});
+				alert({message: $T('err.pw.wrong'), color: 'danger'});
 			else {
-				$alert({message: $T('msg.pw.changed'), color: 'success'});
+				alert({message: $T('msg.pw.changed'), color: 'success'});
 				oldPass = newPass = cnfPass = cnfError = '';
 			}
 		}
@@ -28,12 +28,12 @@ $:	if(!$user) goto('/');
 		<CardTitle>{$T('ttl.pw.new')}</CardTitle>
 		<CardBody>
 			<FormGroup floating label="Current passphrase">
-				<Input required bind:value={oldPass} placeholder="Current passphrase" name="oldPass" type="password" style="min-width: 200px;" autofocus />
+				<Input required bind:value={oldPass} placeholder={$T('fld.pw.cur')} name="oldPass" type="password" style="min-width: 200px;" autofocus />
 			</FormGroup>
-			<FormGroup floating label="New passphrase">
-				<Input required bind:value={newPass} placeholder="New passphrase" name="password" type="password" style="min-width: 200px;" on:blur={validateCnf} />
+			<FormGroup floating label={$T('fld.pw.new')}>
+				<Input required bind:value={newPass} placeholder={$T('fld.pw.new')} name="password" type="password" style="min-width: 200px;" on:blur={validateCnf} />
 			</FormGroup>
-			<FormGroup floating label="Confirm new passphrase">
+			<FormGroup floating label={$T('fld.pw.cnf')}>
 				<Input invalid={!!cnfError} feedback={cnfError || ''} required bind:value={cnfPass} placeholder="Confirm new passphrase" name="cnfPass"
 					type="password" style="min-width: 200px;" on:change={validateCnf} />
 			</FormGroup>

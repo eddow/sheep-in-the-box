@@ -49,23 +49,27 @@ export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 	updateTexts();
 }
 
+export function parmed(str: string, parms?: any): string {
+	if(parms) for(const parm in parms)
+		str = str.replaceAll(`{${parm}}`, parms[parm]);
+	return str;
+}
+
 let updateTexts = ()=> {}
 type translationFunction = (key: string, parms?: any)=> string;
 export const T = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
 	updateTexts = ()=> {
-		function entry(key: string, parms?: any) {
+		function entry(key: string, parms?: any): string {
+			if(!key) return '';
 			let brwsr = dictionary.tree, keys = key.split('.'), i;
 			for(i = 0; i < keys.length && brwsr instanceof Object; ++i)
 				brwsr = brwsr[keys[i]];
 			if(i >= keys.length && brwsr) {
 				let rv = typeof brwsr === 'string' ? brwsr :
-					brwsr.hasOwnProperty('') ? brwsr[''] :
+					'' in brwsr ? brwsr[''] :
 					null;
-				if(rv) {
-					if(parms) for(const parm in parms)
-						rv = rv.replaceAll(`{${parm}}`, parms[parm]);
-					return rv
-				}
+				if(rv)
+					return parmed(rv, parms);
 			}
 			return `[${key}]`;
 		}

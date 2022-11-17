@@ -3,7 +3,7 @@
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
 
-	const {row, editing, dialog} = getRowCtx<EditingRowContext>();
+	const { row, editing, dialog } = getRowCtx<EditingRowContext>();
 	const { config } = getClmnCtx();
 	let prop: string, title: string, headers: boolean, html: boolean;
 $:	prop = <string>$config.prop;
@@ -26,14 +26,14 @@ $:	thProps = headers ? {scope: 'row'} : {};
 			</svelte:element>
 		</slot>
 	{:else}
-		<slot name="display">
-			<svelte:element this={headers?'th':'td'} {...thProps}>
+		<svelte:element this={headers?'th':'td'} {...thProps}>
+			<slot name="display">
 				{#if html}
 					{@html getDisplay(row[prop])}
 				{:else}
 					{getDisplay(row[prop])}
 				{/if}
-			</svelte:element>
-		</slot>
+			</slot>
+		</svelte:element>
 	{/if}
 {/if}

@@ -6,13 +6,15 @@
 	import { clone, compare, type EditingRowContext, type Edition, type EditionControl } from './utils';
 	import { writable } from 'svelte/store';
 	import { T } from '$lib/intl';
+	import { DeleteCancel, confirm } from '$lib/globals';
+
 	const dispatch = createEventDispatcher();
 	const {row, editing, dialog, id} = getRowCtx<EditingRowContext>();
 	const {modal: {close, add, edit}, rowCreation, editions} = getContext<EditionControl>('edition');
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
-	// TODO Deletion warning text
+	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
 	}
@@ -46,7 +48,10 @@
 		rowCreation.cancel(row);
 		stopEdition();
 	}
-	function remove() {
+	export let deleteConfirmation: ConfirmSpec | string = '';
+	async function remove() {
+		if(deleteConfirmation && !await confirm(deleteConfirmation, DeleteCancel))
+			return;
 		function effect() {
 			rowCreation.delete(row);
 			working = false;
@@ -84,14 +89,14 @@
 		<th class="edition" class:editing={!!$editing} scope="row">
 			{#if working}<Spinner size="sm" />{:else}
 				{#if $editing}
-					<Button on:click={()=> save()} color="primary"><Icon name="save" /></Button>
-					<Button on:click={()=> cancel()} color="warning"><Icon name="x-lg" /></Button>
+					<Button on:click={save} color="primary"><Icon name="save" /></Button>
+					<Button on:click={cancel} color="warning"><Icon name="x-lg" /></Button>
 					<slot name="row" editing={true} row={$editing} />
 					<slot name="edit-row" row={$editing} />
 				{:else}
-					{#if hasSpec(edition, 'row')}<Button on:click={()=> editRow()} color="secondary"><Icon name="pencil" /></Button>{/if}
-					{#if hasSpec(edition, 'dialog')}<Button on:click={()=> modalEdit()} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
-					<Button on:click={()=> remove()} color="danger"><Icon name="trash" /></Button>
+					{#if hasSpec(edition, 'row')}<Button on:click={editRow} color="secondary"><Icon name="pencil" /></Button>{/if}
+					{#if hasSpec(edition, 'dialog')}<Button on:click={modalEdit} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
+					<Button on:click={remove} color="danger"><Icon name="trash" /></Button>
 					<slot name="row" editing={false} row={row} />
 					<slot name="display-row" row={row} />
 				{/if}

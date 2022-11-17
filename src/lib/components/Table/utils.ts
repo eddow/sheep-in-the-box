@@ -28,9 +28,13 @@ export interface ColumnContext<T=any> {
 		html?: boolean
 	}>;
 }
+function assertNnull<T>(v: T, msg: string): T {
+	console.assert(v, msg);
+	return v;
+}
 export function setTblCtx<T=TableContext>(c: T) { setContext(tableContextKey, c); }
-export function getTblCtx<T=TableContext>() { return <T>getContext(tableContextKey); }
+export function getTblCtx<T=TableContext>() { return assertNnull(getContext<T>(tableContextKey), 'Element in a table'); }
 export function setRowCtx<T=RowContext>(c: T) { setContext(rowContextKey, c); }
-export function getRowCtx<T=RowContext>() { return <T>getContext(rowContextKey); }
+export function getRowCtx<T=RowContext>() { return assertNnull(getContext<T>(rowContextKey), 'Element in a row'); }
 export function setClmnCtx<T=ColumnContext>(c: T) { setContext(columnContextKey, c); }
-export function getClmnCtx<T=ColumnContext>() { return <T>getContext(columnContextKey); }
+export function getClmnCtx<T=ColumnContext>() { return assertNnull(getContext<T>(columnContextKey), 'Element in a column'); }
