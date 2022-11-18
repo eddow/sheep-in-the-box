@@ -3,14 +3,15 @@
 	import { createForm } from "felte";
 	import { validator } from '@felte/validator-yup';
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
-	import { createEventDispatcher, setContext } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { setFrmCtx } from "./utils";
 
 	const dispatch = createEventDispatcher();
 
 	export let schema: OptionalObjectSchema<ObjectShape>;
-	const formInfo = useCSR(()=> createForm({
-		async onSubmit(values, context) {
+	// @ts-ignore
+	export const formInfo = useCSR(()=> createForm({
+		async onSubmit(values: any, context: any) {
 			dispatch('submit', {values, context});
 		},
 		extend: validator({schema})

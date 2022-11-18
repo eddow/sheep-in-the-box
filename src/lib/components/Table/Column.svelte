@@ -2,6 +2,7 @@
 	import {specialRow, getRowCtx, getTblCtx, setClmnCtx} from './utils'
 	import {writable} from "svelte/store";
 	import { element } from 'svelte/internal';
+	import { T } from '$lib/globals';
 
 	export let prop: string = '';
 	export let title: string = '';
@@ -15,7 +16,7 @@ $:	thProps = headers ? {scope: 'row'} : {};
 	const config = writable({});
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
-$:	config.set({...$config, title});
+$:	config.set({...$config, title: title || (prop && $T('fld.'+prop))});
 $:	config.set({...$config, headers});
 $:	config.set({...$config, html});
 	let ctx: any = {

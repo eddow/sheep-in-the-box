@@ -10,6 +10,7 @@
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
+	import { object, string } from "yup";
 
 	export let data: PageData;
 	let textRoles: any[];
@@ -43,8 +44,14 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	function preview(row: any) {
 		previewed = row;
 	}
+	const schema = object({
+		key: string().required(),
+		text: string(),
+		role: string(),
+		type: string()
+	});
 </script>
-<Table data={data.dictionary} columnFilters title={$T('ttl.text-keys')}>
+<Table {schema} data={data.dictionary} columnFilters title={$T('ttl.text-keys')}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />
 		<Text required />

@@ -4,7 +4,7 @@
   	import { exclude } from '../utils/exclude'
   	import { prefixFilter } from '../utils/prefixFilter'
 	import { Table } from 'sveltestrap';
-	import { privateStore, type PrivateStore } from '$lib/privateStore';
+	import { privateStore } from '$lib/privateStore';
 
 	export let columnFilters: boolean = false;
 	export let columnHeaders: boolean = true;
@@ -31,7 +31,7 @@ $:	displayedData = data.filter((row: any)=>
 		~unfiltered.indexOf(row) ||
 		Array.from(filters.values()).every(filter=> filter(row)))
 </script>
-<Table {...exclude($$props, ['use', 'tr$'])}>
+<Table {...exclude($$props, ['tr$'])}>
 	{#if columnHeaders}
 		<thead>
 			<svelte:component this={rowType} id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>

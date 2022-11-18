@@ -5,7 +5,6 @@
 	import { object, string } from "yup";
 	import Form from "$lib/components/form/Form.svelte";
 	import GInput from "$lib/components/form/GInput.svelte";
-	import type { FelteSubmitEvent } from "felte";
 
 $:	if(!$user) goto('/');
 	const schema = object({

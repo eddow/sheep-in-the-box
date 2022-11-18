@@ -70,11 +70,11 @@
 {#if dialog === 'footer'}
 	{#if working}<Spinner size="sm" />{:else}
 		{#if id === null}
-			<Button type="reset" class="prefix-icon" color="secondary" on:click={cancel}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
+			<Button type="button" class="prefix-icon" color="secondary" on:click={cancel}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
 			<Button type="submit" class="prefix-icon" color="success" on:click={save}><Icon name="plus" />{$T('cmd.create')}</Button>
 			<slot name="dialog" adding={true} row={$editing} />
 		{:else}
-			<Button type="reset" class="prefix-icon" color="secondary" on:click={cancel}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
+			<Button type="button" class="prefix-icon" color="secondary" on:click={cancel}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
 			<Button type="submit" class="prefix-icon" color="primary" on:click={save}><Icon name="save" />{$T('cmd.save')}</Button>
 			<slot name="dialog" adding={false} row={$editing} />
 		{/if}

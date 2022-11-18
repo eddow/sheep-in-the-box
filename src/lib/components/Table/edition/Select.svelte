@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input } from 'sveltestrap';
+	import Input from '$lib/components/form/Input.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
@@ -9,7 +9,6 @@
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
-	export let required: boolean = false;
 	export let autofocus: boolean = false;
 	export let options: any[];
 	function getDisplay(value: string) {
@@ -18,7 +17,7 @@ $:	title = <string>$config.title;
 </script>
 <Editor {...$$restProps} {getDisplay}>
 	{#if $editing}
-		<Input {autofocus} {required} type="select" bind:value={$editing[prop]} placeholder={title}>
+		<Input {autofocus} type="select" bind:value={$editing[prop]} name={prop}>
 			{#each options as option}
 				{#if typeof option === 'string'}
 					<option>{option}</option>

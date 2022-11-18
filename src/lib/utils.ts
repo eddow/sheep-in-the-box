@@ -7,7 +7,7 @@ const emptyFormInfo: FormContext = <FormContext>{
 	errors: readable({}),
 	touched: readable({})
 };
-export function useCSR(usage: ()=> FormContext) {
+export function useCSR(usage: ()=> FormContext): FormContext {
 	return browser ? usage() : emptyFormInfo;
 }
 

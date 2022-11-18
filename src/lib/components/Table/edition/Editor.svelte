@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { getFrmCtx } from '$lib/components/form/utils';
 	import { FormGroup } from 'sveltestrap';
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
@@ -13,6 +14,7 @@ $:	html = <boolean>$config.html;
 	export let getDisplay = (x:string)=> x;
 	let thProps: any;
 $:	thProps = headers ? {scope: 'row'} : {};
+	const form = getFrmCtx().form;
 </script>
 {#if dialog === 'body'}
 	<FormGroup floating label={title}>
@@ -20,11 +22,9 @@ $:	thProps = headers ? {scope: 'row'} : {};
 	</FormGroup>
 {:else if !dialog}
 	{#if $editing}
-		<slot name="edit">
-			<svelte:element this={headers?'th':'td'} {...thProps} class="selection">
-				<slot />
-			</svelte:element>
-		</slot>
+		<svelte:element this={headers?'th':'td'} {...thProps} class="selection">
+			<slot />
+		</svelte:element>
 	{:else}
 		<svelte:element this={headers?'th':'td'} {...thProps}>
 			<slot name="display">
