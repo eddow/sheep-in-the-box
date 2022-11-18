@@ -22,11 +22,11 @@ $:	thProps = headers ? {scope: 'row'} : {};
 	</FormGroup>
 {:else if !dialog}
 	{#if $editing}
-		<svelte:element this={headers?'th':'td'} {...thProps} class="selection">
+		<div class={headers?'th':'td'} {...thProps}>
 			<slot />
-		</svelte:element>
+		</div>
 	{:else}
-		<svelte:element this={headers?'th':'td'} {...thProps}>
+		<div class={headers?'th':'td'} {...thProps}>
 			<slot name="display">
 				{#if html}
 					{@html getDisplay(row[prop])}
@@ -34,6 +34,6 @@ $:	thProps = headers ? {scope: 'row'} : {};
 					{getDisplay(row[prop])}
 				{/if}
 			</slot>
-		</svelte:element>
+		</div>
 	{/if}
 {/if}

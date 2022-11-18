@@ -8,6 +8,7 @@
 	import { writable, type Writable } from "svelte/store";
 	import { exclude } from "../../utils/exclude";
 	import { clone } from "./utils";
+	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
 
 	export let data: any[];
 	let added: any[] = [];
@@ -66,7 +67,9 @@ $:	allRows = [...added, ...data];
 				data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
 		}
 	};
-	setContext('edition', {modal, rowCreation, editions});
+	// TODO Use the same than for the remaining of table : a private object in utils.ts
+	export let schema: OptionalObjectSchema<ObjectShape>;
+	setContext('edition', {modal, rowCreation, editions, schema});
 	
 	async function submitModal({cancel}: {cancel: ()=> void}) {
 		cancel();

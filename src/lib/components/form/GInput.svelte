@@ -10,5 +10,7 @@
 $:	label = $T('fld.'+name);
 </script>
 <FormGroup floating {label} {...prefixFilter($$restProps, 'fg$')}>
-	<Input {name} {...exclude($$restProps, ['fg$'])} />
+	<Input {name} {...exclude($$restProps, ['fg$'])}>
+		<slot />
+	</Input>
 </FormGroup>

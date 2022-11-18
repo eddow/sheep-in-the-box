@@ -1,4 +1,5 @@
 import type { Readable, Writable } from 'svelte/store';
+import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';
 import type { RowContext } from '../utils';
 export type Dialog = 'body' | 'footer' | false;
 export interface EditingRowContext<T=any> extends RowContext<T> {
@@ -20,6 +21,7 @@ export interface EditionControl {
 		delete(row: any): void
 	};
 	editions: Map<any, Writable<any>>;
+	schema: OptionalObjectSchema<ObjectShape>;
 }
 
 export function clone(o: any) {

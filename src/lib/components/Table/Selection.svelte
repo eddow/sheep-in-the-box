@@ -24,11 +24,11 @@
 	getTblCtx().data.subscribe((v: any[])=> { data = v; });
 </script>
 <Column>
-	<th class="selection" slot="header" scope="col">
+	<div class="th" slot="header" scope="col">
 		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
 			on:change={onChangeAll} />
-	</th>
-	<th class="selection" scope="row">
+	</div>
+	<div class="th" scope="row">
 		<input type="checkbox" checked={selected} on:change={onChangeOne} />
-	</th>
+	</div>
 </Column>

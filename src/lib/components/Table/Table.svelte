@@ -30,41 +30,40 @@ $:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');
 $:	displayedData = data.filter((row: any)=>
 		~unfiltered.indexOf(row) ||
 		Array.from(filters.values()).every(filter=> filter(row)))
+	// TODO Forward classes & styles
 </script>
-<Table {...exclude($$props, ['tr$'])}>
+<div class="table" {...exclude($$props, ['tr$'])}>
 	{#if columnHeaders}
-		<thead>
+		<div class="thead">
 			<svelte:component this={rowType} id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>
 				<slot row={specialRow.header} />
 			</svelte:component>
-		</thead>
+		</div>
 	{/if}
 	{#if columnFilters}
-		<thead>
+		<div class="thead">
 			<svelte:component this={rowType} id="filter" row={specialRow.filter} {...prefixFilter($$props, 'tr$')}>
 				<slot row={specialRow.filter} />
 			</svelte:component>
-		</thead>
+		</div>
 	{/if}
-	<tbody>
+	<div class="tbody">
 		{#each displayedData as row, ndx (rowId(row) || ndx)}
 			<svelte:component this={rowType} id={rowId(row)} row={row} {...prefixFilter($$props, 'tr$')}>
 				<slot row={row} />
 			</svelte:component>
 		{/each}
-	</tbody>
+	</div>
 	{#if columnFooters}
-		<tfoot>
+		<div class="tfoot">
 			<svelte:component this={rowType} id="footer" row={specialRow.footer} {...prefixFilter($$props, 'tr$')}>
 				<slot row={specialRow.footer} />
 			</svelte:component>
-		</tfoot>
+		</div>
 	{/if}
 	{#if $$slots.once}
-		<tr style="display: none">
-			<td>
-					<slot name="once" />
-			</td>
-		</tr>
+		<div style="display: none">
+			<slot name="once" />
+		</div>
 	{/if}
-</Table>
+</div>

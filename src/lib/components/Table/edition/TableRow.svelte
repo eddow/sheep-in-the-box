@@ -6,10 +6,10 @@
 	import { useCSR } from "$lib/utils";
 	import { createForm } from "felte";
 	import { validator } from '@felte/validator-yup';
-	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
 	import { createEventDispatcher } from 'svelte';
-	import { setFrmCtx } from "$lib/components/form/utils";
+	import { setFrmCtx, type FormAction, type FormContext } from "$lib/components/form/utils";
 	import { setRowCtx } from "../utils";
+	import Form from "$lib/components/form/Form.svelte";
 
 	export let row: any;
 	export let id: string|number;
@@ -17,17 +17,26 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let schema: OptionalObjectSchema<ObjectShape>;
+	const { schema } = getContext<EditionControl>('edition')
+	const dataRow = typeof row !== 'string';
 	// @ts-ignore
-	export const formInfo = useCSR(()=> createForm({
+	export const formInfo = dataRow ? useCSR(()=> createForm({
+		// TODO Have `initialValues`
+		initialValues: row,
 		async onSubmit(values: any, context: any) {
 			dispatch('submit', {values, context});
 		},
 		extend: validator({schema})
-	})), form = formInfo.form;
-	setFrmCtx(formInfo);
+	})) : {form: null}, form = <FormAction>formInfo.form;
+	if(dataRow) setFrmCtx(<FormContext>formInfo);
 	setRowCtx({editing: editions.get(row) || writable<any>(null), dialog: false, row, id});
 </script>
-<tr data-row-id={''+id} {...$$restProps}>
-	<slot />
-</tr>
+{#if dataRow}
+	<form use:form class="tr" data-row-id={''+id} {...$$restProps}>
+		<slot />
+	</form>
+{:else}
+	<div class="tr" data-row-id={row} {...$$restProps}>
+		<slot />
+	</div>
+{/if}

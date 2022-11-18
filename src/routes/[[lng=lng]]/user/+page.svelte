@@ -10,9 +10,9 @@ $:	if(!$user) goto('/');
 	const schema = object({
 		passCur: string().required(),
 		passNew: string().required(),
-		passCnf: string().required().test(
+		passCnf: string().test(
 			'confirmation', $T('err.pw.conf'),
-			(value, ctx)=> !!value && value === ctx.parent.passNew
+			(value, ctx)=> value === ctx.parent.passNew
 		)
 	});
 	async function submit(e: CustomEvent) {

@@ -12,4 +12,6 @@
 $:	placeholder = $T('fld.'+name);
 $:	allErrors = (errors||[]).concat($frmErrors[name]||[]);
 </script>
-<Input invalid={!!allErrors.length} feedback={allErrors} {name} {placeholder} {...$$restProps} />
+<Input invalid={!!allErrors.length} feedback={allErrors} {name} {placeholder} {...$$restProps}>
+	<slot />
+</Input>

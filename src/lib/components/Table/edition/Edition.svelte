@@ -81,12 +81,12 @@
 	{/if}
 {:else if !dialog}
 	<Column>
-		<th scope="col" slot="header">
+		<div class="th" scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button on:click={()=> addRow()} color="success"><Icon name="plus" /></Button>{/if}
 			{#if hasSpec(create, 'dialog')}<Button on:click={()=> add(creation())} color="success"><Icon name="file-plus" /></Button>{/if}
 			<slot name="header" />
-		</th>
-		<th class="edition" class:editing={!!$editing} scope="row">
+		</div>
+		<div class="th" class:editing={!!$editing} scope="row">
 			{#if working}<Spinner size="sm" />{:else}
 				{#if $editing}
 					<Button on:click={save} color="primary"><Icon name="save" /></Button>
@@ -101,6 +101,6 @@
 					<slot name="display-row" row={row} />
 				{/if}
 			{/if}
-		</th>
+		</div>
 	</Column>
 {/if}

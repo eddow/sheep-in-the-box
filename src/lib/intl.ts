@@ -68,7 +68,7 @@ export function parmed(str: string, parms?: any): string {
 	rex = /\{\$(.*?)\}/; //apply translations
 	while(match = rex.exec(str)) {
 		str = str.substring(0, match.index) +
-			(dictionary.hash[match[1]] || `[${match[1]}]`)	+
+			(dictionary.hash[camel2dot(match[1])] || `[${match[1]}]`)	+
 			str.substring(match.index+match[0].length);
 	}
 	return str;

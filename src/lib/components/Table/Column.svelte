@@ -29,27 +29,27 @@ $:	config.set({...$config, html});
 	setClmnCtx(ctx);
 </script>
 {#if !row}
-	<th>`Column` is to be used in a `Table` only</th>
+	<div class="td">`Column` is to be used in a `Table` only</div>
 {:else if row === specialRow.filter}
 	<slot name="filter">
-		<td />
+		<div class="td" />
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<th scope="col">{title || prop}</th>
+		<div class="th" scope="col">{title || prop}</div>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<th scope="col" />
+		<div class="th" scope="col" />
 	</slot>
 {:else}
 	<slot>
-		<svelte:element this={headers?'th':'td'} {...thProps}>
+		<div class={headers?'th':'td'} {...thProps}>
 			{#if html}
 				{@html value}
 			{:else}
 				{value}
 			{/if}
-		</svelte:element>
+		</div>
 	</slot>
 {/if}
