@@ -7,11 +7,9 @@
 	import Select from "$lib/components/Table/edition/Select.svelte";
 	import { roles, textTypes } from "$lib/constants";
 	import { language, T, ajax, alert } from "$lib/globals";
-	import { Button, Icon, Input, Modal, ModalBody, ModalHeader } from "sveltestrap";
+	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/Table/Column.svelte";
-	import Checkbox from "$lib/components/Table/edition/Checkbox.svelte";
-	import po from "./previewObject";
-	import { parmed } from "$lib/intl";
+	import Preview from "$lib/components/Preview.svelte";
 
 	export let data: PageData;
 	let textRoles: any[];
@@ -41,11 +39,10 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		let rv = await ajax.delete({key: row.key});
 		if(rv.ok) effect(); else cancel();
 	}
-	let previewText = '', previewHtml = false;
+	let previewed: any = null;
 	function preview(row: any) {
-		previewText = parmed(row.text || '', po);
+		previewed = row;
 	}
-	// TODO Preview with type
 </script>
 <Table data={data.dictionary} columnFilters title={$T('ttl.text-keys')}>
 	<Column prop="key" title={$T('fld.key')}>
@@ -64,24 +61,19 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	</Column>
 	<Edition on:save={save} on:remove={remove}
 		create="both" edition="both"
-		creation={()=> ({type: 'txt'})}
 		deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}
 	>
 		<svelte:fragment slot="row" let:row={row}>
-			{#if row.type !== 'txt'}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
+			{#if row.type}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="dialog" let:row={row}>
-			{#if row.type !== 'txt'}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
+			{#if row.type}<Button color="info" on:click={()=> preview(row)}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>
 </Table>
-<Modal isOpen={!!previewText}>
-	<ModalHeader toggle={()=> { previewText = ''; }}>{$T('ttl.preview')}</ModalHeader>
+<Modal isOpen={!!previewed} size="xl">
+	<ModalHeader toggle={()=> { previewed = null; }}>{$T('ttl.preview')}</ModalHeader>
 	<ModalBody>
-		{#if previewHtml}
-			{@html previewText}
-		{:else}
-			{previewText}
-		{/if}
+		<Preview text={previewed.text} type={previewed.type} />
 	</ModalBody>
 </Modal>

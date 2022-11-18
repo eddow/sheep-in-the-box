@@ -15,5 +15,5 @@ export interface Roles {
 	dev: boolean;
 }
 
-export const textTypes = ['txt', 'tpl', 'html', 'md'];
-export type TextType = 'txt' | 'tpl' | 'html' | 'md';
+export const textTypes = ['', 'tpl', 'html', 'md'];
+export type TextType = '' | 'tpl' | 'html' | 'md';

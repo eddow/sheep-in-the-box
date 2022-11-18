@@ -4,7 +4,7 @@ import { flat, tree } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
 
 export async function GET(event: RequestEvent) {	//authed
-	return json(await authed(event));
+	return json(event.locals);// json(await authed(event));
 }
 
 export async function POST(event: RequestEvent) {	//login

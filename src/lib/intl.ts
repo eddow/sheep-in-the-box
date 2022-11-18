@@ -4,7 +4,7 @@ import type { Language, Role } from "./constants";
 import { privateStore } from "./privateStore";
 
 interface Dictionary {
-	tree: any;
+	hash: any;
 	roles: Role[]
 }
 let dics: Record<string, Dictionary> = {};
@@ -13,7 +13,7 @@ export const languageStore = privateStore<Language>(),
 export let dictionary: Dictionary;
 export function resetDictionaries() {
 	dics = {};
-	dictionary = {tree: {}, roles: []};
+	dictionary = {hash: {}, roles: []};
 }
 export async function setLanguage(lng: Language) {
 	languageStore.value = lng;
@@ -25,27 +25,24 @@ export async function setLanguage(lng: Language) {
 
 language.subscribe((lng: Language)=> {
 	if(!dics[lng])
-		dics[lng] = {tree: {}, roles: []};
+		dics[lng] = {hash: {}, roles: []};
 	dictionary = dics[lng];
 });
 
-function addTree(dst: any, src: any) {
-	for(let sk in src) {
-		if(!dst[sk]) dst[sk] = src[sk];
+function addTree(dst: any, src: any, prefix?: string) {
+	for(const sk in src) {
+		if(!sk) dst[prefix||''] = src[sk];
 		else {
-			const [mbs, subt] = typeof src[sk] === 'string' ? [src[sk], dst[sk]] : [dst[sk], src[sk]];
-			if(typeof subt !== 'string') {
-				if(typeof mbs === 'string')
-					dst[sk] = {...subt, '': mbs};
-				else addTree(mbs, subt);
-			}
+			const key = prefix? prefix+'.'+sk : sk;
+			if(typeof src[sk] === 'string') dst[key] = src[sk];
+			else addTree(dst, src[sk], key);
 		}
 	}
 }
 
 export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 	dictionary.roles.push(...roles);
-	addTree(dictionary.tree, tree);
+	addTree(dictionary.hash, tree);
 	updateTexts();
 }
 
@@ -61,17 +58,7 @@ export const T = readable<translationFunction>(x=> `[${x}]`, (set: (t: translati
 	updateTexts = ()=> {
 		function entry(key: string, parms?: any): string {
 			if(!key) return '';
-			let brwsr = dictionary.tree, keys = key.split('.'), i;
-			for(i = 0; i < keys.length && brwsr instanceof Object; ++i)
-				brwsr = brwsr[keys[i]];
-			if(i >= keys.length && brwsr) {
-				let rv = typeof brwsr === 'string' ? brwsr :
-					'' in brwsr ? brwsr[''] :
-					null;
-				if(rv)
-					return parmed(rv, parms);
-			}
-			return `[${key}]`;
+			return dictionary.hash[key] || `[${key}]`;
 		}
 		set(entry);
 	};

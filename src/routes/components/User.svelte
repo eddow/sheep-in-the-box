@@ -72,10 +72,10 @@
 	</ButtonDropdown>
 {:else}
 	<Button id="anonIcon" on:click={anonOpen} class="btn-rounded"><Icon name="person-fill" /></Button>
-	<Popover target="anonIcon" placement="bottom" title="Identification" bind:isOpen={anonOpened}>
+	<Popover target="anonIcon" placement="bottom" title="Identification" bind:isOpen={anonOpened} class="login-popover">
 		{#if state === 'email'}
-			<form style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;" use:enhance={x=> { setEmail(x); }}>
-				<FormGroup floating label="E-mail">
+			<form style="display: flex; flex-direction: column; align-items: flex-end;" use:enhance={x=> { setEmail(x); }}>
+				<FormGroup floating label="E-mail" style="width: 100%;">
 					<Input required bind:value={email} name="identifier" autocomplete="username" placeholder="E-mail" type="text" style="min-width: 200px;" autofocus />
 				</FormGroup>
 				<ButtonGroup class="prefix-icon">
@@ -90,8 +90,8 @@
 				</ButtonGroup>
 			</form>
 		{:else if state === 'password'}
-			<form style="margin: 1em; display: flex; flex-direction: column; align-items: flex-end;" use:enhance={login}>
-				<FormGroup floating label="Passphrase">
+			<form style="display: flex; flex-direction: column; align-items: flex-end;" use:enhance={login}>
+				<FormGroup floating label="Passphrase" style="width: 100%;">
 					<Input required bind:value={password} placeholder="Passphrase" name="password" autocomplete="current-password" type="password" style="min-width: 200px;" autofocus />
 				</FormGroup>
 				<Button name="submit" color="primary" class="prefix-icon">
@@ -102,3 +102,5 @@
 		{/if}
 	</Popover>
 {/if}
+<style lang="scss">
+</style>

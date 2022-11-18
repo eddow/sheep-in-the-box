@@ -31,9 +31,10 @@
 			<NavItem>
 				<NavLink href="#components/">Components</NavLink>
 			</NavItem>
-			<!--{#if $user?.roles.dev}-->
-				<NavItem><NavLink href="/text-keys"><Icon name="key" />Text keys</NavLink></NavItem>
+			{#if $user?.roles.dev}
+				<NavItem><NavLink data-sveltekit-prefetch="off" href="/text-keys"><Icon name="key" />Text keys</NavLink></NavItem>
 				<NavItem><a data-sveltekit-reload href="/export"><Icon name="download" />Download DB</a></NavItem>
+			{/if}
 		</Nav>
 	</Collapse>
 	<Nav>

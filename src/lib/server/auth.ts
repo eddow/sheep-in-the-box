@@ -2,7 +2,7 @@ import { map } from "./db";
 import User, { Registration, Session } from "$lib/server/objects/user";
 import type { RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
-import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS }  from "$env/static/private";
+import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS, REGISTRATION_TIMEOUT }  from "$env/static/private";
 import type { Language } from "./objects/intl";
 import { markdown } from "markdown";
 import { createTransport } from "nodemailer";
@@ -10,7 +10,8 @@ import { parmed } from "$lib/intl";
 import { getText } from "./intl";
 import { dev } from "$app/environment";
 
-const liTimeout = +(LOGGEDIN_TIMEOUT || 300) * 1000;
+const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
+	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
 
 const users = map(User);
 const regs = map(Registration);
@@ -19,14 +20,22 @@ const sessions = map(Session);
 export function userPublic(user: User) {
 	return user && {email: user.email, language: user.language, roles: ('lgdn '+user.roles).trimEnd()};
 }
-// TODO Clean sessions regularly
+
+// TODO Call `cleanup` regularly (each day/hour)
+export async function cleanup() {
+	const ts = Date.now();
+	return await Promise.all([
+		regs.deleteMany({ts: {$lt: ts-regTimeout}}),
+		sessions.deleteMany({ts: {$lt: ts-liTimeout}})
+	]);
+}
+
 export async function authed(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
-	const authKey = event.cookies.get('session');
+	const authKey = event.cookies.get('session'), ts = (new Date).getTime();
 	if(!authKey) return null;
-	const ts = (new Date).getTime();
 	let rv: Session|undefined = await sessions.findOne({authKey});
 	if(rv && ts-rv.ts > liTimeout) {
-		await sessions.deleteMany(authKey);
+		await sessions.deleteMany({authKey});
 		rv = undefined;
 	}
 	let user = null;
@@ -72,12 +81,18 @@ export async function changePass(event: RequestEvent<Partial<Record<string, stri
 	return true;
 }
 
-// TODO Clean codes regularly
 export async function registration(code: string) : Promise<string> {
-	return (await regs.aggregate([
+	const ts = (new Date).getTime();
+	let rv = (await regs.aggregate([
 		{$match: {code}},
 		{$project: {email: 1}}
 	]))[0]?.email;
+	
+	if(rv && ts-rv.ts > regTimeout) {
+		await sessions.deleteMany({code});
+		rv = undefined;
+	}
+	return rv;
 }
 
 export async function userExists(email: string) {
@@ -124,8 +139,17 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 }
 
 export async function useCode(code: string, password: string) {
-	// TODO check ts ?
 	const email = (await regs.findOne({code}))?.email;
+	const ts = (new Date).getTime();
+	let rv = (await regs.aggregate([
+		{$match: {code}},
+		{$project: {email: 1}}
+	]))[0]?.ts;
+	
+	if(rv && ts-rv > regTimeout) {
+		await sessions.deleteMany({code});
+		return null;
+	}
 	if(email) {
 		regs.deleteMany({email});
 		return await users.updateMany({email}, {$set: {password: md5(password)}}, {upsert: true});

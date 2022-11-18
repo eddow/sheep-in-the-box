@@ -10,6 +10,11 @@ declare namespace App {
 		language: Language;
 		dictionary: Record<string, string>;
 	}
+	
+	interface Error {
+		message: string;
+		code: string;
+	}
 }
 
 declare module 'markdown';
