@@ -1,4 +1,4 @@
-import { beforeNavigate, goto } from "$app/navigation";
+import {  goto } from "$app/navigation";
 import type { Language, Role, Roles } from "./constants";
 import { privateStore } from "./privateStore";
 

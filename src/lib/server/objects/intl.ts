@@ -31,6 +31,6 @@ export class IntlKey {
 	@prop({type: String, trim: true})
 	role!: string;
 
-	@prop({type: String, required: true, enum: textTypes})
+	@prop({type: String, enum: textTypes})
 	type!: TextType;
 }

@@ -1,14 +1,14 @@
 <script lang="ts">
-	import Edition from "$lib/components/Table/edition/Edition.svelte";
-	import Text from "$lib/components/Table/edition/Text.svelte";
-	import Table from "$lib/components/Table/edition/Table.svelte";
-	import StringContent from "$lib/components/Table/filters/StringContent.svelte";
+	import Edition from "$lib/components/table/edition/Edition.svelte";
+	import Text from "$lib/components/table/edition/Text.svelte";
+	import Table from "$lib/components/table/edition/Table.svelte";
+	import StringContent from "$lib/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
-	import Select from "$lib/components/Table/edition/Select.svelte";
+	import Select from "$lib/components/table/edition/Select.svelte";
 	import { roles, textTypes } from "$lib/constants";
 	import { language, T, ajax, alert } from "$lib/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
-	import Column from "$lib/components/Table/Column.svelte";
+	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
 
 	export let data: PageData;

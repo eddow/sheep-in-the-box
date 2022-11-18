@@ -27,12 +27,12 @@ export async function PUT(event: RequestEvent) {	//register
 }
 
 export async function PATCH(event: RequestEvent) {	//change pass
-	if(!event.locals.user) throw error(400, 'Not logged in.')
-	const {oldPass, newPass} = await event.request.json();
+	if(!event.locals.user) throw error(401, 'Not logged in.')
+	const {passCur, passNew} = await event.request.json();
 	
-	return new Response(null, {status: await changePass(event, oldPass, newPass) ? 200 : 401});
+	return new Response(null, {status: await changePass(event, passCur, passNew) ? 200 : 401});
 }
 
 export async function DELETE(event: RequestEvent) {	//logout
-	return json(logout(event) ? event.locals.language : false);
+	return json(await logout(event) ? event.locals.language : false);
 }

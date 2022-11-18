@@ -1,44 +1,45 @@
 <script lang="ts">
 	import { DropdownItem, DropdownMenu, DropdownToggle, ButtonDropdown, FormGroup, Input, Label, Button, Popover, ButtonGroup, Icon } from 'sveltestrap';
 	import { enhance, type SubmitFunction } from '$app/forms';
-	import { getContext } from 'svelte';
 	import { createEventDispatcher } from 'svelte';
 	import { T, dictionary, gotTree, languageStore } from '$lib/intl';
 	import { ajax, user, alert } from '$lib/globals';
+	import { object, string } from "yup";
 
 	const dispatch = createEventDispatcher();
 
-	let state = 'email';
-	let registering = false;
-	let anonOpened = false;
-	let email: string = '';
-	let password: string = '';
-	let isMenuOpen = false;
+	let state = 'email', anonOpened = false, gvnMmail: string = '', isMenuOpen = false, cmd: string;
+	import Form from "$lib/components/form/Form.svelte";
+	import GInput from "$lib/components/form/GInput.svelte";
 	
+	const emailSchema = object({ email: string().email().required() });
+	const passSchema = object({ pass: string().required() });
+
 	function anonOpen() {
 		state = 'email';
 	}
 
-	async function setEmail({cancel}: {cancel: ()=> void}) {
-		cancel();
-		if(registering) {
+	async function setEmail(e: CustomEvent) {
+		const { values, context } = e.detail, email = values.email;
+		context.reset();
+		switch(cmd) {
+		case 'register':
 			anonOpened = false;
 			let rv = await ajax.put({email}, '/user');
 			if(await rv.json()) alert({message: $T('msg.mail-sent', {email})});
-			email = password = '';
-		} else {
+			break;
+		case 'go-pp':
+			gvnMmail = e.detail.values.email;
 			state = 'password';
+			break;
 		}
 	}
-	function register() {
-		registering = true;
-		setTimeout(()=> { registering = false; })
-	}
 
-	const login: SubmitFunction<Record<string, any>, Record<string, any>> = x=> { (async ({cancel}: {cancel: ()=> void}) => {
-		cancel();
+	async function login(e: CustomEvent) {
+		const { values, context } = e.detail, email = values.email;
+		context.reset();
 		anonOpened = false;
-		let rv = await ajax.post({email, password, roles: dictionary.roles}, '/user', [401]);
+		let rv = await ajax.post({email: gvnMmail, password: values.pass, roles: dictionary.roles}, '/user', [401]);
 		if(rv.ok) {
 			const login = await rv.json();
 			dispatch('set-user', login.user);
@@ -51,13 +52,13 @@
 			alert({message: $T('err.login'), color: 'danger'});
 			dispatch('set-user', null);
 		}
-		email = password = '';
-	})(x); }
+	}
 	async function logout() {
 		const rv = await ajax.delete({}, '/user'), cnt = await(rv.json());
 		if(cnt) languageStore.value = cnt;
 		dispatch('set-user', null);
 	}
+	// TOTR fld.email, err.email, ??err.required
 </script>
 {#if $user}
 	<ButtonDropdown isOpen={isMenuOpen}>
@@ -74,31 +75,27 @@
 	<Button id="anonIcon" on:click={anonOpen} class="btn-rounded"><Icon name="person-fill" /></Button>
 	<Popover target="anonIcon" placement="bottom" title="Identification" bind:isOpen={anonOpened} class="login-popover">
 		{#if state === 'email'}
-			<form style="display: flex; flex-direction: column; align-items: flex-end;" use:enhance={x=> { setEmail(x); }}>
-				<FormGroup floating label="E-mail" style="width: 100%;">
-					<Input required bind:value={email} name="identifier" autocomplete="username" placeholder="E-mail" type="text" style="min-width: 200px;" autofocus />
-				</FormGroup>
+			<Form schema={emailSchema} style="display: flex; flex-direction: column; align-items: flex-end;" on:submit={setEmail}>
+				<GInput name="email" autocomplete="email" type="text" style="min-width: 200px;" autofocus fg$style="width: 100%;" />
 				<ButtonGroup class="prefix-icon">
-					<Button name="submit" color="primary">
+					<Button color="primary" on:click={()=> cmd = 'go-pp'}>
 						<Icon name="box-arrow-in-right" />
 						{@html $T('cmd.login')}
 					</Button>
-					<Button color="secondary" on:click={register}>
+					<Button color="secondary" on:click={()=> cmd = 'register'}>
 						<Icon name="person-fill-add" />
 						{@html $T('cmd.register')}
 					</Button>
 				</ButtonGroup>
-			</form>
+			</Form>
 		{:else if state === 'password'}
-			<form style="display: flex; flex-direction: column; align-items: flex-end;" use:enhance={login}>
-				<FormGroup floating label="Passphrase" style="width: 100%;">
-					<Input required bind:value={password} placeholder="Passphrase" name="password" autocomplete="current-password" type="password" style="min-width: 200px;" autofocus />
-				</FormGroup>
+			<Form schema={passSchema} style="display: flex; flex-direction: column; align-items: flex-end;" on:submit={login}>
+				<GInput name="pass" autocomplete="current-password" type="pass" style="min-width: 200px;" autofocus fg$style="width: 100%;" />
 				<Button name="submit" color="primary" class="prefix-icon">
 					<Icon name="person-check-fill" />
 					{@html $T('cmd.login')}
 				</Button>
-			</form>
+			</Form>
 		{/if}
 	</Popover>
 {/if}

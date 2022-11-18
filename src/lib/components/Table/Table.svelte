@@ -1,8 +1,8 @@
 <script lang="ts">
 	import TableRow from './TableRow.svelte'
 	import { specialRow, setTblCtx } from './utils'
-  	import { exclude } from './utils/exclude'
-  	import { prefixFilter } from './utils/prefixFilter'
+  	import { exclude } from '../utils/exclude'
+  	import { prefixFilter } from '../utils/prefixFilter'
 	import { Table } from 'sveltestrap';
 	import { privateStore, type PrivateStore } from '$lib/privateStore';
 

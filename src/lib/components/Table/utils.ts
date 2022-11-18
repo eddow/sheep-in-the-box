@@ -1,3 +1,4 @@
+import { assertNnull } from '$lib/utils';
 import {setContext, getContext} from 'svelte';
 import type {Readable, Writable} from 'svelte/store';
 
@@ -28,10 +29,7 @@ export interface ColumnContext<T=any> {
 		html?: boolean
 	}>;
 }
-function assertNnull<T>(v: T, msg: string): T {
-	console.assert(v, msg);
-	return v;
-}
+
 export function setTblCtx<T=TableContext>(c: T) { setContext(tableContextKey, c); }
 export function getTblCtx<T=TableContext>() { return assertNnull(getContext<T>(tableContextKey), 'Element in a table'); }
 export function setRowCtx<T=RowContext>(c: T) { setContext(rowContextKey, c); }

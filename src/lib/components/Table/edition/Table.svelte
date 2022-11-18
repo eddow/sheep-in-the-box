@@ -6,7 +6,7 @@
 	import { setContext } from "svelte";
 	import ModalPart from "./ModalPart.svelte";
 	import { writable, type Writable } from "svelte/store";
-	import { exclude } from "../utils/exclude";
+	import { exclude } from "../../utils/exclude";
 	import { clone } from "./utils";
 
 	export let data: any[];

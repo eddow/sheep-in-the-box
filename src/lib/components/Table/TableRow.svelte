@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { setRowCtx } from './utils'
-  	import { exclude } from './utils/exclude'
-	import { useActions } from './utils/useActions'
+  	import { exclude } from '../utils/exclude'
+	import { useActions } from '../utils/useActions'
 	
 	export let row: any;
 	export let id: string|number;

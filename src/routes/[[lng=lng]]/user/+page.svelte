@@ -1,42 +1,39 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import { goto } from "$app/navigation";
 	import { ajax, T, user, alert } from "$lib/globals";
-	import { Button, Card, CardBody, CardFooter, CardTitle, FormGroup, Input } from "sveltestrap";
+	import { Button, Card, CardBody, CardFooter, CardTitle } from "sveltestrap";
+	import { object, string } from "yup";
+	import Form from "$lib/components/form/Form.svelte";
+	import GInput from "$lib/components/form/GInput.svelte";
+	import type { FelteSubmitEvent } from "felte";
 
 $:	if(!$user) goto('/');
-	let oldPass: string, cnfPass: string, newPass: string,
-		cnfError: string | false;
-	function validateCnf() {
-		cnfError = cnfPass !== newPass && $T('err.pw.conf');	// TODO && !cnfPass.hasFocus
-	}
-	async function setPW({cancel}: {cancel: ()=> void}) {
-		cancel();
-		if(cnfPass === newPass) {
-			let rv = await ajax.patch({oldPass, newPass});
-			if(Math.floor(rv.status/100) === 4)
-				alert({message: $T('err.pw.wrong'), color: 'danger'});
-			else {
-				alert({message: $T('msg.pw.changed'), color: 'success'});
-				oldPass = newPass = cnfPass = cnfError = '';
-			}
+	const schema = object({
+		passCur: string().required(),
+		passNew: string().required(),
+		passCnf: string().required().test(
+			'confirmation', $T('err.pw.conf'),
+			(value, ctx)=> !!value && value === ctx.parent.passNew
+		)
+	});
+	async function submit(e: CustomEvent) {
+		const { values, context } = e.detail, {passCur, passNew} = values;
+		let rv = await ajax.patch({passCur, passNew});
+		if(Math.floor(rv.status/100) === 4)
+			alert({message: $T('err.pw.wrong'), color: 'danger'});
+		else {
+			alert({message: $T('msg.pw.changed'), color: 'success'});
+			context.reset();
 		}
 	}
 </script>
-<form use:enhance={x=> { setPW(x); }}>
+<Form {schema} on:submit={submit}>
 	<Card>
 		<CardTitle>{$T('ttl.pw.new')}</CardTitle>
 		<CardBody>
-			<FormGroup floating label="Current passphrase">
-				<Input required bind:value={oldPass} placeholder={$T('fld.pw.cur')} name="oldPass" type="password" style="min-width: 200px;" autofocus />
-			</FormGroup>
-			<FormGroup floating label={$T('fld.pw.new')}>
-				<Input required bind:value={newPass} placeholder={$T('fld.pw.new')} name="password" type="password" style="min-width: 200px;" on:blur={validateCnf} />
-			</FormGroup>
-			<FormGroup floating label={$T('fld.pw.cnf')}>
-				<Input invalid={!!cnfError} feedback={cnfError || ''} required bind:value={cnfPass} placeholder="Confirm new passphrase" name="cnfPass"
-					type="password" style="min-width: 200px;" on:change={validateCnf} />
-			</FormGroup>
+			<GInput name="passCur" type="password" style="min-width: 200px;" autofocus />
+			<GInput name="passNew" type="password" style="min-width: 200px;" />
+			<GInput name="passCnf" type="password" style="min-width: 200px;" />
 		</CardBody>
 		<CardFooter>
 			<Button name="submit" color="primary">
@@ -44,4 +41,4 @@ $:	if(!$user) goto('/');
 			</Button>
 		</CardFooter>
 	</Card>
-</form>
+</Form>
