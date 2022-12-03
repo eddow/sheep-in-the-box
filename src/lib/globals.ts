@@ -1,6 +1,6 @@
 export { T, language } from "./intl";
 export { ajax } from "./ajax";
-export { user } from "./auth";
+export { user } from "./user";
 
 export let alert: (alertSpec: AlertSpec | string)=> void;
 export function setGlobalAlertCenter(alertCenter: (alertSpec: AlertSpec | string)=> void) { alert = alertCenter; }

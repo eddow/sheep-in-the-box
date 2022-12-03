@@ -14,7 +14,7 @@ export const languageStore = privateStore<Language>(),	//A- languageStore.value 
 	language = languageStore.store;
 
 export async function setLanguage(lng: Language) {		//B- setLanguage is used to manage the directories
-	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/intl'),
+	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/user/ego'),
 		content = await rv.json();
 	if(content) gotTree(content);
 	else updateTexts();

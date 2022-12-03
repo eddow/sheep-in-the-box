@@ -1,4 +1,4 @@
-import { useCode } from '$lib/server/auth';
+import { useCode } from '$lib/server/user';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export async function POST(event: RequestEvent) {

@@ -1,12 +1,11 @@
-import type { Handle, HandleServerError } from '@sveltejs/kit';
-import { authed } from '$lib/server/auth';
-import type { RequestEvent } from "@sveltejs/kit";
+import type { Handle, HandleServerError, HandleFetch } from '@sveltejs/kit';
+import { authed, updatePreference } from '$lib/server/user';
 import { languages } from "$lib/server/objects/intl";
-import { allGroups } from '$lib/auth';
+import { allGroups, setSSRupdatePreference } from '$lib/user';
 import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
-import { dev } from '$app/environment';
 import { setCookie, setSSR } from '$lib/cookies';
+
 
 // Version when `user.roles` is still a string
 function accessible(routeId: string, user: any) {
@@ -18,8 +17,10 @@ function accessible(routeId: string, user: any) {
 	return true;
 }
 
-export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Partial<Record<string, string>>, string | null>, resolve: any}) => {
+export const handle: Handle = async ({ event, resolve }) => {
 	setSSR(event.cookies);
+	setSSRupdatePreference(updatePreference);
+
 	const user = await authed(event);
 	resetDictionaries();
 	event.locals.language = event.params.lng || user?.language || event.cookies.get('language');
@@ -45,9 +46,10 @@ export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Pa
 const codes: Record<string, string> = {
 	11000: 'err.key.dup'
 }
-export function handleError({error, event}: {error: {code: number}, event: RequestEvent<Partial<Record<string, string>>, string | null>}, stuff: any) {
-	if(!codes[error.code]) {
+export const handleError: HandleServerError = ({error})=> {
+	let code = (<any>error).code;
+	if(!codes[code]) {
 		console.error(error);
 	}
-	return {message: t(codes[error.code] || 'err.internal')};
+	return {message: t(codes[code] || 'err.internal')};
 }

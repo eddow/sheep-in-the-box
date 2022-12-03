@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { accessible, setGlobalUser } from "$lib/auth";
+	import { accessible, setGlobalUser } from "$lib/user";
 	import Menu from './components/Menu.svelte';
 	import Alerts from './components/Alerts.svelte';
 	import Confirm from "./components/Confirm.svelte";

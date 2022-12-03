@@ -2,6 +2,7 @@ import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
 import type { Language, Role, Roles } from "./constants";
 import { jsonCookies } from "./cookies";
+import { ajax } from "./globals";
 import { privateStore } from "./privateStore";
 
 export function allGroups(rex: RegExp, hay: string, grpIndex: number) {
@@ -30,24 +31,28 @@ export interface User {
 	preferences: any;
 }
 
+let updatePreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/user/ego')
+export function setSSRupdatePreference(nup: (email: string, name: string, value?: string)=> any) {
+	updatePreference = nup;
+}
+
 const preferencesStore = privateStore();
 export const preferences = preferencesStore.store;
-const userPrefs = (email: string, preferences: Record<PropertyKey, any>)=> new Proxy(preferences, {
+const userPrefs = (preferences: Record<PropertyKey, any>)=> new Proxy(preferences, {
 	get(target: any, prop: PropertyKey, receiver: any): any {
 		return target[prop];
 	},
 	set(target: any, prop: PropertyKey, value: any, receiver: any): boolean {
 		target[prop] = value;
-		// TODO create & call API
+		updatePreference(userStore.value.email, prop.toString(), value);	// TODO .then(?)
 		return true;
 	},
 	deleteProperty(target: any, prop: PropertyKey): boolean {
 		delete target[prop];
-		// TODO create & call API
+		updatePreference(userStore.value.email, prop.toString());
 		return true;
 	}
-});
-const localPrefs = new Proxy({}, {
+}), localPrefs = new Proxy({}, {
 	get(target: any, prop: PropertyKey, receiver: any): any {
 		return jsonCookies.preferences && jsonCookies.preferences[prop];
 	},
@@ -84,7 +89,7 @@ export function setGlobalUser(userSpec: any, routeId: string | null) {
 		roles: analyseRoles(userSpec.roles)
 	};
 	preferencesStore.value = userSpec ?
-		userPrefs(userSpec.email, userSpec.preferences || {}) :
+		userPrefs(userSpec.preferences || {}) :
 		localPrefs;
 	if(routeId && !accessible(routeId))
 		goto('/');

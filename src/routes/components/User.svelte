@@ -89,7 +89,7 @@
 			</Form>
 		{:else if state === 'password'}
 			<Form schema={passSchema} style="display: flex; flex-direction: column; align-items: flex-end;" on:submit={login}>
-				<GInput name="pass" autocomplete="current-password" type="pass" style="min-width: 200px;" autofocus fg$style="width: 100%;" />
+				<GInput name="pass" autocomplete="current-password" type="password" style="min-width: 200px;" autofocus fg$style="width: 100%;" />
 				<Button name="submit" color="primary" class="prefix-icon">
 					<Icon name="person-check-fill" />
 					{@html $T('cmd.login')}

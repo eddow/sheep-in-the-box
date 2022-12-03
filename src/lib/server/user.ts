@@ -8,7 +8,6 @@ import { markdown } from "markdown";
 import { createTransport } from "nodemailer";
 import { parmed } from "$lib/intl";
 import { getText } from "./intl";
-import { dev } from "$app/environment";
 import { stringCookies } from "$lib/cookies";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
@@ -101,6 +100,20 @@ export async function userExists(email: string) {
 
 export async function setLanguage(email: string, language: Language) {
 	await users.findOneAndUpdate({email}, {$set:{language}});
+}
+
+export async function updatePreference(email: string, name: string, value?: any) {
+	let preferences = (await users.aggregate([
+			{$match: {email}},
+			{$project: {preferences: 1}}
+		]))[0].preferences;
+	if(typeof value === 'undefined') {
+		if(!preferences || !(name in preferences)) return preferences || {};
+		delete preferences[name];
+	} else if(preferences) preferences[name] = value;
+	else preferences = {[name]: value};
+	let rv = await users.updateMany({email}, {$set:{preferences}});
+	return rv.acknowledged && preferences;
 }
 
 //#region Register/lost pw

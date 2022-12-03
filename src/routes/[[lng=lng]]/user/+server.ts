@@ -1,5 +1,5 @@
 import { error, json } from '@sveltejs/kit';
-import { login, logout, authed, changePass, register } from "$lib/server/auth";
+import { login, logout, authed, changePass, register } from "$lib/server/user";
 import { flat, tree } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
 

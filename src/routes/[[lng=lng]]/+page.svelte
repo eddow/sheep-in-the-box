@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { preferences } from '$lib/auth';
+	import { preferences } from '$lib/user';
 	import { Input } from 'sveltestrap';
 	
 	let prefs: any;
