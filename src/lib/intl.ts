@@ -19,6 +19,7 @@ export function resetDictionaries() {
 }
 export async function setLanguage(lng: Language) {
 	languageStore.value = lng;
+	// TODO All roles are always asked !!!
 	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/intl'),
 		content = await rv.json();
 	if(content) gotTree(content);

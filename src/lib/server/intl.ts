@@ -1,11 +1,11 @@
 import Intl, { IntlKey, type Language, type TextType } from "$lib/server/objects/intl";
-import { map, removeIds } from "./db";
+import { map, removeIds, stringIds } from "./db";
 import type { Role } from "./objects/user";
 
 const dictionary = map(Intl);
 const keys = map(IntlKey);
 
-// TODO - later - Cache the dictionary in RAM and reload on trad's `refresh` command
+// TODO - later - Cache the dictionary in RAM and reload on trad's `refresh` command or regularly
 let thisFlat: Record<string, string> = {};
 export function t(key: string) {
 	return key in thisFlat ? thisFlat[key] : `[${key}]`;
@@ -56,7 +56,7 @@ export function tree(flat: Record<string, string>) {
 }
 
 export async function getDevDictionary(lng: Language) {
-	return removeIds(await dictionary.aggregate([
+	return stringIds(await dictionary.aggregate([
 		{$match: {lng}},
 		{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
 		{$project: {key: 1, text: 1, role: {$first: '$keyDesc.role'}, type: {$first: '$keyDesc.type'}}},
@@ -81,10 +81,8 @@ export async function setKeyInfo(key: string, $set: {role?: Role, type?: TextTyp
 }
 
 export async function create(lng: Language, key: string, text: string, role: string, type: TextType) {
-	return await Promise.all([
-		dictionary.insertMany([{lng, key, text, ts: Date.now()}]),
-		keys.insertMany([{key, role, type}])
-	]);
+	try { await keys.insertMany([{key, role, type}]) } catch {}
+	return (await dictionary.insertMany([{lng, key, text, ts: Date.now()}]))[0]._id;
 }
 
 export async function deleteKey(key: string) {

@@ -3,7 +3,6 @@
 	import { specialRow, setTblCtx } from './utils'
   	import { exclude } from '../utils/exclude'
   	import { prefixFilter } from '../utils/prefixFilter'
-	import { Table } from 'sveltestrap';
 	import { privateStore } from '$lib/privateStore';
 
 	export let columnFilters: boolean = false;

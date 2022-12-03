@@ -1,26 +1,23 @@
-import type { Readable, Writable } from 'svelte/store';
+import type { Readable } from 'svelte/store';
 import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';
 import type { RowContext } from '../utils';
-export type Dialog = 'body' | 'footer' | false;
+
+export enum Dialog { None = 0, Body, Footer }
+export enum Editing { No = 0, Yes, Working }
+
 export interface EditingRowContext<T=any> extends RowContext<T> {
-	editing: Writable<any>;
 	dialog: Dialog;
 }
 
 export interface EditionControl {
-	modal: {
-		opened: Readable<boolean>,
-		close: ()=> void,
-		add: (editing: Writable<any>)=> void,
-		edit: (editing: Writable<any>, row: any, id?: string | number)=> void
-	};
-	rowCreation: {
-		add(row: any): void,
-		save(row: any, old: any): void,
-		cancel(row: any): void,
-		delete(row: any): void
-	};
-	editions: Map<any, Writable<any>>;
+	editing: Readable<Editing>;
+	startEdit?: ()=> void;
+	save: (row: any, old: any)=> Promise<boolean>
+	cancelEdit(row?: any): void;
+	deleteRow(row?: any): void;
+	addRow(row?: any): void;
+	editModal(row: any): void;
+	addedRows: Set<any>;
 	schema: OptionalObjectSchema<ObjectShape>;
 }
 

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { DropdownItem, DropdownMenu, DropdownToggle, ButtonDropdown, FormGroup, Input, Label, Button, Popover, ButtonGroup, Icon } from 'sveltestrap';
-	import { enhance, type SubmitFunction } from '$app/forms';
 	import { createEventDispatcher } from 'svelte';
 	import { T, dictionary, gotTree, languageStore } from '$lib/intl';
 	import { ajax, user, alert } from '$lib/globals';
@@ -25,7 +24,7 @@
 		switch(cmd) {
 		case 'register':
 			anonOpened = false;
-			let rv = await ajax.put({email}, '/user');
+			const rv = await ajax.put({email}, '/user');
 			if(await rv.json()) alert({message: $T('msg.mail-sent', {email})});
 			break;
 		case 'go-pp':
@@ -36,7 +35,7 @@
 	}
 
 	async function login(e: CustomEvent) {
-		const { values, context } = e.detail, email = values.email;
+		const { values, context } = e.detail;
 		context.reset();
 		anonOpened = false;
 		let rv = await ajax.post({email: gvnMmail, password: values.pass, roles: dictionary.roles}, '/user', [401]);

@@ -9,6 +9,16 @@ export function map(definition: any/*AnyParamConstructor<any>*/, parms?: IModelO
 	return getModelForClass(definition, parms);
 }
 
+export function stringIds(obj: any) {
+	if(obj instanceof Array)
+		for(const o of obj) stringIds(o);
+	else {
+		obj._id = obj._id.toString();
+		delete obj.__v;
+	}
+	return obj;
+}
+
 export function removeIds(obj: any) {
 	if(obj instanceof Array)
 		for(const o of obj) removeIds(o);

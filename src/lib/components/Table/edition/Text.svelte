@@ -4,7 +4,7 @@
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
 
-	const { editing } = getRowCtx<EditingRowContext>();
+	const { row } = getRowCtx<EditingRowContext>();
 	const { config } = getClmnCtx();
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
@@ -13,7 +13,5 @@ $:	title = <string>$config.title;
 	export let autofocus: boolean = false;
 </script>
 <Editor {...$$restProps}>
-	{#if $editing}
-		<Input {autofocus} type={area ? 'textarea' : 'text'} bind:value={$editing[prop]} name={prop} />
-	{/if}
+	<Input {autofocus} type={area ? 'textarea' : 'text'} value={row[prop]} name={prop} />
 </Editor>

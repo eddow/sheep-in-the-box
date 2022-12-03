@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { create, deleteKey, getDevDictionary, renameKey, setKeyInfo, setTexts } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
-import type { Role, TextType } from '$lib/constants';
 import { t } from '$lib/server/intl';
 
 export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
@@ -10,7 +9,13 @@ export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
 
 export async function POST(event: RequestEvent) {	// create
 	const {language, key, text, role, type} = await event.request.json();
-	return json(await create(language, key, text, role, type));
+	try {
+		return json(await create(language, key, text, role, type));
+	} catch(x: any) {
+		if(x.code == 11000)
+			throw error(400, await t('err.key.dup'));
+		throw x;
+	}
 }
 
 export async function PUT(event: RequestEvent) {	// rename key

@@ -1,97 +1,126 @@
+<script context="module" lang="ts">
+	export type SaveCallback<T = any> = (newValues: T, oldValues: T, diff: any) => Promise<boolean|undefined>;
+	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|undefined>;
+</script>
 <script lang="ts">
 	import TableRow from "./TableRow.svelte";
 	import Table from "../Table.svelte";
 	import { Modal, ModalBody, ModalFooter, ModalHeader } from "sveltestrap";
-	import { enhance } from "$app/forms";
-	import { setContext } from "svelte";
+	import { setContext, tick } from "svelte";
 	import ModalPart from "./ModalPart.svelte";
-	import { writable, type Writable } from "svelte/store";
 	import { exclude } from "../../utils/exclude";
-	import { clone } from "./utils";
+	import { compare, Dialog, Editing, type EditionControl } from "./utils";
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
+	import Form from "$lib/components/form/Form.svelte";
+	import { privateStore } from "$lib/privateStore";
 
+	export let saveCB: SaveCallback, deleteCB: DeleteCallback;
 	export let data: any[];
+	export let key: string;
+	const addedRows = new Set<any>();
+
 	let added: any[] = [];
 $:	allRows = [...added, ...data];
-	let modalOpened = false;
-	let dialogRow: any = null, dialogId: string | number | undefined;
-	let dialogEdit: Writable<any>;
+	let modalOpened = false,
+		dialogRow: any = null,
+		dialogEditing = privateStore<Editing>(Editing.Yes);
 	export let title: string = '';
-	const modal = {
-		close() {
-			modalOpened = false;
-		},
-		add(row: Writable<any>) {
-			dialogRow = clone(row);
-			dialogEdit = writable(row);
-			dialogId = undefined;
-			modalOpened = true;
-		},
-		edit(editing: Writable<any>, row: any, id: string | number) {
-			dialogRow = row;
-			dialogEdit = editing;
-			dialogId = id;
-			modalOpened = true;
-		}
-	};
-	const editions = new Map<any, SvelteStore<any>>();
-	const rowCreation = {
-		add(row: any) {
-			added = [row, ...added];
-			editions.set(row, writable(clone(row)));
-		},
-		save(row: any, old: any) {
-			let ndxAdded = added.indexOf(old), ndxData = data.indexOf(old);
-			if(~ndxAdded) {
-				added = [...added.slice(0, ndxAdded), ...added.slice(ndxAdded+1)];
-				data = [row, ...data];
-			} else if(~ndxData) {
-				for(const k of Object.keys(old)) delete old[k];
-				setTimeout(()=> {
-					Object.assign(old, row);
-					data = [...data];
-				});
-				data = [...data];
-			} else if(old === dialogRow)
-				data = [row, ...data];
-			else throw "Inconsistent saving behaviour";
-		},
-		cancel(row: any) {
-			const ndx = added.indexOf(row);
-			if(~ndx)
-				added = [...added.slice(0, ndx), ...added.slice(ndx+1)];
-		},
-		delete(row: any) {
-			const ndx = data.indexOf(row);
-			if(~ndx)
-				data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
-		}
-	};
+	
 	// TODO Use the same than for the remaining of table : a private object in utils.ts
 	export let schema: OptionalObjectSchema<ObjectShape>;
-	setContext('edition', {modal, rowCreation, editions, schema});
-	
-	async function submitModal({cancel}: {cancel: ()=> void}) {
-		cancel();
+
+	function setEditing(editing: Editing, row?: any) {
+		if(!row || row === dialogRow)
+			dialogEditing.value = editing;
 	}
+	async function saveRow(e: CustomEvent) {
+		setEditing(Editing.Working);
+		if(await save(e.detail.values, dialogRow))		
+			modalOpened = false;
+		setEditing(Editing.Yes);
+	}
+	
+	async function save(row: any, old: any) {
+		const diff = compare(row, old);
+		if(diff) {
+			setEditing(Editing.Working, old);
+			if(await saveCB(row, old, diff) === false) {
+				setEditing(Editing.Yes, old);
+				return false;
+			}
+			let ndxData = data.indexOf(old);
+			if(~ndxData) {
+				for(const k of Object.keys(old)) delete old[k];
+				data = [...data];
+				await tick();	// TODO Double check why needed
+				Object.assign(old, row);
+				data = [...data];
+			} else if(addedRows.delete(old)) {
+				added = Array.from(addedRows);
+				data = [row, ...data];
+			} else if(old === dialogRow) {
+				data = [row, ...data];
+				modalOpened = false;
+			}
+			else throw "Inconsistent saving behaviour";
+			setEditing(Editing.No, old);
+			dialogRow = null;
+		}
+		return true;
+	};
+
+	setContext<EditionControl>('edition', {
+		addedRows, schema,
+		editing: dialogEditing.store,
+		save,
+		async deleteRow(row?: any) {
+			let exEditing = dialogEditing.value;
+			setEditing(Editing.Working, row);
+			try {
+				if(await deleteCB(row || dialogRow) === false)
+					return false;
+			} finally {
+				setEditing(exEditing, row);
+			}
+			if(row) {
+				const ndx = data.indexOf(row);
+				if(~ndx)
+					data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
+			} else dialogRow = null;
+			return true;
+		},
+		cancelEdit(row?: any) {
+			if(row && addedRows.delete(row))
+				added = Array.from(addedRows);
+			modalOpened = false;
+		},
+		addRow(row?: any) {
+			addedRows.add(row || {});
+			added = Array.from(addedRows);
+		},
+		editModal(row?: any) {
+			dialogRow = row || {};
+			modalOpened = true;
+		}
+	});
 </script>
-<Table key="key" {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
+<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
 	<slot />
 	<svelte:fragment slot="once">
 		<Modal keyboard={true} size="xl" isOpen={modalOpened}>
-			<form use:enhance={x=> { submitModal(x); }}>
+			<Form {schema} on:submit={saveRow}>
 				{#if title}<ModalHeader>{title}</ModalHeader>{/if}
 				<ModalBody>
-					<ModalPart row={dialogRow} id={dialogId} dialog="body" editing={dialogEdit}>
+					<ModalPart row={dialogRow} {key} dialog={Dialog.Body}>
 						<slot />
 					</ModalPart>
 				</ModalBody>
 				<ModalFooter>
-					<ModalPart row={dialogRow} id={dialogId} dialog="footer" editing={dialogEdit}>
+					<ModalPart row={dialogRow} {key} dialog={Dialog.Footer}>
 						<slot />
 					</ModalPart>
 				</ModalFooter>
-			</form>
+			</Form>
 		</Modal>
 		<slot name="once" />
 	</svelte:fragment>

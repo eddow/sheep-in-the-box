@@ -36,11 +36,11 @@ $:	config.set({...$config, html});
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<div class="th" scope="col">{title || prop}</div>
+		<div class="th" data-scope="col">{title || prop}</div>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<div class="th" scope="col" />
+		<div class="th" data-scope="col" />
 	</slot>
 {:else}
 	<slot>
