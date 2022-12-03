@@ -4,11 +4,11 @@ import type { Readable } from 'svelte/store';
 import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';
 import type { RowContext } from '../utils';
 
-const editionContext = {};
+const editionContextKey = Symbol('editionContext');
 
-export function setEdtnCtx<T extends EditionContext = EditionContext>(c: T) { setContext(editionContext, c); }
+export function setEdtnCtx<T extends EditionContext = EditionContext>(c: T) { setContext(editionContextKey, c); }
 export function getEdtnCtx<T extends EditionContext = EditionContext>(): T {
-	return assertNnull(getContext<T>(editionContext), 'Element in a form');
+	return assertNnull(getContext<T>(editionContextKey), 'Element in a form');
 }
 
 export enum Dialog { None = 0, Body, Footer }

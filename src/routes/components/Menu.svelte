@@ -14,13 +14,19 @@
 		Icon
 	} from 'sveltestrap';
 	import User from './User.svelte';
-	import Languages from './Languages.svelte';
+	import Languages from '$lib/components/Languages.svelte';
 	import { user } from '$lib/globals';
+	import { language, setLanguage, T } from "$lib/intl";
+	import type { Language } from '$lib/constants';
 	
 	let isOpen = false;
 
 	function handleUpdate(event: any) {
 		isOpen = event.detail.isOpen;
+	}
+	
+	function setLng(e: CustomEvent) {
+		setLanguage(<Language>e.detail);
 	}
 </script>
 <Navbar color="light" light expand="md">
@@ -31,12 +37,21 @@
 			<NavItem>
 				<NavLink href="#components/">Components</NavLink>
 			</NavItem>
-			{#if $user?.roles.dev}
-				<NavItem><NavLink href="/text-keys"><Icon name="key" />Text keys</NavLink></NavItem>
-				<NavItem><a data-sveltekit-reload href="/export"><Icon name="download" />Download DB</a></NavItem>
-			{/if}
 		</Nav>
 	</Collapse>
+	{#if $user?.roles.dev}
+		<Dropdown>
+			<DropdownToggle caret><Icon name="tools" /></DropdownToggle>
+			<DropdownMenu>
+				<DropdownItem><NavLink class="prefix-icon" href="/text-keys"><Icon name="key" />{$T('ttl.text-keys')}</NavLink></DropdownItem>
+				<DropdownItem>
+					<a class="nav-link prefix-icon" data-sveltekit-preload-data="off" data-sveltekit-reload href="/export">
+						<Icon name="download" />{$T('mnu.db-dld')}
+					</a>
+				</DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+	{/if}
 	<Nav>
 		<NavItem>
 			<User on:set-user />
@@ -45,7 +60,7 @@
 			<div style="width: .5em;">&nbsp;</div>
 		</NavItem>
 		<NavItem>
-			<Languages on:set-language />
+			<Languages language={$language} on:set-language={setLng} />
 		</NavItem>
 	</Nav>
 </Navbar>

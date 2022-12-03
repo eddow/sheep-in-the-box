@@ -1,7 +1,8 @@
-import { prop } from '@typegoose/typegoose';
+import { modelOptions, prop, Severity } from '@typegoose/typegoose';
 import { languages, roles, type Language, type Role } from '../../constants';
 export { Role, roles }
 
+@modelOptions({options: {allowMixed: Severity.ALLOW}})
 export default class User {
 	@prop({type: String, required: true, unique: true, trim: true, validate: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/})
 	email!: string;
@@ -14,6 +15,9 @@ export default class User {
 	
 	@prop({type: String, required: true})
 	roles!: string;	//Roles;
+	
+	@prop({type: Object})
+	preferences!: any;
 }
 
 export class Registration {

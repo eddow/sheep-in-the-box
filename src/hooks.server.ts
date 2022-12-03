@@ -6,6 +6,7 @@ import { allGroups } from '$lib/auth';
 import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
 import { dev } from '$app/environment';
+import { setCookie, setSSR } from '$lib/cookies';
 
 // Version when `user.roles` is still a string
 function accessible(routeId: string, user: any) {
@@ -18,20 +19,18 @@ function accessible(routeId: string, user: any) {
 }
 
 export const handle: Handle = async ({ event, resolve }: {event: RequestEvent<Partial<Record<string, string>>, string | null>, resolve: any}) => {
-	const user = await authed(event), languageCookie = event.cookies.get('language');
+	setSSR(event.cookies);
+	const user = await authed(event);
 	resetDictionaries();
-	event.locals.language = event.params.lng || user?.language || languageCookie ||
-		event.request.headers.get('accept-language')?.
-			split(';').map(x=> x.split(' ')[1]).
-			find(x=> x && x in languages) ||
-		'en';
-	if(!languageCookie && !user?.language)
-		event.cookies.set('language', event.locals.language, {
-			path: '/',
-			sameSite: 'strict',
-			secure: !dev,
-			maxAge: 60 * 60 * 24 * 30
-		});
+	event.locals.language = event.params.lng || user?.language || event.cookies.get('language');
+	if(!event.locals.language) {
+		event.locals.language = event.request.headers.get('accept-language')?.
+				split(';').map(x=> x.split(' ')[1]).
+				find(x=> x && x in languages) ||
+			'en'
+		setCookie('language', event.locals.language);
+	}
+	event.locals.preferences = (user ? user.preferences : event.cookies.get('preferences')) || {};
 	event.locals.dictionary = await flat(event.locals.language, (event.locals.user?.roles.split(' ') || []).concat(['']));
 	if(event.route.id && !accessible(event.route.id, user)) {
 		return new Response('"Not avail"', /^text\/html/.test(event.request.headers.get('accept') || '') ? 

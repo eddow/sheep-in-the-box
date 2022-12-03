@@ -9,6 +9,7 @@ import { createTransport } from "nodemailer";
 import { parmed } from "$lib/intl";
 import { getText } from "./intl";
 import { dev } from "$app/environment";
+import { stringCookies } from "$lib/cookies";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
@@ -18,7 +19,7 @@ const regs = map(Registration);
 const sessions = map(Session);
 
 export function userPublic(user: User) {
-	return user && {email: user.email, language: user.language, roles: ('lgdn '+user.roles).trimEnd()};
+	return user && {email: user.email, language: user.language, roles: ('lgdn '+user.roles).trimEnd(), preferences: user.preferences || {}};
 }
 
 // TODO Call `cleanup` regularly (each day/hour)
@@ -41,7 +42,8 @@ export async function authed(event: RequestEvent<Partial<Record<string, string>>
 	let user = null;
 	if(rv) {
 		user = await users.findOne({email: rv.email});
-		await sessions.updateMany({email: rv.email}, {$set: {ts}})
+		await sessions.updateMany({email: rv.email}, {$set: {ts}});
+		stringCookies.session = authKey;	// Refresh the maxAge
 	} else {
 		if(authKey) event.cookies.delete('session', {path: '/'});
 		return null;
@@ -54,13 +56,8 @@ export async function login(event: RequestEvent<Partial<Record<string, string>>,
 	const one = await users.findOne({email, password: md5(password)});
 	if(!one) return null;
 	event.locals.user = userPublic(one);
-	await sessions.updateMany({email}, {$set: {authKey, ts: Date.now()}}, {upsert: true})
-	event.cookies.set('session', authKey, {
-		path: '/',
-		sameSite: 'strict',
-		secure: !dev,
-		maxAge: 60 * 60 * 24 * 30
-	});
+	await sessions.updateMany({email}, {$set: {authKey, ts: Date.now()}}, {upsert: true});
+	stringCookies.session = authKey;
 	return userPublic(one);
 }
 

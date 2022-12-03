@@ -107,6 +107,8 @@ $:	allRows = [...added, ...data];
 </script>
 <Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
 	<slot />
+	<slot name="header" slot="header" />
+	<slot name="footer" slot="footer" />
 	<svelte:fragment slot="once">
 		<Modal keyboard={true} size="xl" isOpen={modalOpened}>
 			<Form {schema} on:submit={saveRow}>

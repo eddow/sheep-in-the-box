@@ -5,13 +5,14 @@ import type { Language } from "$lib/constants";
 
 // and what to do when importing types
 declare namespace App {
-	interface Locals {
+	export interface Locals {
 		user: User;
 		language: Language;
 		dictionary: Record<string, string>;
+		preferences: Record<string, any>;
 	}
 	
-	interface Error {
+	export interface Error {
 		message: string;
 		code: string;
 	}

@@ -32,6 +32,11 @@ $:	displayedData = data.filter((row: any)=>
 	// TODO Forward classes & styles
 </script>
 <div class="table" {...exclude($$props, ['tr$'])}>
+	{#if $$slots.header}
+		<div class="thead">
+			<slot name="header" />
+		</div>
+	{/if}
 	{#if columnHeaders}
 		<div class="thead">
 			<svelte:component this={rowType} id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>
@@ -58,6 +63,11 @@ $:	displayedData = data.filter((row: any)=>
 			<svelte:component this={rowType} id="footer" row={specialRow.footer} {...prefixFilter($$props, 'tr$')}>
 				<slot row={specialRow.footer} />
 			</svelte:component>
+		</div>
+	{/if}
+	{#if $$slots.footer}
+		<div class="tfoot">
+			<slot name="footer" />
 		</div>
 	{/if}
 	{#if $$slots.once}

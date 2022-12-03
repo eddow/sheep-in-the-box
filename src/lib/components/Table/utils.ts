@@ -2,9 +2,9 @@ import { assertNnull } from '$lib/utils';
 import {setContext, getContext} from 'svelte';
 import type {Readable, Writable} from 'svelte/store';
 
-const tableContextKey = {};
-const rowContextKey = {};
-const columnContextKey = {};
+const tableContextKey = Symbol('tableContext');
+const rowContextKey = Symbol('rowContext');
+const columnContextKey = Symbol('columnContext');
 export enum specialRow {
 	header = 'headerRow',
 	filter = 'filterRow',

@@ -98,5 +98,3 @@
 		{/if}
 	</Popover>
 {/if}
-<style lang="scss">
-</style>

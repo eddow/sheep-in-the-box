@@ -11,6 +11,7 @@
 	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
 	import { object, string } from "yup";
+	import Languages from "$lib/components/Languages.svelte";
 
 	export let data: PageData;
 	let textRoles: any[];
@@ -46,6 +47,12 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		type: string()
 	});
 </script>
+<div style="width: 100%">
+	<Languages style="float: right;" language={$language} on:set-language={()=> {}} />
+	<h1>
+		{$T('ttl.text-keys')}
+	</h1>
+</div>
 <Table key="_id" {schema} data={data.dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />

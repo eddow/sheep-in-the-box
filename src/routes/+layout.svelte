@@ -15,6 +15,7 @@
 		if(to?.route.id && !accessible(to.route.id))
 			cancel();
 	});
+	// TODO Cache CSS!!
 </script>
 <div class="app">
 	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
