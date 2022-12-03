@@ -45,9 +45,8 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		role: string(),
 		type: string()
 	});
-	// TODO Use objectID instead
 </script>
-<Table key="key" {schema} data={data.dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
+<Table key="_id" {schema} data={data.dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />
 		<Text />

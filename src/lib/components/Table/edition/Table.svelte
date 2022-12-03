@@ -6,10 +6,10 @@
 	import TableRow from "./TableRow.svelte";
 	import Table from "../Table.svelte";
 	import { Modal, ModalBody, ModalFooter, ModalHeader } from "sveltestrap";
-	import { setContext, tick } from "svelte";
+	import { tick } from "svelte";
 	import ModalPart from "./ModalPart.svelte";
 	import { exclude } from "../../utils/exclude";
-	import { compare, Dialog, Editing, type EditionControl } from "./utils";
+	import { compare, Dialog, Editing, setEdtnCtx } from "./utils";
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
 	import Form from "$lib/components/form/Form.svelte";
 	import { privateStore } from "$lib/privateStore";
@@ -26,7 +26,6 @@ $:	allRows = [...added, ...data];
 		dialogEditing = privateStore<Editing>(Editing.Yes);
 	export let title: string = '';
 	
-	// TODO Use the same than for the remaining of table : a private object in utils.ts
 	export let schema: OptionalObjectSchema<ObjectShape>;
 
 	function setEditing(editing: Editing, row?: any) {
@@ -50,9 +49,11 @@ $:	allRows = [...added, ...data];
 			}
 			let ndxData = data.indexOf(old);
 			if(~ndxData) {
+				// { Double change w/ emptying for a weird bug who lets the change unseen when modal-editing
 				for(const k of Object.keys(old)) delete old[k];
 				data = [...data];
-				await tick();	// TODO Double check why needed
+				await tick();
+				// }
 				Object.assign(old, row);
 				data = [...data];
 			} else if(addedRows.delete(old)) {
@@ -69,7 +70,7 @@ $:	allRows = [...added, ...data];
 		return true;
 	};
 
-	setContext<EditionControl>('edition', {
+	setEdtnCtx({
 		addedRows, schema,
 		editing: dialogEditing.store,
 		save,

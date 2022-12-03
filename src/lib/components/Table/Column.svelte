@@ -1,7 +1,6 @@
 <script lang="ts">
 	import {specialRow, getRowCtx, getTblCtx, setClmnCtx} from './utils'
 	import {writable} from "svelte/store";
-	import { element } from 'svelte/internal';
 	import { T } from '$lib/globals';
 
 	export let prop: string = '';
@@ -29,27 +28,27 @@ $:	config.set({...$config, html});
 	setClmnCtx(ctx);
 </script>
 {#if !row}
-	<div class="td">`Column` is to be used in a `Table` only</div>
+	<td>`Column` is to be used in a `Table` only</td>
 {:else if row === specialRow.filter}
 	<slot name="filter">
-		<div class="td" />
+		<td />
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<div class="th" data-scope="col">{title || prop}</div>
+		<th scope="col">{title || prop}</th>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<div class="th" data-scope="col" />
+		<th scope="col" />
 	</slot>
 {:else}
 	<slot>
-		<div class={headers?'th':'td'} {...thProps}>
+		<svelte:element this={headers?'th':'td'} {...thProps}>
 			{#if html}
 				{@html value}
 			{:else}
 				{value}
 			{/if}
-		</div>
+		</svelte:element>
 	</slot>
 {/if}

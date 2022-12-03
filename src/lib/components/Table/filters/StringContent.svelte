@@ -9,6 +9,6 @@ $:	setFilter(value ?
 		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v)) :
 		undefined);
 </script>
-<div class="th" data-scope="col">
+<th scope="col">
 	<Input type="search" bind:value />
-</div>
+</th>

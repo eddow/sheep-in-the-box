@@ -1,6 +1,15 @@
+import { assertNnull } from '$lib/utils';
+import { getContext, setContext } from 'svelte';
 import type { Readable } from 'svelte/store';
 import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';
 import type { RowContext } from '../utils';
+
+const editionContext = {};
+
+export function setEdtnCtx<T extends EditionContext = EditionContext>(c: T) { setContext(editionContext, c); }
+export function getEdtnCtx<T extends EditionContext = EditionContext>(): T {
+	return assertNnull(getContext<T>(editionContext), 'Element in a form');
+}
 
 export enum Dialog { None = 0, Body, Footer }
 export enum Editing { No = 0, Yes, Working }
@@ -9,7 +18,7 @@ export interface EditingRowContext<T=any> extends RowContext<T> {
 	dialog: Dialog;
 }
 
-export interface EditionControl {
+export interface EditionContext {
 	editing: Readable<Editing>;
 	startEdit?: ()=> void;
 	save: (row: any, old: any)=> Promise<boolean>

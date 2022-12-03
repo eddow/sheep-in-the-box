@@ -10,20 +10,21 @@ interface Dictionary {
 	roles: Role[]
 }
 let dics: Record<string, Dictionary> = {};
-export const languageStore = privateStore<Language>(),
+export const languageStore = privateStore<Language>(),	//A- languageStore.value = ... is used when the dictionarries are managed
 	language = languageStore.store;
-export let dictionary: Dictionary;
-export function resetDictionaries() {
-	dics = {};
-	dictionary = {hash: {}, roles: []};
-}
-export async function setLanguage(lng: Language) {
-	languageStore.value = lng;
-	// TODO All roles are always asked !!!
+
+export async function setLanguage(lng: Language) {		//B- setLanguage is used to manage the directories
 	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/intl'),
 		content = await rv.json();
 	if(content) gotTree(content);
 	else updateTexts();
+	languageStore.value = lng;
+}
+
+export let dictionary: Dictionary;
+export function resetDictionaries() {
+	dics = {};
+	dictionary = {hash: {}, roles: []};
 }
 
 language.subscribe((lng: Language)=> {

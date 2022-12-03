@@ -2,13 +2,12 @@
 	import Column from '../Column.svelte'
 	import { getRowCtx } from '../utils';
 	import { Button, Icon, Spinner } from 'sveltestrap';
-	import { getContext } from 'svelte';
-	import { Dialog, Editing, type EditingRowContext, type Edition, type EditionControl } from './utils';
+	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type Edition } from './utils';
 	import { T } from '$lib/intl';
 	import { DeleteCancel, confirm } from '$lib/globals';
 
 	const { row, dialog, id } = getRowCtx<EditingRowContext>();
-	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getContext<EditionControl>('edition');
+	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx();
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
@@ -22,7 +21,6 @@
 			return;
 		await deleteRow();
 	}
-	// TODO Try to replace class="th" with real TH for graphic effects and scope ?
 </script>
 {#if dialog === Dialog.Footer}
 	{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
@@ -38,12 +36,12 @@
 	{/if}
 {:else if !dialog}
 	<Column>
-		<div class="th" data-scope="col" slot="header">
+		<th scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></Button>{/if}
 			{#if hasSpec(create, 'dialog')}<Button on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></Button>{/if}
 			<slot name="header" />
-		</div>
-		<div class="th" class:editing={!!$editing} data-scope="row">
+		</th>
+		<th class:editing={!!$editing} scope="row">
 			{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
 				{#if $editing}
 					<Button type="submit" color="primary"><Icon name="save" /></Button>
@@ -58,6 +56,6 @@
 					<slot name="display-row" row={row} />
 				{/if}
 			{/if}
-		</div>
+		</th>
 	</Column>
 {/if}
