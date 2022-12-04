@@ -73,7 +73,7 @@
 	</ButtonDropdown>
 {:else}
 	<Button id="anonIcon" on:click={anonOpen} class="btn-rounded"><Icon name="person-fill" /></Button>
-	<Popover target="anonIcon" placement="bottom" title="Identification" bind:isOpen={anonOpened} class="login-popover">
+	<Popover target="anonIcon" placement="bottom" title={$T('ttl.identf')} bind:isOpen={anonOpened} class="login-popover">
 		{#if state === 'email'}
 			<Form schema={emailSchema} style="display: flex; flex-direction: column; align-items: flex-end;" on:submit={setEmail}>
 				<GInput name="email" autocomplete="email" type="text" style="min-width: 200px;" autofocus fg$style="width: 100%;" />

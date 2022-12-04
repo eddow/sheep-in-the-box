@@ -4,12 +4,12 @@
 </script>
 <script lang="ts">
 	import TableRow from "./TableRow.svelte";
-	import Table from "../Table.svelte";
+	import Table from "../../Table.svelte";
 	import { Modal, ModalBody, ModalFooter, ModalHeader } from "sveltestrap";
 	import { tick } from "svelte";
-	import ModalPart from "./ModalPart.svelte";
-	import { exclude } from "../../utils/exclude";
-	import { compare, Dialog, Editing, setEdtnCtx } from "./utils";
+	import ModalPart from "../ModalPart.svelte";
+	import { exclude } from "../../../utils/exclude";
+	import { compare, Dialog, Editing, setEdtnCtx, type RowEditionContext } from "../utils";
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
 	import Form from "$lib/components/form/Form.svelte";
 	import { privateStore } from "$lib/privateStore";
@@ -70,7 +70,7 @@ $:	allRows = [...added, ...data];
 		return true;
 	};
 
-	setEdtnCtx({
+	setEdtnCtx<RowEditionContext>({
 		addedRows, schema,
 		editing: dialogEditing.store,
 		save,

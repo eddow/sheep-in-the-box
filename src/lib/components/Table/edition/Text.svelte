@@ -7,11 +7,12 @@
 	const { row } = getRowCtx<EditingRowContext>();
 	const { config } = getClmnCtx();
 	let prop: string, title: string;
+	export let placeholder: string | undefined = undefined;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
 	export let area: boolean = false;
 	export let autofocus: boolean = false;
 </script>
 <Editor {...$$restProps}>
-	<Input {autofocus} type={area ? 'textarea' : 'text'} value={row[prop]} name={prop} />
+	<Input {placeholder} {autofocus} type={area ? 'textarea' : 'text'} value={row[prop]} name={prop} />
 </Editor>

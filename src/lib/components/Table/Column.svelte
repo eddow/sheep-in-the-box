@@ -1,6 +1,6 @@
 <script lang="ts">
-	import {specialRow, getRowCtx, getTblCtx, setClmnCtx} from './utils'
-	import {writable} from "svelte/store";
+	import { specialRow, getRowCtx, getTblCtx, setClmnCtx } from './utils'
+	import { writable } from "svelte/store";
 	import { T } from '$lib/globals';
 
 	export let prop: string = '';
@@ -11,11 +11,11 @@
 $:	thProps = headers ? {scope: 'row'} : {};
 	let row: any = getRowCtx().row;
 	const tblSetFilter = getTblCtx().setFilter;
-	export let value: any = prop && (typeof row === 'object') && row[prop];
+	export let value: any = (prop && (typeof row === 'object') && row[prop]) || '';
 	const config = writable({});
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
-$:	config.set({...$config, title: title || (prop && $T('fld.'+prop))});
+$:	config.set({...$config, title: typeof title === 'undefined' ? (prop && $T('fld.'+prop)) : title});
 $:	config.set({...$config, headers});
 $:	config.set({...$config, html});
 	let ctx: any = {
@@ -28,27 +28,27 @@ $:	config.set({...$config, html});
 	setClmnCtx(ctx);
 </script>
 {#if !row}
-	<td>`Column` is to be used in a `Table` only</td>
+	<div class="td">`Column` is to be used in a `Table` only</div>
 {:else if row === specialRow.filter}
 	<slot name="filter">
-		<td />
+		<div class="td" />
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<th scope="col">{title || prop}</th>
+		<div class="th" scope="col">{title || prop}</div>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<th scope="col" />
+		<div class="th" scope="col" />
 	</slot>
 {:else}
 	<slot>
-		<svelte:element this={headers?'th':'td'} {...thProps}>
+		<div class={headers?'th':'td'} {...thProps}>
 			{#if html}
 				{@html value}
 			{:else}
 				{value}
 			{/if}
-		</svelte:element>
+		</div>
 	</slot>
 {/if}

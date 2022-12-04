@@ -6,9 +6,9 @@
 	export let caseSensitive: boolean = false;
 	const setFilter = getClmnCtx().setFilter;
 $:	setFilter(value ?
-		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v)) :
+		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v||'')) :
 		undefined);
 </script>
-<th scope="col">
+<div class="th" scope="col">
 	<Input type="search" bind:value />
-</th>
+</div>

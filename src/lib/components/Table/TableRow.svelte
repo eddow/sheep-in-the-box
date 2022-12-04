@@ -7,6 +7,6 @@
 	Object.assign(context, {row, id})
 	setRowCtx(context);
 </script>
-<tr data-row-id={''+id} {...$$restProps}>
+<div class="tr" data-row-id={''+id} {...$$restProps}>
 	<slot />
-</tr>
+</div>

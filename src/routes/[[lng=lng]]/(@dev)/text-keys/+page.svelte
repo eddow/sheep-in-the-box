@@ -1,12 +1,12 @@
 <script lang="ts">
-	import Edition from "$lib/components/table/edition/Edition.svelte";
+	import Edition from "$lib/components/table/edition/row/Edition.svelte";
 	import Text from "$lib/components/table/edition/Text.svelte";
-	import Table from "$lib/components/table/edition/Table.svelte";
+	import Select from "$lib/components/table/edition/Select.svelte";
+	import Table from "$lib/components/table/edition/row/Table.svelte";
 	import StringContent from "$lib/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
-	import Select from "$lib/components/table/edition/Select.svelte";
 	import { roles, textTypes } from "$lib/constants";
-	import { language, T, ajax, alert } from "$lib/globals";
+	import { T, ajax, alert } from "$lib/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
@@ -34,7 +34,7 @@ $:	prefs = $preferences;
 		const chg: any = {};
 		for(const k of ['text', 'role', 'type']) if(k in diff) chg[k] = diff[k];
 		if(Object.keys(chg).length) {
-			const rv = await ajax[old.key?'patch':'post']({key: row.key, language: $language, ...chg});
+			const rv = await ajax[old.key?'patch':'post']({key: row.key, language: prefs.devKeysLng, ...chg});
 			if(!old.key) row._id = await rv.json();
 			return rv.ok;
 		}
@@ -64,7 +64,7 @@ $:	prefs = $preferences;
 		{$T('ttl.text-keys')}
 	</h1>
 </div>
-<Table key="_id" {schema} data={dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
+<Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />
 		<Text />
@@ -81,7 +81,7 @@ $:	prefs = $preferences;
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}>
 		<svelte:fragment slot="row" let:row={row}>
-			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
+			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="dialog" let:row={row}>
 			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}

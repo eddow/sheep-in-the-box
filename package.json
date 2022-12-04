@@ -41,6 +41,7 @@
 		"md5": "^2.3.0",
 		"mongoose": "~6.6.0",
 		"nodemailer": "^6.8.0",
+		"svelte-dnd-action": "^0.9.22",
 		"sveltestrap": "^5.10.0",
 		"yup": "^0.32.11"
 	}

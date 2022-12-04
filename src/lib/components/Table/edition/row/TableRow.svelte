@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { Dialog, Editing, getEdtnCtx, setEdtnCtx, type EditingRowContext } from "./utils";
+	import { Dialog, Editing, getEdtnCtx, setEdtnCtx, type EditingRowContext, type RowEditionContext } from "../utils";
 	import { useCSR } from "$lib/utils";
 	import { createForm } from "felte";
 	import { validator } from '@felte/validator-yup';
 	import { createEventDispatcher } from 'svelte';
 	import { setFrmCtx, type FormAction, type FormContext } from "$lib/components/form/utils";
-	import { setRowCtx } from "../utils";
+	import { setRowCtx } from "../../utils";
 	import Form from "$lib/components/form/Form.svelte";
 	import { privateStore } from "$lib/privateStore";
 
 	export let row: any;
 	export let id: string|number;
-	const EditionContext = getEdtnCtx(),
+	const EditionContext = getEdtnCtx<RowEditionContext>(),
 		{ addedRows, schema, cancelEdit, save, deleteRow } = EditionContext;
 
 	const dispatch = createEventDispatcher();
@@ -33,7 +33,7 @@
 		editing.value = (await save(e.detail.values, row)) ? Editing.No : Editing.Yes;
 	}
 	
-	setEdtnCtx({
+	setEdtnCtx<RowEditionContext>({
 		...EditionContext,
 		editing: editing.store,
 		startEdit() {
@@ -59,7 +59,7 @@
 		<slot />
 	</Form>
 {:else}
-	<tr data-row-id={id} {...$$restProps}>
+	<div class="tr" data-row-id={id} {...$$restProps}>
 		<slot />
-	</tr>
+	</div>
 {/if}

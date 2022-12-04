@@ -5,6 +5,9 @@ export const languages: Record<string, string> = {
 	ro: 'Română'
 };
 
+const mods: Record<string, string> = {en: 'gb'};
+export const flag = (lng: string) => 'fi fi-'+(mods[lng] || lng);
+
 export type Role = 'adm' | 'trad' | 'sell' | 'dev';
 export const roles = ['adm', 'trad', 'sell', 'dev'];
 

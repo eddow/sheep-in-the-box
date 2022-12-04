@@ -1,11 +1,9 @@
 <script lang="ts">
-	import { languages, type Language } from "$lib/constants";
+	import { flag, languages, type Language } from "$lib/constants";
 	import { createEventDispatcher } from "svelte";
 	
 	const dispatch = createEventDispatcher();
 	import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from "sveltestrap";
-	const mods: Record<string, string> = {en: 'gb'};
-	const flag = (lng: string) => 'fi fi-'+(mods[lng] || lng);
 	export let language: Language;
 	function setLng(lng: string) {
 		dispatch('set-language', lng)

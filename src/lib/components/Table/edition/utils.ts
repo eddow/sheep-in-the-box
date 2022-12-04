@@ -8,7 +8,7 @@ const editionContextKey = Symbol('editionContext');
 
 export function setEdtnCtx<T extends EditionContext = EditionContext>(c: T) { setContext(editionContextKey, c); }
 export function getEdtnCtx<T extends EditionContext = EditionContext>(): T {
-	return assertNnull(getContext<T>(editionContextKey), 'Element in a form');
+	return assertNnull(getContext<T>(editionContextKey), 'Element in an editable context');
 }
 
 export enum Dialog { None = 0, Body, Footer }
@@ -20,6 +20,10 @@ export interface EditingRowContext<T=any> extends RowContext<T> {
 
 export interface EditionContext {
 	editing: Readable<Editing>;
+	schema: OptionalObjectSchema<ObjectShape>;
+}
+
+export interface RowEditionContext extends EditionContext {
 	startEdit?: ()=> void;
 	save: (row: any, old: any)=> Promise<boolean>
 	cancelEdit(row?: any): void;
@@ -27,7 +31,6 @@ export interface EditionContext {
 	addRow(row?: any): void;
 	editModal(row: any): void;
 	addedRows: Set<any>;
-	schema: OptionalObjectSchema<ObjectShape>;
 }
 
 export function clone(o: any) {

@@ -4,6 +4,7 @@
 	import { getClmnCtx } from '../utils'
 
 	const { config } = getClmnCtx();
+	export let placeholder: string | undefined = undefined;
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
@@ -14,7 +15,7 @@ $:	title = <string>$config.title;
 	}
 </script>
 <Editor {...$$restProps} {getDisplay}>
-	<Input {autofocus} type="select" name={prop}>
+	<Input {placeholder} {autofocus} type="select" name={prop}>
 		{#each options as option}
 			{#if typeof option === 'string'}
 				<option>{option}</option>

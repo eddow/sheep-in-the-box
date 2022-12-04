@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { getFrmCtx } from '$lib/components/form/utils';
 	import { FormGroup } from 'sveltestrap';
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import { Dialog, getEdtnCtx, type EditingRowContext, type EditionContext } from './utils';
@@ -7,15 +6,14 @@
 	const { row, dialog } = getRowCtx<EditingRowContext>();
 	const { editing } = getEdtnCtx();
 	const { config } = getClmnCtx();
-	let prop: string, title: string, headers: boolean, html: boolean;
+	let prop: string, title: string, headers: boolean;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
 $:	headers = <boolean>$config.headers;
-$:	html = <boolean>$config.html;
-	export let getDisplay = (x:string)=> x;
+	export let html = (x:string, row: any)=> $config.html;
+	export let getDisplay = (x: string, row: any)=> x;
 	let thProps: any;
 $:	thProps = headers ? {scope: 'row'} : {};
-	const form = getFrmCtx().form;
 </script>
 {#if dialog === Dialog.Body}
 	<FormGroup floating label={title}>
@@ -23,18 +21,18 @@ $:	thProps = headers ? {scope: 'row'} : {};
 	</FormGroup>
 {:else if !dialog}
 	{#if $editing}
-		<svelte:element this={headers?'th':'td'} {...thProps}>
+		<div class={headers?'th':'td'} {...thProps}>
 			<slot />
-		</svelte:element>
+		</div>
 	{:else}
-		<svelte:element this={headers?'th':'td'} {...thProps}>
+		<div class={headers?'th':'td'} {...thProps}>
 			<slot name="display">
-				{#if html}
-					{@html getDisplay(row[prop])}
+				{#if html(row[prop], row)}
+					{@html getDisplay(row[prop], row)}
 				{:else}
-					{getDisplay(row[prop])}
+					{getDisplay(row[prop], row)}
 				{/if}
 			</slot>
-		</svelte:element>
+		</div>
 	{/if}
 {/if}

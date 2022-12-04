@@ -39,6 +39,14 @@
 			</NavItem>
 		</Nav>
 	</Collapse>
+	{#if $user?.roles.trad}
+		<Dropdown>
+			<DropdownToggle caret><Icon name="translate" /></DropdownToggle>
+			<DropdownMenu>
+				<DropdownItem><NavLink class="prefix-icon" href="/translations"><Icon name="gear-fill" />{$T('ttl.translations')}</NavLink></DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+	{/if}
 	{#if $user?.roles.dev}
 		<Dropdown>
 			<DropdownToggle caret><Icon name="tools" /></DropdownToggle>

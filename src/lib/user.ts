@@ -1,4 +1,3 @@
-import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
 import type { Language, Role, Roles } from "./constants";
 import { jsonCookies } from "./cookies";
@@ -26,7 +25,7 @@ export function accessible(routeId: string) {
 
 export interface User {
 	email: string;
-	roles: Roles;
+	roles: Roles
 	language: Language;
 	preferences: any;
 }
@@ -34,6 +33,16 @@ export interface User {
 let updatePreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/user/ego')
 export function setSSRupdatePreference(nup: (email: string, name: string, value?: string)=> any) {
 	updatePreference = nup;
+}
+
+const egoDelay = 5*1000;
+const delays: any = {};
+function delay(prop: PropertyKey, cb: ()=> void) {
+	if(delays[prop]) clearTimeout(delays[prop]);
+	delays[prop] = setTimeout(()=> {
+		delete delays[prop];
+		cb();
+	}, egoDelay);
 }
 
 const preferencesStore = privateStore();
@@ -44,12 +53,12 @@ const userPrefs = (preferences: Record<PropertyKey, any>)=> new Proxy(preference
 	},
 	set(target: any, prop: PropertyKey, value: any, receiver: any): boolean {
 		target[prop] = value;
-		updatePreference(userStore.value.email, prop.toString(), value);	// Note: Nothing is done, it is just expected... to have worked
+		delay(prop, ()=> updatePreference(userStore.value.email, prop.toString(), value));	// Note: Nothing is done, it is just expected... to have worked
 		return true;
 	},
 	deleteProperty(target: any, prop: PropertyKey): boolean {
 		delete target[prop];
-		updatePreference(userStore.value.email, prop.toString());
+		delay(prop, ()=> updatePreference(userStore.value.email, prop.toString()));
 		return true;
 	}
 }), localPrefs = new Proxy({}, {

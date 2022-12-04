@@ -1,13 +1,13 @@
 <script lang="ts">
-	import Column from '../Column.svelte'
-	import { getRowCtx } from '../utils';
+	import Column from '../../Column.svelte'
+	import { getRowCtx } from '../../utils';
 	import { Button, Icon, Spinner } from 'sveltestrap';
-	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type Edition } from './utils';
+	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type Edition, type RowEditionContext } from '../utils';
 	import { T } from '$lib/intl';
 	import { DeleteCancel, confirm } from '$lib/globals';
 
 	const { row, dialog, id } = getRowCtx<EditingRowContext>();
-	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx();
+	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
@@ -36,26 +36,26 @@
 	{/if}
 {:else if !dialog}
 	<Column>
-		<th scope="col" slot="header">
-			{#if hasSpec(create, 'row')}<Button on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></Button>{/if}
-			{#if hasSpec(create, 'dialog')}<Button on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></Button>{/if}
+		<div class="th" scope="col" slot="header">
+			{#if hasSpec(create, 'row')}<Button size="sm" on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></Button>{/if}
+			{#if hasSpec(create, 'dialog')}<Button size="sm" on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></Button>{/if}
 			<slot name="header" />
-		</th>
-		<th class:editing={!!$editing} scope="row">
+		</div>
+		<div class="th" class:editing={!!$editing} scope="row">
 			{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
 				{#if $editing}
-					<Button type="submit" color="primary"><Icon name="save" /></Button>
-					<Button type="button" on:click={cancelEdit} color="warning"><Icon name="x-lg" /></Button>
+					<Button size="sm" type="submit" color="primary"><Icon name="save" /></Button>
+					<Button size="sm" type="button" on:click={cancelEdit} color="warning"><Icon name="x-lg" /></Button>
 					<slot name="row" editing={true} row={$editing} />
 					<slot name="edit-row" row={$editing} />
 				{:else}
-					{#if hasSpec(edition, 'row')}<Button type="button" on:click={startEdit} color="secondary"><Icon name="pencil" /></Button>{/if}
-					{#if hasSpec(edition, 'dialog')}<Button type="button" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
-					<Button type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>
+					{#if hasSpec(edition, 'row')}<Button size="sm" type="button" on:click={startEdit} color="secondary"><Icon name="pencil" /></Button>{/if}
+					{#if hasSpec(edition, 'dialog')}<Button size="sm" type="button" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
+					<Button size="sm" type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>
 					<slot name="row" editing={false} row={row} />
 					<slot name="display-row" row={row} />
 				{/if}
 			{/if}
-		</th>
+		</div>
 	</Column>
 {/if}

@@ -59,8 +59,30 @@ export async function getDevDictionary(lng: Language) {
 	return stringIds(await dictionary.aggregate([
 		{$match: {lng}},
 		{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
-		{$project: {key: 1, text: 1, role: {$first: '$keyDesc.role'}, type: {$first: '$keyDesc.type'}}},
+		{$project: {key: 1, text: 1, role: {$first: '$keyDesc.role'}, type: {$first: '$keyDesc.type'}}}
 	]));
+}
+
+export async function getTradDictionaries(/*lngs: Language[]*/) {
+	let rv = removeIds(await dictionary.aggregate([
+		{$group: {_id: '$key', key: {$min: '$key'}, trads: {$addToSet: {lng: '$lng', text: '$text'}}}},
+		//{$project: {key: '$key', trads: {$filter: {input: '$trads', as: 'tr', cond: {$in: ['$$tr.lng', lngs]}}}}},
+		{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
+		{$project: {key: 1, trads: 1, type: {$first: '$keyDesc.type'}}}
+	]));
+	/* Too complex in aggregations for me, I keep on is JS
+	{
+		"key": "role.none",
+		"type": "",
+		"trads": [{"lng": "fr", "text": "Publique"}, {"lng": "ro", "text": "Public"}]
+	} => {
+		"key": "role.none",
+		"type": "",
+		"fr": "Publique",
+		"ro": "Public"
+	}
+	*/
+	return rv.map((cplx: any)=> (cplx.trads.reduce((ttl: any, cur: any)=> ({...ttl, [cur.lng]: cur.text}), {key: cplx.key, type: cplx.type})))
 }
 
 export async function setTexts(key: string, texts: Record<string, string> /* {language: text} */) {
