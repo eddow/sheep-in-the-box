@@ -3,7 +3,7 @@
 	import Menu from './components/Menu.svelte';
 	import Alerts from './components/Alerts.svelte';
 	import Confirm from "./components/Confirm.svelte";
-	import './styles.scss';
+	import './styles.scss';		// TODO The CSS is cached, but something is reaallllyyy slow
 	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
 	import { beforeNavigate } from "$app/navigation";
@@ -15,7 +15,6 @@
 		if(to?.route.id && !accessible(to.route.id))
 			cancel();
 	});
-	// TODO Cache CSS!!
 </script>
 <div class="app">
 	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />

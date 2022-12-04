@@ -1,7 +1,7 @@
 import { getDevDictionary } from "$lib/server/intl";
  
-export const load = async (event: Partial<Record<string, any>>) => {
+export const load = async ({locals}: Partial<Record<string, any>>) => {
 	return {
-		dictionary: await getDevDictionary(event.locals.user.language)
+		dictionary: await getDevDictionary(locals.preferences.devKeysLng || locals.user.language)
 	};
 }

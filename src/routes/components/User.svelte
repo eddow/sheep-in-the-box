@@ -57,7 +57,8 @@
 		if(cnt) languageStore.value = cnt;
 		dispatch('set-user', null);
 	}
-	// TOTR fld.email, err.email, ??err.required
+	// TODO Login browser'autofill
+	// TODO Use a real library + get rid of the session cookie for a real authentication one
 </script>
 {#if $user}
 	<ButtonDropdown isOpen={isMenuOpen}>

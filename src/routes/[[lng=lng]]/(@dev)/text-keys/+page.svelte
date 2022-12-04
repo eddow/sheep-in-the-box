@@ -12,10 +12,16 @@
 	import Preview from "$lib/components/Preview.svelte";
 	import { object, string } from "yup";
 	import Languages from "$lib/components/Languages.svelte";
+	import { preferences, user } from "$lib/user";
 
 	export let data: PageData;
 	let textRoles: any[];
 $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('role.'+(r||'none'))}));
+	let prefs = $preferences;
+$:	prefs = $preferences;
+	if(!prefs.devKeysLng) prefs.devKeysLng = $user.language;
+	let dictionaries = {[prefs.devKeysLng]: data.dictionary},
+		dictionary = data.dictionary;
 	async function saveCB(row: any, old: any, diff: any) {
 		if(!row.key) {
 			alert({message: $T('err.key.no'), color: 'danger'});
@@ -37,23 +43,28 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		return (await ajax.delete({key: row.key})).ok;
 	}
 	let previewed: any = null;
-	function preview(row: any) {
-		previewed = row;
-	}
 	const schema = object({
 		key: string().required(),
 		text: string(),
 		role: string(),
 		type: string()
 	});
+	async function reloadKeys(e: CustomEvent) {
+		const lng = e.detail;
+		if(!dictionaries[lng]) {
+			let qr = await ajax.get('?'+lng);
+			dictionaries[lng] = await qr.json();
+		}
+		dictionary = dictionaries[lng];
+	}
 </script>
 <div style="width: 100%">
-	<Languages style="float: right;" language={$language} on:set-language={()=> {}} />
+	<Languages style="float: left;" bind:language={prefs.devKeysLng} on:set-language={reloadKeys} />
 	<h1>
 		{$T('ttl.text-keys')}
 	</h1>
 </div>
-<Table key="_id" {schema} data={data.dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
+<Table key="_id" {schema} data={dictionary} columnFilters title={$T('ttl.text-keys')}  {saveCB} {deleteCB}>
 	<Column prop="key" title={$T('fld.key')}>
 		<StringContent slot="filter" />
 		<Text />
@@ -70,10 +81,10 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}>
 		<svelte:fragment slot="row" let:row={row}>
-			{#if row.type}<Button type="button" color="info" on:click={()=> preview(row)}><Icon name="eye" /></Button>{/if}
+			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="dialog" let:row={row}>
-			{#if row.type}<Button type="button" color="info" on:click={()=> preview(row)}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
+			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>
 </Table>

@@ -2,9 +2,11 @@ import { error, json } from '@sveltejs/kit';
 import { create, deleteKey, getDevDictionary, renameKey, setKeyInfo, setTexts } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
 import { t } from '$lib/server/intl';
+import type { Language } from '$lib/constants';
 
-export async function GET(event: RequestEvent) {	// Unused: loaded in `PageData`
-	return json(await getDevDictionary(event.locals.user.language));
+export async function GET(event: RequestEvent) {
+	const language = event.url.search.substring(1);
+	return json(language ? await getDevDictionary(<Language>language) : false);
 }
 
 export async function POST(event: RequestEvent) {	// create

@@ -44,7 +44,7 @@ const userPrefs = (preferences: Record<PropertyKey, any>)=> new Proxy(preference
 	},
 	set(target: any, prop: PropertyKey, value: any, receiver: any): boolean {
 		target[prop] = value;
-		updatePreference(userStore.value.email, prop.toString(), value);	// TODO .then(?)
+		updatePreference(userStore.value.email, prop.toString(), value);	// Note: Nothing is done, it is just expected... to have worked
 		return true;
 	},
 	deleteProperty(target: any, prop: PropertyKey): boolean {
