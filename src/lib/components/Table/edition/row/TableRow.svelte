@@ -10,7 +10,6 @@
 	import { privateStore } from "$lib/privateStore";
 
 	export let row: any;
-	export let id: string|number;
 	const EditionContext = getEdtnCtx<RowEditionContext>(),
 		{ addedRows, schema, cancelEdit, save, deleteRow } = EditionContext;
 
@@ -26,7 +25,7 @@
 	})) : {form: null}, form = <FormAction>formInfo.form;
 	if(dataRow) setFrmCtx(<FormContext>formInfo);
 	const editing = privateStore<Editing>(addedRows.has(row) ? Editing.Yes : Editing.No);
-	setRowCtx<EditingRowContext>({ dialog: Dialog.None, row, id});
+	setRowCtx<EditingRowContext>({ dialog: Dialog.None});
 	
 	async function saveRow(e: CustomEvent) {
 		editing.value = Editing.Working;
@@ -55,11 +54,11 @@
 	});
 </script>
 {#if dataRow && editing.value}
-	<Form {schema} class="tr" data-row-id={''+id} {...$$restProps} on:submit={saveRow}>
-		<slot />
+	<Form {schema} class="tr" {...$$restProps} on:submit={saveRow}>
+		<slot {row} />
 	</Form>
 {:else}
-	<div class="tr" data-row-id={id} {...$$restProps}>
-		<slot />
+	<div class="tr" {...$$restProps}>
+		<slot {row} />
 	</div>
 {/if}

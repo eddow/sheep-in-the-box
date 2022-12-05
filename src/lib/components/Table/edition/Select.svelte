@@ -10,11 +10,12 @@ $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
 	export let autofocus: boolean = false;
 	export let options: any[];
+	export let value: string;
 	function getDisplay(value: string) {
 		return options.find(o=> o.value === value)?.text || value;
 	}
 </script>
-<Editor {...$$restProps} {getDisplay}>
+<Editor {...$$restProps} {getDisplay} {value}>
 	<Input {placeholder} {autofocus} type="select" name={prop}>
 		{#each options as option}
 			{#if typeof option === 'string'}

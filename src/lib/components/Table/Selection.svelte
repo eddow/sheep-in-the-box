@@ -1,10 +1,9 @@
 <script lang="ts">
 	import Column from './Column.svelte'
 	import {getRowCtx, getTblCtx} from './utils'
-
+// TODO Re-check
 	export let selection: Set<any>;
-	let row: any = {};
-	getRowCtx().row.subscribe((value: any)=> row = value);
+	let row: any;
 	let all: 'indeterminate'|boolean;
 	let selected: boolean;
 	let data: any[];
@@ -23,12 +22,12 @@
 	}
 	getTblCtx().data.subscribe((v: any[])=> { data = v; });
 </script>
-<Column>
-	<div class="th" slot="header" scope="col">
+<Column {row}>
+	<div class="th" slot="header" data-scope="col">
 		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
 			on:change={onChangeAll} />
 	</div>
-	<div class="th" scope="row">
+	<div class="th" data-scope="row">
 		<input type="checkbox" checked={selected} on:change={onChangeOne} />
 	</div>
 </Column>

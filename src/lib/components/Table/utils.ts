@@ -1,5 +1,5 @@
 import { assertNnull } from '$lib/utils';
-import {setContext, getContext} from 'svelte';
+import {setContext, getContext, tick} from 'svelte';
 import type {Readable, Writable} from 'svelte/store';
 
 const tableContextKey = Symbol('tableContext');
@@ -16,8 +16,6 @@ export interface TableContext<T=any> {
 	setFilter(key: any, filter?: (row: T)=> boolean): void;
 }
 export interface RowContext<T=any> {
-	row: T;
-	id?: string | number;
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;

@@ -10,8 +10,8 @@
 $:	paramed = parmed(text || '', po);
 $:	displayed = type === 'md' ? markdown.toHTML(paramed) : paramed;
 </script>
-{#if type === 'tpl'}
-	<pre>{paramed}</pre>
+{#if !type || type === 'tpl'}
+	{paramed}
 {:else if type in {html: 1, md: 1}}
 	{@html displayed}
 {/if}

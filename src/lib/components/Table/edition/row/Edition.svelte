@@ -6,11 +6,12 @@
 	import { T } from '$lib/intl';
 	import { DeleteCancel, confirm } from '$lib/globals';
 
-	const { row, dialog, id } = getRowCtx<EditingRowContext>();
+	const { dialog } = getRowCtx<EditingRowContext>();
 	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
+	export let row: any;
 	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
@@ -24,37 +25,39 @@
 </script>
 {#if dialog === Dialog.Footer}
 	{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
+	<!-- TODO Find a way to determine if the row is new
 		{#if id === null}
 			<Button type="button" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
 			<Button type="submit" class="prefix-icon" color="success"><Icon name="plus" />{$T('cmd.create')}</Button>
 			<slot name="dialog" adding={true} row={row} />
 		{:else}
+		-->
 			<Button type="button" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
 			<Button type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</Button>
 			<slot name="dialog" adding={false} row={row} />
-		{/if}
+		<!--{/if}-->
 	{/if}
 {:else if !dialog}
-	<Column>
-		<div class="th" scope="col" slot="header">
+	<Column {row}>
+		<div class="th" data-scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button size="sm" on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></Button>{/if}
 			{#if hasSpec(create, 'dialog')}<Button size="sm" on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></Button>{/if}
 			<slot name="header" />
 		</div>
-		<div class="th" class:editing={!!$editing} scope="row">
-			{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
-				{#if $editing}
-					<Button size="sm" type="submit" color="primary"><Icon name="save" /></Button>
-					<Button size="sm" type="button" on:click={cancelEdit} color="warning"><Icon name="x-lg" /></Button>
-					<slot name="row" editing={true} row={$editing} />
-					<slot name="edit-row" row={$editing} />
-				{:else}
-					{#if hasSpec(edition, 'row')}<Button size="sm" type="button" on:click={startEdit} color="secondary"><Icon name="pencil" /></Button>{/if}
-					{#if hasSpec(edition, 'dialog')}<Button size="sm" type="button" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
-					<Button size="sm" type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>
-					<slot name="row" editing={false} row={row} />
-					<slot name="display-row" row={row} />
-				{/if}
+		<div class="th" class:editing={!!$editing} data-scope="row">
+			{#if $editing == Editing.Working}
+				<Spinner size="sm" />
+			{:else if $editing}
+				<Button size="sm" type="submit" color="primary"><Icon name="save" /></Button>
+				<Button size="sm" type="button" on:click={cancelEdit} color="warning"><Icon name="x-lg" /></Button>
+				<slot name="row" editing={true} row={$editing} />
+				<slot name="edit-row" row={$editing} />
+			{:else}
+				{#if hasSpec(edition, 'row')}<Button size="sm" type="button" on:click={startEdit} color="secondary"><Icon name="pencil" /></Button>{/if}
+				{#if hasSpec(edition, 'dialog')}<Button size="sm" type="button" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
+				<Button size="sm" type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>
+				<slot name="row" editing={false} row={row} />
+				<slot name="display-row" row={row} />
 			{/if}
 		</div>
 	</Column>

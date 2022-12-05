@@ -11,7 +11,11 @@ export function getEdtnCtx<T extends EditionContext = EditionContext>(): T {
 	return assertNnull(getContext<T>(editionContextKey), 'Element in an editable context');
 }
 
-export enum Dialog { None = 0, Body, Footer }
+export enum Dialog {
+	None = 0,		// In a row-edit row
+	Body, Footer,	// In a dialog
+	Wrapped			// In a `td` already
+}
 export enum Editing { No = 0, Yes, Working }
 
 export interface EditingRowContext<T=any> extends RowContext<T> {

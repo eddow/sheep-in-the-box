@@ -5,13 +5,14 @@
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
 
-	const { row, dialog } = getRowCtx<EditingRowContext>();
+	const { dialog } = getRowCtx<EditingRowContext>();
 	const { config } = getClmnCtx();
+	export let checked: boolean;
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
 </script>
-<Editor {...$$restProps}>
-	<Icon slot="display" name={row[prop]?'check':'x'} />
-	<Input type="checkbox" name={prop} label={dialog?title:''} />
+<Editor value={checked} {...$$restProps}>
+	<Icon slot="display" name={checked?'check':'x'} />
+	<Input type="checkbox" {checked} name={prop} label={dialog?title:''} />
 </Editor>

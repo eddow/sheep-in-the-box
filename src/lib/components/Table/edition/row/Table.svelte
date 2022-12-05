@@ -32,9 +32,9 @@ $:	allRows = [...added, ...data];
 		if(!row || row === dialogRow)
 			dialogEditing.value = editing;
 	}
-	async function saveRow(e: CustomEvent) {
+	async function saveRow({detail}: CustomEvent) {
 		setEditing(Editing.Working);
-		if(await save(e.detail.values, dialogRow))		
+		if(await save(detail.values, dialogRow))		
 			modalOpened = false;
 		setEditing(Editing.Yes);
 	}
@@ -49,13 +49,8 @@ $:	allRows = [...added, ...data];
 			}
 			let ndxData = data.indexOf(old);
 			if(~ndxData) {
-				// { Double change w/ emptying for a weird bug who lets the change unseen when modal-editing
-				for(const k of Object.keys(old)) delete old[k];
-				data = [...data];
-				await tick();
-				// }
-				Object.assign(old, row);
-				data = [...data];
+				data[ndxData] = {...Object.assign(old, row)};
+				allRows = allRows;
 			} else if(addedRows.delete(old)) {
 				added = Array.from(addedRows);
 				data = [row, ...data];
@@ -105,25 +100,27 @@ $:	allRows = [...added, ...data];
 		}
 	});
 </script>
-<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added}>
-	<slot />
+<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added} let:row>
+	<slot {row} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 	<svelte:fragment slot="once">
 		<Modal keyboard={true} size="xl" isOpen={modalOpened}>
-			<Form {schema} on:submit={saveRow}>
-				{#if title}<ModalHeader>{title}</ModalHeader>{/if}
-				<ModalBody>
-					<ModalPart row={dialogRow} {key} dialog={Dialog.Body}>
-						<slot />
-					</ModalPart>
-				</ModalBody>
-				<ModalFooter>
-					<ModalPart row={dialogRow} {key} dialog={Dialog.Footer}>
-						<slot />
-					</ModalPart>
-				</ModalFooter>
-			</Form>
+			{#if dialogRow}
+				<Form {schema} on:submit={saveRow}>
+					{#if title}<ModalHeader>{title}</ModalHeader>{/if}
+					<ModalBody>
+						<ModalPart dialog={Dialog.Body}>
+							<slot row={dialogRow} />
+						</ModalPart>
+					</ModalBody>
+					<ModalFooter>
+						<ModalPart dialog={Dialog.Footer}>
+							<slot row={dialogRow} />
+						</ModalPart>
+					</ModalFooter>
+				</Form>
+			{/if}
 		</Modal>
 		<slot name="once" />
 	</svelte:fragment>

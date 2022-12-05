@@ -12,7 +12,7 @@
 	let allErrors: string[];
 	export let placeholder: string | undefined = undefined;
 	let computedPH: string;
-$:	computedPH = typeof placeholder === 'undefined' ? $T('fld.'+name) : placeholder;
+$:	computedPH = placeholder === undefined ? $T('fld.'+name) : placeholder;
 $:	allErrors = (errors||[]).concat($frmErrors[name]||[]);
 </script>
 <Input invalid={!!allErrors.length} {value} {checked} feedback={allErrors} {name} placeholder={computedPH} {...$$restProps}>

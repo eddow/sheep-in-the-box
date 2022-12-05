@@ -8,14 +8,15 @@
 	export let headers: boolean = false;
 	export let html: boolean = false;
 	let thProps: any;
-$:	thProps = headers ? {scope: 'row'} : {};
-	let row: any = getRowCtx().row;
+$:	thProps = headers ? {'data-scope': 'row'} : {};
+	export let row: any;
 	const tblSetFilter = getTblCtx().setFilter;
-	export let value: any = (prop && (typeof row === 'object') && row[prop]) || '';
+	export let value: any = null;
+$:	value = (prop && row && (typeof row === 'object') && row[prop]) || '';
 	const config = writable({});
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
-$:	config.set({...$config, title: typeof title === 'undefined' ? (prop && $T('fld.'+prop)) : title});
+$:	config.set({...$config, title: title === undefined ? (prop && $T('fld.'+prop)) : title});
 $:	config.set({...$config, headers});
 $:	config.set({...$config, html});
 	let ctx: any = {
@@ -35,14 +36,14 @@ $:	config.set({...$config, html});
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<div class="th" scope="col">{title || prop}</div>
+		<div class="th" data-scope="col">{title || prop}</div>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<div class="th" scope="col" />
+		<div class="th" data-scope="col" />
 	</slot>
 {:else}
-	<slot>
+	<slot {row} {value}>
 		<div class={headers?'th':'td'} {...thProps}>
 			{#if html}
 				{@html value}

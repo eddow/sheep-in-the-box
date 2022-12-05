@@ -35,11 +35,11 @@ export async function DELETE(event: RequestEvent) {	// delete ALL from key
 export async function PATCH(event: RequestEvent) {	// modify
 	const {language, key, text, role, type} = await event.request.json();
 	const promises = [];
-	if(typeof text !== 'undefined') promises.push(setTexts(key, {[language]: text})
+	if(text !== undefined) promises.push(setTexts(key, {[language]: text})
 		.then(x=> { if(!x) throw error(500, 'Key does not exists'); }));
 	let keyInfo:any = {};
-	if(typeof role !== 'undefined') keyInfo.role = role;
-	if(typeof type !== 'undefined') keyInfo.type = type;
+	if(role !== undefined) keyInfo.role = role;
+	if(type !== undefined) keyInfo.type = type;
 	if(Object.keys(keyInfo).length) promises.push(setKeyInfo(key, keyInfo));
 	return json(await Promise.all(promises));
 }

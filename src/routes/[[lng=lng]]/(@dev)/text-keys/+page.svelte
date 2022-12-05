@@ -64,26 +64,26 @@ $:	prefs = $preferences;
 		{$T('ttl.text-keys')}
 	</h1>
 </div>
-<Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB}>
-	<Column prop="key" title={$T('fld.key')}>
+<Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
+	<Column prop="key" title={$T('fld.key')} {row} let:value>
 		<StringContent slot="filter" />
-		<Text />
+		<Text {value}  />
 	</Column>
-	<Column prop="text" title={$T('fld.text')}>
+	<Column prop="text" title={$T('fld.text')} {row} let:value>
 		<StringContent slot="filter" />
-		<Text area />
+		<Text area {value} />
 	</Column>
-	<Column prop="role" title={$T('fld.role')}>
-		<Select options={textRoles} />
+	<Column prop="role" title={$T('fld.role')} {row} let:value>
+		<Select options={textRoles} {value} />
 	</Column>
-	<Column prop="type" title={$T('fld.type')}>
-		<Select options={textTypes} />
+	<Column prop="type" title={$T('fld.type')} {row} let:value>
+		<Select options={textTypes} {value} />
 	</Column>
-	<Edition create="both" edition="both" deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}>
-		<svelte:fragment slot="row" let:row={row}>
+	<Edition create="both" edition="both" {row} deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}>
+		<svelte:fragment slot="row" let:row>
 			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
-		<svelte:fragment slot="dialog" let:row={row}>
+		<svelte:fragment slot="dialog" let:row>
 			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>

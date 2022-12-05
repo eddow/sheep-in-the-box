@@ -30,7 +30,7 @@
 	}
 </script>
 <Navbar color="light" light expand="md">
-	<NavbarBrand href="/">sveltestrap</NavbarBrand>
+	<NavbarBrand href="/">SitB</NavbarBrand>
 	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate} class="ms-auto">
 		<Nav>

@@ -107,7 +107,7 @@ export async function updatePreference(email: string, name: string, value?: any)
 			{$match: {email}},
 			{$project: {preferences: 1}}
 		]))[0].preferences;
-	if(typeof value === 'undefined') {
+	if(value === undefined) {
 		if(!preferences || !(name in preferences)) return preferences || {};
 		delete preferences[name];
 	} else if(preferences) preferences[name] = value;

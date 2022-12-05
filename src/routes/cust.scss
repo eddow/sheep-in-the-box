@@ -1,7 +1,9 @@
 .btn.btn-rounded {
     border-radius: 50px;
 }
-
+.btn.xs {
+	padding: 1px 5px;
+}
 .prefix-icon i {
 	margin-right: .5em;
 }
@@ -14,6 +16,7 @@
 }
 .td {
 	display: table-cell;
+	vertical-align: top;
 }
 .th {
 	display: table-cell;

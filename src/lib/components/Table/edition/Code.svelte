@@ -1,17 +1,17 @@
 <script lang="ts">
-	import Input from '$lib/components/form/Input.svelte';
+	import Code from '$lib/components/form/Code.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
+	import type { TextType } from '$lib/constants';
 
+	export let value: string;
 	const { config } = getClmnCtx();
 	let prop: string;
-	export let value: string;
-	export let placeholder: string | undefined = undefined;
 $:	prop = <string>$config.prop;
-	export let area: boolean = false;
 	export let autofocus: boolean = false;
+	export let preview: TextType = '';
 </script>
-<Editor {...$$restProps} {value}>
-	<Input {placeholder} {autofocus} type={area ? 'textarea' : 'text'} {value} name={prop} />
+<Editor {value}>
+	<Code {autofocus} {value} name={prop} {preview} {...$$restProps} />
 </Editor>

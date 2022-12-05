@@ -17,8 +17,8 @@
 			(value, ctx)=> !!value && value === ctx.parent[name]
 		)
 	});
-	async function submit(e: CustomEvent) {
-		const { values } = e.detail, {[name]: pass} = values;
+	async function submit({detail}: CustomEvent) {
+		const { values } = detail, {[name]: pass} = values;
 		goto('/');
 		if((await ajax.post({pass}, '', [401])).ok)
 			alert({message: $T('msg.pw.code'), color: 'success'});
