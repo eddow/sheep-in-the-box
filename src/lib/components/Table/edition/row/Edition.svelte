@@ -25,17 +25,9 @@
 </script>
 {#if dialog === Dialog.Footer}
 	{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
-	<!-- TODO Find a way to determine if the row is new
-		{#if id === null}
-			<Button type="button" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
-			<Button type="submit" class="prefix-icon" color="success"><Icon name="plus" />{$T('cmd.create')}</Button>
-			<slot name="dialog" adding={true} row={row} />
-		{:else}
-		-->
-			<Button type="button" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
-			<Button type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</Button>
-			<slot name="dialog" adding={false} row={row} />
-		<!--{/if}-->
+		<Button type="button" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
+		<Button type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</Button>
+		<slot name="dialog" adding={false} row={row} />
 	{/if}
 {:else if !dialog}
 	<Column {row}>

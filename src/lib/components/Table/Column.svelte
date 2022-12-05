@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { specialRow, getRowCtx, getTblCtx, setClmnCtx } from './utils'
+	import { specialRow, getTblCtx, setClmnCtx } from './utils'
 	import { writable } from "svelte/store";
 	import { T } from '$lib/globals';
 

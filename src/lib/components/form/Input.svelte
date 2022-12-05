@@ -15,6 +15,6 @@
 $:	computedPH = placeholder === undefined ? $T('fld.'+name) : placeholder;
 $:	allErrors = (errors||[]).concat($frmErrors[name]||[]);
 </script>
-<Input invalid={!!allErrors.length} {value} {checked} feedback={allErrors} {name} placeholder={computedPH} {...$$restProps}>
+<Input invalid={!!allErrors.length} bind:value bind:checked feedback={allErrors} {name} placeholder={computedPH} {...$$restProps}>
 	<slot />
 </Input>

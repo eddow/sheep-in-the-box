@@ -14,5 +14,5 @@ $:	title = <string>$config.title;
 </script>
 <Editor value={checked} {...$$restProps}>
 	<Icon slot="display" name={checked?'check':'x'} />
-	<Input type="checkbox" {checked} name={prop} label={dialog?title:''} />
+	<Input type="checkbox" bind:checked name={prop} label={dialog?title:''} />
 </Editor>

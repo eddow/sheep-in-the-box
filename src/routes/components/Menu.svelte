@@ -18,8 +18,9 @@
 	import { user } from '$lib/globals';
 	import { language, setLanguage, T } from "$lib/intl";
 	import type { Language } from '$lib/constants';
+	import Login from './Login.svelte';
 	
-	let isOpen = false;
+	let isOpen = false, logingIn = false;
 
 	function handleUpdate(event: any) {
 		isOpen = event.detail.isOpen;
@@ -35,7 +36,7 @@
 	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate} class="ms-auto">
 		<Nav>
 			<NavItem>
-				<NavLink href="#components/">Components</NavLink>
+				Blah
 			</NavItem>
 		</Nav>
 	</Collapse>
@@ -62,7 +63,7 @@
 	{/if}
 	<Nav>
 		<NavItem>
-			<User on:set-user />
+			<User on:set-user on:login={()=> logingIn = !logingIn} />
 		</NavItem>
 		<NavItem>
 			<div style="width: .5em;">&nbsp;</div>
@@ -72,3 +73,8 @@
 		</NavItem>
 	</Nav>
 </Navbar>
+<Collapse isOpen={logingIn}>
+	<Navbar color="light" light expand="md">
+		<Login on:set-user on:done={()=> logingIn = false} />
+	</Navbar>
+</Collapse>

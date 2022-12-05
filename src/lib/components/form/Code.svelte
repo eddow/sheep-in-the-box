@@ -9,6 +9,7 @@
 	// If codemirror needs to be instanciated, it's here ^^
 </script>
 {#if preview}
+	<input type="hidden" {name} {value} />
 	<Preview type={preview} text={value} />
 {:else}
 	<div {...$$restProps}>

@@ -28,7 +28,6 @@ $:	schema = object(work.reduce((ttl: any, cur: LangItem)=> ({...ttl, [cur.id]: s
 	function preview(lng: LangItem) {
 		previewed[lng.id] = !previewed[lng.id];
 	}
-	// TODO https://svelte.dev/tutorial/dimensions : bind areas height
 </script>
 <Form {schema} on:submit={({detail})=> dispatch('save', detail)}>
 	<ModalHeader>{model.key}</ModalHeader>

@@ -5,12 +5,13 @@ import type {Readable, Writable} from 'svelte/store';
 const tableContextKey = Symbol('tableContext');
 const rowContextKey = Symbol('rowContext');
 const columnContextKey = Symbol('columnContext');
-export enum specialRow {
-	header = 'headerRow',
-	filter = 'filterRow',
-	footer = 'footerRow'
+// Just unique objects
+export const specialRow  = {
+	header: <any>{},
+	filter: <any>{},
+	footer: <any>{}
 }
-export type RowContent<T=any> = specialRow|T;
+
 export interface TableContext<T=any> {
 	data: Readable<T[]>;
 	setFilter(key: any, filter?: (row: T)=> boolean): void;

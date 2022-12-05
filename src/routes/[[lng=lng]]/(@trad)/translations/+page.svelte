@@ -84,7 +84,7 @@ $:	prefs = $preferences;
 	{/each}
 	<RoColumn {row}>
 		<div class="td">
-			<Button class="xs" size="sm" type="button" on:click={()=> modaled = row} color="secondary"><Icon name="box-arrow-up-left" /></Button>
+			<Button class="xs" size="sm" type="button" on:click={()=> modaled = row} color={row.type?'primary':'secondary'}><Icon name="box-arrow-up-left" /></Button>
 		</div>
 	</RoColumn>
 </Table>

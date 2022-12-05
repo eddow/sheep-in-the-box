@@ -13,5 +13,5 @@ $:	prop = <string>$config.prop;
 	export let preview: TextType = '';
 </script>
 <Editor {value}>
-	<Code {autofocus} {value} name={prop} {preview} {...$$restProps} />
+	<Code {autofocus} bind:value name={prop} {preview} {...$$restProps} />
 </Editor>

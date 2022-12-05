@@ -16,7 +16,7 @@ $:	title = <string>$config.title;
 	}
 </script>
 <Editor {...$$restProps} {getDisplay} {value}>
-	<Input {placeholder} {autofocus} type="select" name={prop}>
+	<Input {placeholder} {autofocus} type="select" name={prop} bind:value>
 		{#each options as option}
 			{#if typeof option === 'string'}
 				<option>{option}</option>

@@ -6,11 +6,13 @@
 	import Input from "./Input.svelte";
 
 	export let name: string;
+	export let value = '';
+	export let checked = false;
 	let label: string;
 $:	label = $T('fld.'+name);
 </script>
 <FormGroup floating {label} {...prefixFilter($$restProps, 'fg$')}>
-	<Input {name} {...exclude($$restProps, ['fg$'])}>
+	<Input {name} {...exclude($$restProps, ['fg$'])} bind:value bind:checked>
 		<slot />
 	</Input>
 </FormGroup>
