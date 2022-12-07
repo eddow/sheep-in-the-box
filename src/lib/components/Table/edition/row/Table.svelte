@@ -1,12 +1,11 @@
 <script context="module" lang="ts">
-	export type SaveCallback<T = any> = (newValues: T, oldValues: T, diff: any) => Promise<boolean|undefined>;
-	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|undefined>;
+	export type SaveCallback<T = any> = (newValues: T, oldValues: T, diff: any) => Promise<boolean|void>;
+	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|void>;
 </script>
 <script lang="ts">
 	import TableRow from "./TableRow.svelte";
 	import Table from "../../Table.svelte";
 	import { Modal, ModalBody, ModalFooter, ModalHeader } from "sveltestrap";
-	import { tick } from "svelte";
 	import ModalPart from "../ModalPart.svelte";
 	import { exclude } from "../../../utils/exclude";
 	import { compare, Dialog, Editing, setEdtnCtx, type RowEditionContext } from "../utils";
@@ -14,10 +13,11 @@
 	import Form from "$lib/components/form/Form.svelte";
 	import { privateStore } from "$lib/privateStore";
 
-	export let saveCB: SaveCallback, deleteCB: DeleteCallback;
+	export let saveCB: SaveCallback, deleteCB: DeleteCallback | undefined = undefined;
 	export let data: any[];
 	export let key: string;
 	const addedRows = new Set<any>();
+	const context = {deletable: !!deleteCB};
 
 	let added: any[] = [];
 $:	allRows = [...added, ...data];
@@ -73,7 +73,7 @@ $:	allRows = [...added, ...data];
 			let exEditing = dialogEditing.value;
 			setEditing(Editing.Working, row);
 			try {
-				if(await deleteCB(row || dialogRow) === false)
+				if(await deleteCB!(row || dialogRow) === false)
 					return false;
 			} finally {
 				setEditing(exEditing, row);
@@ -100,7 +100,7 @@ $:	allRows = [...added, ...data];
 		}
 	});
 </script>
-<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added} let:row>
+<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added} {context} let:row>
 	<slot {row} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />

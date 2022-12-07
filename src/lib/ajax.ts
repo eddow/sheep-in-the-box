@@ -17,7 +17,7 @@ function shortCut(method: string, body?: any, url?: string, throughStatus?: numb
 
 export const ajax: Ajax = Object.assign(async (input: RequestInfo | URL, init?: RequestInit, throughStatus?: number[]): Promise<Response>=> {
 	const rv = await fetch(input, init);
-	if(!rv.ok && (!throughStatus || !~throughStatus.indexOf(rv.status)))
+	if(!rv.ok && (!throughStatus || !throughStatus.includes(rv.status)))
 		alert({message: (await rv.json()).message || rv.statusText, color: 'danger'});
 	return rv;
 }, {

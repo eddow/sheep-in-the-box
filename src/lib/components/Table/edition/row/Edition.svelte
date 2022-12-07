@@ -1,13 +1,14 @@
 <script lang="ts">
 	import Column from '../../Column.svelte'
-	import { getRowCtx } from '../../utils';
+	import { getRowCtx, getTblCtx } from '../../utils';
 	import { Button, Icon, Spinner } from 'sveltestrap';
-	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type Edition, type RowEditionContext } from '../utils';
+	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
 	import { T } from '$lib/intl';
 	import { DeleteCancel, confirm } from '$lib/globals';
 
 	const { dialog } = getRowCtx<EditingRowContext>();
 	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
+	const { deletable } = getTblCtx<EditingTableContext>();
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
@@ -47,7 +48,7 @@
 			{:else}
 				{#if hasSpec(edition, 'row')}<Button size="sm" type="button" on:click={startEdit} color="secondary"><Icon name="pencil" /></Button>{/if}
 				{#if hasSpec(edition, 'dialog')}<Button size="sm" type="button" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></Button>{/if}
-				<Button size="sm" type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>
+				{#if deletable}<Button size="sm" type="button" on:click={remove} color="danger"><Icon name="trash" /></Button>{/if}
 				<slot name="row" editing={false} row={row} />
 				<slot name="display-row" row={row} />
 			{/if}

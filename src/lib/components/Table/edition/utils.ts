@@ -2,7 +2,7 @@ import { assertNnull } from '$lib/utils';
 import { getContext, setContext } from 'svelte';
 import type { Readable } from 'svelte/store';
 import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';
-import type { RowContext } from '../utils';
+import type { RowContext, TableContext } from '../utils';
 
 const editionContextKey = Symbol('editionContext');
 
@@ -20,6 +20,10 @@ export enum Editing { No = 0, Yes, Working }
 
 export interface EditingRowContext<T=any> extends RowContext<T> {
 	dialog: Dialog;
+}
+
+export interface EditingTableContext<T=any> extends TableContext<T> {
+	deletable: boolean;
 }
 
 export interface EditionContext {

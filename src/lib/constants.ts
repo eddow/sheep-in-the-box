@@ -8,7 +8,7 @@ export const languages: Record<string, string> = {
 const mods: Record<string, string> = {en: 'gb'};
 export const flag = (lng: string) => 'fi fi-'+(mods[lng] || lng);
 
-export type Role = 'adm' | 'trad' | 'sell' | 'dev';
+export type Role = 'adm' | 'trad' | 'sell' | 'dev' | 'lgdn';
 export const roles = ['adm', 'trad', 'sell', 'dev'];
 
 export interface Roles {
@@ -16,6 +16,14 @@ export interface Roles {
 	trad: boolean;
 	sell: boolean;
 	dev: boolean;
+	lgdn: boolean;
+}
+
+export interface User {
+	email: string;
+	roles: Roles
+	language: Language;
+	preferences: any;
 }
 
 export const textTypes = ['', 'tpl', 'html', 'md'];

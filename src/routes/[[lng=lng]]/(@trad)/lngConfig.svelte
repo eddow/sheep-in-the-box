@@ -16,9 +16,9 @@
 		used = ref.concat(wrk),
 		allItems: LangItem[] = [{id: 'key', icon: 'bi-key', text: $T('fld.key')}].concat(Object.keys(languages).map(id=> ({id, icon: flag(id), text: languages[id]}))),
 		groups = [
-			{id: 'unused', noDrop: false, items: allItems.filter((x: LangItem)=> !~used.indexOf(x.id))},
-			{id: 'ref', noDrop: false, items: allItems.filter((x: LangItem)=> ~ref.indexOf(x.id))},
-			{id: 'work', noDrop: false, items: allItems.filter((x: LangItem)=> ~wrk.indexOf(x.id))}
+			{id: 'unused', noDrop: false, items: allItems.filter((x: LangItem)=> !used.includes(x.id))},
+			{id: 'ref', noDrop: false, items: allItems.filter((x: LangItem)=> ref.includes(x.id))},
+			{id: 'work', noDrop: false, items: allItems.filter((x: LangItem)=> wrk.includes(x.id))}
 		], groupIdx: Record<string, number> = {unused: 0, ref: 1, wrk: 2};
 
 	// Callback instead of dispatch to make sure the call is made on-init and the parent has no tick() while uninitialized

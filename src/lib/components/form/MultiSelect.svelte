@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
 	//https://svelte.dev/repl/c7094fb1004b440482d2a88f4d1d7ef5?version=3.14.0
+	//Hesitation: https://multiselect.janosh.dev/
 	export interface Option {
 		text: string;
 		value: string;
@@ -10,60 +11,52 @@
 	import { fly } from 'svelte/transition';
 	import { FormFeedback } from 'sveltestrap';
 	import { getFrmCtx } from './utils';
+	
 	export let id: string = '';
-	export let selected: string[] = [];
 	export let readonly = false;
 	export let placeholder = '';
 	export let name: string = '';
+	export let options: Option[] = [];
+	export let value: string|undefined = undefined;
+	export let selected: Option[] = [];
+	export let listValue: (o: string[])=> string = (vs: string[])=> vs.join(' ');
+	export let readValue: (o: string)=> string[] = (vs: string)=> vs.split(' ');
 
 	let input: HTMLInputElement,
 		inputValue: string,
-		options: Option[] = [],
 		activeOption: Option|undefined,
 		showOptions: boolean|string = false,
-		selection: Record<string, Option> = {},
-		first = true,
-		slot: HTMLSelectElement;
+		formInput: HTMLInputElement;
 	const iconClearPath = 'M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z';
 
-	onMount(() => {
-		slot.querySelectorAll('option').forEach(o => {
-			o.selected && !selected.includes(o.value) && (selected = [...selected, o.value]);
-			options = [...options, {value: o.value, text: o.textContent||o.value}]
-		});
-		selected && (selection = options.reduce((obj, op) => selected.includes(op.value) ? {...obj, [op.value]: op} : obj, {}));
-		first = false;
-	});
-
-// Commented to try if no bugs: allows `values` to be R/W instead of R-O
-// TODO Remove the `First` variable when validated
-	$: /*if (!first)*/ selected = Object.values(selection).map(o => o.value);
-	$: filtered = options.filter(o => inputValue ? o.text.toLowerCase().includes(inputValue.toLowerCase()) : o);
-	$: if (activeOption && !filtered.includes(activeOption) || !activeOption && inputValue) activeOption = filtered[0];
-
-	let formInput: HTMLInputElement;
-	export let value: string = '',
-		listValue: (o: string[])=> string = (vs: string[])=> vs.join(' ');
-	$: {
-		value = listValue(selected);
+	let optionByV: Record<string, Option> = options.reduce((obj, op) => ({...obj, [op.value]: op}), {});
+	if(value !== undefined) selected = readValue(value).map(v=> optionByV[v])
+	
+$:	filtered = options.filter(o => inputValue ? o.text.toLowerCase().includes(inputValue.toLowerCase()) : o);
+$:	if (activeOption && !filtered.includes(activeOption) || !activeOption && inputValue) activeOption = filtered[0];
+$:	{
+		value = listValue(selected.map(o=> o.value));
 		if(formInput) formInput.dispatchEvent(new Event('input', {bubbles:true}));
 	}
+	
 	export let errors: string[] = [];
 	const { errors: frmErrors } = getFrmCtx();
 	let allErrors: string[], invalid: boolean = false;
-	$: {
+$:	{
 		allErrors = (errors||[]).concat($frmErrors[name]||[]);
 		invalid = !!allErrors.length;
 	}
 
-	function add(token: Option) {
-		if (!readonly) selection[token.value] = token;
+	function add(o: Option) {
+		if (!readonly && !selected.includes(o))
+			selected = [o, ...selected];
 	}
 
 	function remove(value: string) {
-		if (!readonly) {
-			const {[value]: val, ...rest} = selection;
-			selection = rest;
+		let ndx = selected.indexOf(optionByV[value]);
+		if (!readonly && ~ndx) {
+			selected.splice(ndx, 1);
+			selected = selected;
 		}
 	}
 
@@ -82,7 +75,7 @@
 
 	function handleKeyup(e: KeyboardEvent) {
 		if (e.keyCode === 13) {
-			Object.keys(selection).includes(activeOption!.value) ? remove(activeOption!.value) : add(activeOption!);
+			if(selected.includes(activeOption!)) remove(activeOption!.value); else add(activeOption!);
 			inputValue = '';
 		}
 		if ([38,40].includes(e.keyCode)) { // up and down arrows
@@ -104,7 +97,7 @@
 			e.stopPropagation();
 			remove((<HTMLElement>target.closest('.token')).dataset.id!);
 		} else if (target.closest('.remove-all')) {
-			selection = {};
+			selected = [];
 			inputValue = '';
 		} else {
 			optionsVisibility(true);
@@ -113,7 +106,7 @@
 
 	function handleOptionMousedown(e: MouseEvent) {
 		const value = (<HTMLElement>e.target).dataset.value!;
-		if (selection[value]) {
+		if(selected.includes(optionByV[value])) {
 			remove(value);
 		} else {
 			add(options.filter(o => o.value === value)[0]);
@@ -126,7 +119,7 @@
 	{#if name}<input type="hidden" bind:this={formInput} {name} {value} />{/if}
 	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="tokens" class:showOptions on:click={handleTokenClick}>
-		{#each Object.values(selection) as s}
+		{#each selected as s}
 			<div class="token" data-id="{s.value}">
 				<span>{s.text}</span>
 				{#if !readonly}
@@ -141,7 +134,7 @@
 		<div class="actions">
 			{#if !readonly}
 				<input id={id} autocomplete="off" bind:value={inputValue} bind:this={input} on:keyup={handleKeyup} on:blur={handleBlur} placeholder={placeholder}/>
-				<div class="remove-all" title="Remove All" class:hidden={!Object.keys(selection).length}>
+				<div class="remove-all" title="Remove All" class:hidden={!selected.length}>
 					<svg class="icon-clear" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24">
 						<path d="{iconClearPath}"/>
 					</svg>
@@ -151,13 +144,13 @@
 		</div>
 	</div>
 
-	<select bind:this={slot} type="multiple" class="hidden"><slot></slot></select>
+	<select type="multiple" class="hidden"><slot></slot></select>
 	
 	{#if showOptions}
 		<ul class="options" transition:fly="{{duration: 200, y: 5}}" on:mousedown|preventDefault={handleOptionMousedown}>
 			{#each filtered as option}
-				<li class:selected={selection[option.value]} class:active={activeOption === option} data-value="{option.value}">
-					<slot name="option" selected={selection[option.value]} {option}>
+				<li class:selected={selected.includes(option)} class:active={activeOption === option} data-value="{option.value}">
+					<slot name="option" selected={selected.includes(option)} {option}>
 						{option.text}
 					</slot>
 				</li>

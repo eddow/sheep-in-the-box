@@ -10,7 +10,7 @@ import { setCookie, setSSR } from '$lib/cookies';
 // Version when `user.roles` is still a string
 function accessible(routeId: string, user: any) {
 	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))
-		if(!user || (group !== 'lgdn' && !~user.roles.indexOf(group))) {
+		if(!user || !~user.roles.indexOf(group)) {
 			console.log('CS-401', `Unauthorized (@${group})`);
 			return false;
 		}

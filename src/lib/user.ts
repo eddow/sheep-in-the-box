@@ -1,5 +1,5 @@
 import { goto } from "$app/navigation";
-import type { Language, Role, Roles } from "./constants";
+import type { Role, User } from "./constants";
 import { jsonCookies } from "./cookies";
 import { ajax } from "./globals";
 import { privateStore } from "./privateStore";
@@ -16,18 +16,11 @@ export function allGroups(rex: RegExp, hay: string, grpIndex: number) {
 
 export function accessible(routeId: string) {
 	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))
-		if(!userStore.value || (group !== 'lgdn' && !userStore.value.roles[<Role>group])) {
+		if(!userStore.value ||!userStore.value.roles[<Role>group]) {
 			console.log('CS-401', `Unauthorized (@${group})`);
 			return false;
 		}
 	return true;
-}
-
-export interface User {
-	email: string;
-	roles: Roles
-	language: Language;
-	preferences: any;
 }
 
 let updatePreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/user/ego')

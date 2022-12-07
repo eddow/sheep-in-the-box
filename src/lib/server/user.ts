@@ -1,4 +1,4 @@
-import { map } from "./db";
+import { map, stringIds } from "./db";
 import User, { Registration, Session } from "$lib/server/objects/user";
 import type { RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
@@ -9,6 +9,7 @@ import { createTransport } from "nodemailer";
 import { parmed } from "$lib/intl";
 import { getText } from "./intl";
 import { stringCookies } from "$lib/cookies";
+import { ObjectId } from "mongodb";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
@@ -98,6 +99,16 @@ export async function userExists(email: string) {
 		]))[0]?.count;
 }
 
+export async function listUsers() {
+	return stringIds(await users.aggregate([{
+		$project: {email: 1, roles: 1}
+	}]));
+}
+
+export async function patchUser(_id: string, diff: {email?: string, roles?: string}) {
+	return await users.findByIdAndUpdate(_id, diff);
+}
+
 export async function setLanguage(email: string, language: Language) {
 	await users.findOneAndUpdate({email}, {$set:{language}});
 }
@@ -112,7 +123,7 @@ export async function updatePreference(email: string, name: string, value?: any)
 		delete preferences[name];
 	} else if(preferences) preferences[name] = value;
 	else preferences = {[name]: value};
-	let rv = await users.updateMany({email}, {$set:{preferences}});
+	let rv = await users.updateMany({email}, {$set: {preferences}});
 	return rv.acknowledged && preferences;
 }
 

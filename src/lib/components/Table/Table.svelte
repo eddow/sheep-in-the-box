@@ -9,12 +9,14 @@
 	export let columnHeaders: boolean = true;
 	export let columnFooters: boolean = false;
 	export let filters = new Map<any, (row: any)=> boolean>();
+	export let context = {};
 	export let rowType = TableRow;
 	export let data: any[];
 	export let unfiltered: any[] = [];
 	const dataStore = privateStore(data);
 $:	dataStore.value = data;
 	setTblCtx({
+		...context,
 		data: dataStore.store,
 		setFilter(key: any, filter?: (row: any)=> boolean) {
 			if(filter) filters.set(key, filter);

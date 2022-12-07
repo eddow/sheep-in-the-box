@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Input from '$lib/components/form/Input.svelte';
 	import Editor from './Editor.svelte'
-	import { getClmnCtx, getRowCtx } from '../utils'
-	import type { EditingRowContext } from './utils';
+	import { getClmnCtx } from '../utils'
 
 	const { config } = getClmnCtx();
 	let prop: string;

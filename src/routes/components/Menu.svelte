@@ -40,6 +40,14 @@
 			</NavItem>
 		</Nav>
 	</Collapse>
+	{#if $user?.roles.adm}
+		<Dropdown>
+			<DropdownToggle caret><Icon name="person-lines-fill" /></DropdownToggle>
+			<DropdownMenu>
+				<DropdownItem><NavLink class="prefix-icon" href="/users"><Icon name="person-badge" />{$T('ttl.users')}</NavLink></DropdownItem>
+			</DropdownMenu>
+		</Dropdown>
+	{/if}
 	{#if $user?.roles.trad}
 		<Dropdown>
 			<DropdownToggle caret><Icon name="translate" /></DropdownToggle>
