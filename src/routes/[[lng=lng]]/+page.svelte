@@ -1,20 +1,32 @@
 <script lang="ts">
-	import Ctrl from "./ctrl.svelte";
+	import Form from "$lib/components/form/Form.svelte";
+	import MultiSelect from "$lib/components/form/MultiSelect.svelte";
+	import { alert } from "$lib/globals";
+	import { array, object, string } from "yup";
 
-	let data = [
-		{a:1, b: 'one'},
-		{a:2, b: 'two'},
-		{a:3, b: 'three'},
-	];
-	function click() {
-		let dob = data[1];
-		dob.b = '?';
-		//data = data;
+	const ui_libs = [{label: `Svelte`, value: 'S'}, {label: `React`}, {label: `Vue`, value: 'V'}, {label: `Angular`, value: 'A'}, `...`]
+
+	let selected: any[] = [],
+		value: string;
+
+	const schema = object({
+		test: string().required()
+	});
+	function submit({detail}: CustomEvent) {
+		alert({message: detail.values.test});
 	}
 </script>
-<Ctrl data={data} />
-<button on:click={click}>Yup</button>
-
+<Form {schema} on:submit={submit}>
+	<code>selected = {JSON.stringify(selected)}
+value = {JSON.stringify(value)}</code>
+	<MultiSelect name="test" bind:value bind:selected>
+		<option value="AF">Afrikanns</option>
+		<option value="SQ"><i>Albanian</i></option>
+		<option value="AR">Arabic</option>
+		<option value="HY">Armenian</option>
+	</MultiSelect>
+	<button type="submit">Yup</button>
+</Form>
 <svelte:head>
 	<title>Home</title>
 </svelte:head>

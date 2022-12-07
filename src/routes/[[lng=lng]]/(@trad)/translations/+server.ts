@@ -1,8 +1,6 @@
 import { error, json } from '@sveltejs/kit';
-import { create, deleteKey, getDevDictionary, getTradDictionaries, renameKey, setKeyInfo, setTexts } from '$lib/server/intl';
+import { getTradDictionaries, setTexts } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
-import { t } from '$lib/server/intl';
-import type { Language } from '$lib/constants';
 
 export async function GET(event: RequestEvent) {	// Note: never used
 	return json(await getTradDictionaries());

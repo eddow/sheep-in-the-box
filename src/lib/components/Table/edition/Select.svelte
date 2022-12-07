@@ -5,9 +5,8 @@
 
 	const { config } = getClmnCtx();
 	export let placeholder: string | undefined = undefined;
-	let prop: string, title: string;
+	let prop: string;
 $:	prop = <string>$config.prop;
-$:	title = <string>$config.title;
 	export let autofocus: boolean = false;
 	export let options: any[];
 	export let value: string;
@@ -18,11 +17,13 @@ $:	title = <string>$config.title;
 <Editor {...$$restProps} {getDisplay} {value}>
 	<Input {placeholder} {autofocus} type="select" name={prop} bind:value>
 		{#each options as option}
-			{#if typeof option === 'string'}
-				<option>{option}</option>
-			{:else}
-				<option value={option.value}>{option.text}</option>
-			{/if}
+			<slot name="option" {option}>
+				{#if typeof option === 'string'}
+					<option>{option}</option>
+				{:else}
+					<option value={option.value}>{option.text}</option>
+				{/if}
+			</slot>
 		{/each}
 	</Input>
 </Editor>

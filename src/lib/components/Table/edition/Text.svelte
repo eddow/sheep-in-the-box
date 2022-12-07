@@ -6,9 +6,9 @@
 
 	const { config } = getClmnCtx();
 	let prop: string;
+$:	prop = <string>$config.prop;
 	export let value: string;
 	export let placeholder: string | undefined = undefined;
-$:	prop = <string>$config.prop;
 	export let area: boolean = false;
 	export let autofocus: boolean = false;
 </script>

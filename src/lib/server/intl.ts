@@ -1,5 +1,5 @@
 import Intl, { IntlKey, type Language, type TextType } from "$lib/server/objects/intl";
-import { map, removeIds, stringIds } from "./db";
+import { map, stringIds } from "./db";
 import type { Role } from "./objects/user";
 
 const dictionary = map(Intl);
@@ -23,7 +23,7 @@ export async function flat(language: Language, roles: string[]): Promise<Record<
 		$match.role = {$regex: '^((' + roles.join(')|(') + '))$' };
 		prePipiline = [
 			{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
-			{$project: {key: 1, lng: 1, text: 1, role: {$first: '$keyDesc.role'}}}
+			{$project: {_id: 0, key: 1, lng: 1, text: 1, role: {$first: '$keyDesc.role'}}}
 		];
 	}
 	
@@ -64,12 +64,12 @@ export async function getDevDictionary(lng: Language) {
 }
 
 export async function getTradDictionaries(/*lngs: Language[]*/) {
-	let rv = removeIds(await dictionary.aggregate([
+	let rv = await dictionary.aggregate([
 		{$group: {_id: '$key', key: {$min: '$key'}, trads: {$addToSet: {lng: '$lng', text: '$text'}}}},
 		//{$project: {key: '$key', trads: {$filter: {input: '$trads', as: 'tr', cond: {$in: ['$$tr.lng', lngs]}}}}},
 		{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
-		{$project: {key: 1, trads: 1, type: {$first: '$keyDesc.type'}}}
-	]));
+		{$project: {_id: 0, key: 1, trads: 1, type: {$first: '$keyDesc.type'}}}
+	]);
 	/* Too complex in aggregations for me, I keep on is JS
 	{
 		"key": "role.none",
