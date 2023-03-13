@@ -10,7 +10,7 @@ export const POST: RequestHandler = async (event) => {	// set language
 	const {language, roles} = await event.request.json();
 	event.locals.language = language;
 	const user = event.locals.user,
-		toSendRoles = user?.roles.split(' ').concat(['']).filter((r: string)=> !~roles.indexOf(r)) || [''], rv: any = {};
+		toSendRoles = (<string>user?.roles)?.split(' ').concat(['']).filter((r: string)=> !~roles.indexOf(r)) || [''], rv: any = {};
 	if(user) {
 		setLanguage(user.email, language);
 	} else

@@ -1,6 +1,6 @@
 import type { Handle, HandleServerError, HandleFetch } from '@sveltejs/kit';
 import { authed, persistPreference } from '$lib/server/user';
-import { languages } from "$lib/server/objects/intl";
+import { languages, type Language } from "$lib/server/objects/intl";
 import { allGroups, setSSPersistPreference } from '$lib/user';
 import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
@@ -23,16 +23,17 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	const user = await authed(event);
 	resetDictionaries();
-	event.locals.language = event.params.lng || user?.language || event.cookies.get('language');
+	let llng = event.params.lng || user?.language || event.cookies.get('language');
 	if(!event.locals.language) {
-		event.locals.language = event.request.headers.get('accept-language')?.
+		llng = event.request.headers.get('accept-language')?.
 				split(';').map(x=> x.split(' ')[1]).
 				find(x=> x && x in languages) ||
 			'en'
-		setCookie('language', event.locals.language);
+		setCookie('language', llng);
 	}
+	event.locals.language = <Language>llng;
 	event.locals.preferences = (user ? user.preferences : event.cookies.get('preferences')) || {};
-	event.locals.dictionary = await flat(event.locals.language, (event.locals.user?.roles.split(' ') || []).concat(['']));
+	event.locals.dictionary = await flat(event.locals.language, ((<string>event.locals.user?.roles)?.split(' ') || []).concat(['']));
 	if(event.route.id && !accessible(event.route.id, user)) {
 		return new Response('"Not avail"', /^text\/html/.test(event.request.headers.get('accept') || '') ? 
 			{status: 303, headers: {location: '/'}} :
@@ -51,5 +52,5 @@ export const handleError: HandleServerError = ({error})=> {
 	if(!codes[code]) {
 		console.error(error);
 	}
-	return {message: t(codes[code] || 'err.internal')};
+	return {message: t(codes[code] || 'err.internal'), code};
 }
