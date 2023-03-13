@@ -4,6 +4,7 @@
   	import { exclude } from '../utils/exclude'
   	import { prefixFilter } from '../utils/prefixFilter'
 	import { privateStore } from '$lib/privateStore';
+	import VirtualList from '@sveltejs/svelte-virtual-list';
 
 	export let columnFilters: boolean = false;
 	export let columnHeaders: boolean = true;
@@ -55,9 +56,11 @@ $:	displayedData = data.filter((row: any)=>
 	{/if}
 	<div class="tbody">
 		{#each displayedData as row, ndx (rowId(row) || ndx)}
+		<!-- VirtualList items={displayedData} let:item={row} -->
 			<svelte:component this={rowType} id={rowId(row)} row={row} {...prefixFilter($$props, 'tr$')}>
 				<slot row={row} />
 			</svelte:component>
+		<!-- /VirtualList -->
 		{/each}
 	</div>
 	{#if columnFooters}

@@ -1,5 +1,5 @@
 import { error, json } from '@sveltejs/kit';
-import { login, logout, authed, changePass, register } from "$lib/server/user";
+import { login, logout, changePass, register } from "$lib/server/user";
 import { flat, tree } from '$lib/server/intl';
 import type { RequestEvent } from './$types';
 
@@ -9,7 +9,7 @@ export async function GET(event: RequestEvent) {	//authed
 
 export async function POST(event: RequestEvent) {	//login
 	const {email, password, roles} = await event.request.json();
-	// roles is the list of roles for whom the client has the dictionary already
+	// roles is the list of roles for whom the client already has the dictionary
 	let user = await login(event, email, password);
 	if(!user) {
 		logout(event);

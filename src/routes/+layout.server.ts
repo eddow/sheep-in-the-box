@@ -1,10 +1,10 @@
 import { tree } from "$lib/server/intl";
 
-export const load = async (event: Partial<Record<string, any>>) => {
+export async function load({locals}: Partial<Record<string, any>>) {
 	return {
-		user: event.locals.user,
-		language: event.locals.language,
-		preferences: event.locals.preferences,
-		dictionary: await tree(event.locals.dictionary)
+		user: locals.user,
+		language: locals.language,
+		preferences: locals.preferences,
+		dictionary: await tree(locals.dictionary)
 	};
 }

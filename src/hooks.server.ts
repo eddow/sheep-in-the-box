@@ -1,7 +1,7 @@
 import type { Handle, HandleServerError, HandleFetch } from '@sveltejs/kit';
-import { authed, updatePreference } from '$lib/server/user';
+import { authed, persistPreference } from '$lib/server/user';
 import { languages } from "$lib/server/objects/intl";
-import { allGroups, setSSRupdatePreference } from '$lib/user';
+import { allGroups, setSSPersistPreference } from '$lib/user';
 import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
 import { setCookie, setSSR } from '$lib/cookies';
@@ -19,7 +19,7 @@ function accessible(routeId: string, user: any) {
 
 export const handle: Handle = async ({ event, resolve }) => {
 	setSSR(event.cookies);
-	setSSRupdatePreference(updatePreference);
+	setSSPersistPreference(persistPreference);
 
 	const user = await authed(event);
 	resetDictionaries();

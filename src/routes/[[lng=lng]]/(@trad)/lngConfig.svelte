@@ -9,27 +9,28 @@
 	import Horizontal from "$lib/components/dnd/Horizontal.svelte";
 	import { flag, languages } from "$lib/constants";
 	import { T, user } from "$lib/globals";
+	import { preference, Side } from "$lib/preferences";
 	import { Card, CardBody, CardHeader, CardTitle, Col, Container, Row } from "sveltestrap";
-
-	export let configuration: string;
-	const [ref, wrk] = configuration.split(':').map((x: string)=> x.split('.').filter(x=>x)),
-		used = ref.concat(wrk),
+	
+	const tradLngs = preference('tradLngs', Side.server),
 		allItems: LangItem[] = [{id: 'key', icon: 'bi-key', text: $T('fld.key')}].concat(Object.keys(languages).map(id=> ({id, icon: flag(id), text: languages[id]}))),
-		groups = [
-			{id: 'unused', noDrop: false, items: allItems.filter((x: LangItem)=> !used.includes(x.id))},
-			{id: 'ref', noDrop: false, items: allItems.filter((x: LangItem)=> ref.includes(x.id))},
-			{id: 'work', noDrop: false, items: allItems.filter((x: LangItem)=> wrk.includes(x.id))}
-		], groupIdx: Record<string, number> = {unused: 0, ref: 1, wrk: 2};
-
+		groupIdx: Record<string, number> = {unused: 0, ref: 1, work: 2};
+	const [ref, wrk] = $tradLngs ?
+		$tradLngs.split(':').map((x: string)=> x.split('.').filter(x=>x)) :
+		[['key'], [$user.language]];
+	const used = ref.concat(wrk), groups = [
+		{id: 'unused', noDrop: false, items: allItems.filter((x: LangItem)=> !used.includes(x.id))},
+		{id: 'ref', noDrop: false, items: allItems.filter((x: LangItem)=> ref.includes(x.id))},
+		{id: 'work', noDrop: false, items: allItems.filter((x: LangItem)=> wrk.includes(x.id))}
+	];
 	// Callback instead of dispatch to make sure the call is made on-init and the parent has no tick() while uninitialized
 	export let config: (cnf: {reference: LangItem[], work: LangItem[]})=> void;
 	let refreshingOutp = false;
 	function outputGroups() {
 		refreshingOutp = false;
-		configuration = grpKeys(1)+':'+grpKeys(2);
+		$tradLngs = [groups[1], groups[2]].map(g=> g.items.map(g=> g.id).join('.')).join(':');
 		config({reference: groups[1].items, work: groups[2].items});
 	}
-	if(!configuration) configuration = 'key:' + $user.language;
 	outputGroups();
 
 $:	allItems[0].text = $T('fld.key');
@@ -40,11 +41,6 @@ $:	allItems[0].text = $T('fld.key');
 			refreshingOutp = true;
 			setTimeout(outputGroups, 100);
 		}
-	}
-	function grpKeys(ndx: number) {
-		return groups[ndx].items.map(li=> li.id).join('.');
-	}
-	function refreshPrefs() {
 	}
 	function setAvailableZones(id: string) {	// Test on:mousemove to avoid the few misses on:mousedown
 		groups[2].noDrop = id === 'key';

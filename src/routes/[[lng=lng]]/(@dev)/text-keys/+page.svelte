@@ -5,22 +5,22 @@
 	import Table from "$lib/components/table/edition/row/Table.svelte";
 	import StringContent from "$lib/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
-	import { roles, textTypes } from "$lib/constants";
+	import { roles, textTypes, type Language } from "$lib/constants";
 	import { T, ajax, alert } from "$lib/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
 	import { object, string } from "yup";
 	import Languages from "$lib/components/Languages.svelte";
-	import { preferences, user } from "$lib/user";
-
+	import { preference, Side } from "$lib/preferences";
+	import { user } from "$lib/user";
+	import type { Writable } from "svelte/store";
+	
 	export let data: PageData;
 	let textRoles: any[];
 $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('role.'+(r||'none'))}));
-	let prefs = $preferences;
-$:	prefs = $preferences;
-	if(!prefs.devKeysLng) prefs.devKeysLng = $user.language;
-	let dictionaries = {[prefs.devKeysLng]: data.dictionary},
+	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $user.language);
+	let dictionaries = {[$kLang || $user.language]: data.dictionary},
 		dictionary = data.dictionary;
 	async function saveCB(row: any, old: any, diff: any) {
 		if(!row.key) {
@@ -34,7 +34,7 @@ $:	prefs = $preferences;
 		const chg: any = {};
 		for(const k of ['text', 'role', 'type']) if(k in diff) chg[k] = diff[k];
 		if(Object.keys(chg).length) {
-			const rv = await ajax[old.key?'patch':'post']({key: row.key, language: prefs.devKeysLng, ...chg});
+			const rv = await ajax[old.key?'patch':'post']({key: row.key, language: $kLang, ...chg});
 			if(!old.key) row._id = await rv.json();
 			return rv.ok;
 		}
@@ -59,7 +59,7 @@ $:	prefs = $preferences;
 	}
 </script>
 <div style="width: 100%">
-	<Languages style="float: left;" bind:language={prefs.devKeysLng} on:set-language={reloadKeys} />
+	<Languages style="float: left;" bind:language={$kLang} on:set-language={reloadKeys} />
 	<h1>
 		{$T('ttl.text-keys')}
 	</h1>

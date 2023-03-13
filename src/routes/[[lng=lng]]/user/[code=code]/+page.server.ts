@@ -1,7 +1,7 @@
 import { registration, userExists } from "$lib/server/user";
 
-export const load = async (event: Partial<Record<string, any>>) => {
-	const email = await registration(event.params.code);
+export async function load({params}: Partial<Record<string, any>>) {
+	const email = await registration(params.code);
 	return {
 		exists: email && await userExists(email)
 	};

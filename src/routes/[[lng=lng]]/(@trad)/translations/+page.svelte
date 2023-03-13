@@ -4,7 +4,6 @@
 	import StringContent from "$lib/components/table/filters/StringContent.svelte";
 	import Text from "$lib/components/table/edition/Text.svelte";
 	import { ajax, T } from "$lib/globals";
-	import { preferences, user } from "$lib/user";
 	import { Button, Icon, Modal } from "sveltestrap";
 	import type { PageData } from "./$types";
 	import Table from "$lib/components/table/Table.svelte";
@@ -15,8 +14,6 @@
 	export let data: PageData;
 	let dictionary = data.transls;
 
-	let prefs = $preferences;
-$:	prefs = $preferences;
 	let confHidden = true;
 	let reference: LangItem[], work: LangItem[];
 	function config(cnf: {reference: LangItem[], work: LangItem[]}) {
@@ -59,7 +56,7 @@ $:	prefs = $preferences;
 </script>
 <div style="width: 100%">
 	<Button id="configure" on:click={()=> confHidden = !confHidden} class="btn-rounded"><Icon name="gear-fill" /></Button>
-	<LngConfig bind:configuration={prefs.tradLngs} {config} hide={confHidden} />
+	<LngConfig {config} hide={confHidden} />
 	<h1>
 		{$T('ttl.translations')}
 	</h1>

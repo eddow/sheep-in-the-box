@@ -1,21 +1,19 @@
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
+/// <reference types="@sveltejs/kit" />
 
-import type { Language } from "$lib/constants";
+import type { Language, User } from "./lib/constants";
 
-// and what to do when importing types
-declare namespace App {
-	interface Locals {
-		user: User;
-		language: Language;
-		dictionary: Record<string, string>;
-		preferences: Record<string, any>;
-	}
-	
-	interface Error {
-		message: string;
-		code: string;
+declare global {
+	namespace App {
+		interface Locals {
+			user?: User;
+			language: Language;
+			dictionary: Record<string, string>;
+			preferences: Record<string, unknown>;
+		}
+		
+		interface Error {
+			message: string;
+			code: string;
+		}
 	}
 }
-
-declare module 'markdown';

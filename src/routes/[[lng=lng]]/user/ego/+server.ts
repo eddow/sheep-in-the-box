@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
 import { flat, tree } from '$lib/server/intl';
-import { setLanguage, updatePreference } from '$lib/server/user';
+import { setLanguage, persistPreference } from '$lib/server/user';
 import { setCookie } from '$lib/cookies';
 
 ////// API related to "my user"
@@ -22,5 +22,5 @@ export const POST: RequestHandler = async (event) => {	// set language
 
 export const PATCH: RequestHandler = async (event) => {	// set/delete preference
 	const {name, value} = await event.request.json();
-	return json(await updatePreference(event.locals.user.email, name, value));
+	return json(await persistPreference(event.locals.user.email, name, value));
 }

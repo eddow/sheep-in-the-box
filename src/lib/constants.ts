@@ -21,7 +21,7 @@ export interface Roles {
 
 export interface User {
 	email: string;
-	roles: Roles
+	roles: string | Roles;
 	language: Language;
 	preferences: any;
 }

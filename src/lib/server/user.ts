@@ -9,7 +9,6 @@ import { createTransport } from "nodemailer";
 import { parmed } from "$lib/intl";
 import { getText } from "./intl";
 import { stringCookies } from "$lib/cookies";
-import { ObjectId } from "mongodb";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
@@ -66,12 +65,12 @@ export async function logout(event: RequestEvent<Partial<Record<string, string>>
 	if(!authKey) return false;
 	await sessions.deleteMany({authKey});
 	delete event.locals.user;
-	event.locals.language = event.cookies.get('language');
+	event.locals.language = <Language>event.cookies.get('language');
 	return true;
 }
 
 export async function changePass(event: RequestEvent<Partial<Record<string, string>>, string | null>, oldPass: string, newPass: string) {
-	const one = await users.findOne({email: event.locals.user.email, password: md5(oldPass)});
+	const one = await users.findOne({email: event.locals.user!.email, password: md5(oldPass)});
 	if(!one) return false;
 	one.password = md5(newPass);
 	await one.save();
@@ -113,7 +112,8 @@ export async function setLanguage(email: string, language: Language) {
 	await users.findOneAndUpdate({email}, {$set:{language}});
 }
 
-export async function updatePreference(email: string, name: string, value?: any) {
+// Used by hook.server to access directly the DB instead of cookies or XHR
+export async function persistPreference(email: string, name: string, value?: any) {
 	let preferences = (await users.aggregate([
 			{$match: {email}},
 			{$project: {preferences: 1}}
@@ -130,12 +130,12 @@ export async function updatePreference(email: string, name: string, value?: any)
 //#region Register/lost pw
 
 const transport = createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  auth: {
-    user: SMTP_USER,
-    pass: SMTP_PASS
-  }
+	host: SMTP_HOST,
+	port: SMTP_PORT,
+	auth: {
+		user: SMTP_USER,
+		pass: SMTP_PASS
+	}
 });
 export async function register(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string) {
 	const code = md5(crypto.randomUUID()),
