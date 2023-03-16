@@ -13,11 +13,6 @@
 			],
 			"runtimeExecutable": "npm",
     		"cwd": "${workspaceRoot}",
-			"windows": {
-				"name":"Launch",
-				"request": "launch",
-				"runtimeExecutable": "npm.cmd"
-			},
 			"runtimeArgs": [
 				"run-script",
 				"dev"

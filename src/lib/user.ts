@@ -1,11 +1,10 @@
 import { goto } from "$app/navigation";
+import { browser } from "$app/environment";
 import type { Role, Roles, User } from "./constants";
 import { jsonCookies } from "./cookies";
 import { ajax } from "./globals";
 import { privateStore } from "./privateStore";
 import { setPrefOperations, Side } from "./preferences";
-
-const csWindow = 'undefined' != typeof window ? window : null;
 
 export function allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	const rv = [];
@@ -34,11 +33,10 @@ export function setSSPersistPreference(npp: (email: string, name: string, value?
 
 
 const egoDelay = 5*1000,
-	delays: any = {},
-	clientSide = csWindow?.onbeforeunload;
+	delays: any = {};
 // onBeforeLeave => call delays
 function delay(prop: PropertyKey, cb: ()=> void) {
-	if(clientSide) {
+	if(browser) {
 		if(delays[prop]) clearTimeout(delays[prop].hndl);
 		delays[prop] = {
 			hndl: setTimeout(()=> {
@@ -49,7 +47,7 @@ function delay(prop: PropertyKey, cb: ()=> void) {
 		};
 	} else cb();
 }
-if(clientSide)
+if(browser)
 	window.addEventListener('beforeunload', (ev: BeforeUnloadEvent)=> {
 		for(let p of Object.keys(delays)) {
 			delays[p].cb();
@@ -97,17 +95,17 @@ export function setGlobalUser(userSpec: any, routeId: string | null) {
 	if(userSpec)
 		setPrefOperations(userPrefs(userSpec.preferences || {}), userSpec.preferences);
 	else {
-		const ls = csWindow?.localStorage,
-			localVolatile = Object.create(
-				jsonCookies.preferences,
-				Object.getOwnPropertyDescriptors((ls && ls.preferences) ||  {}));
+		const localVolatile = Object.create(
+			jsonCookies.preferences,
+			Object.getOwnPropertyDescriptors(browser ? localStorage.preferences : {})
+		);
 		function accsLP(side: Side, upd: (lp: any)=> void): any {
 			const preferences = side == Side.client ? localVolatile : jsonCookies.preferences || {};
 			upd(side == Side.server ? jsonCookies.preferences : preferences);
 			if(side == Side.server)
 				jsonCookies.preferences = jsonCookies.preferences;
-			else if(ls)
-				ls.preferences = Object.create({}, Object.getOwnPropertyDescriptors(preferences))
+			else if(browser)
+				localStorage.preferences = Object.create({}, Object.getOwnPropertyDescriptors(preferences))
 		}
 		setPrefOperations({
 			get(prop: string): any {
