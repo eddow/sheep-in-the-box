@@ -1,4 +1,5 @@
 <script lang="ts">
+	import "svemantic";
 	import { accessible, setGlobalUser } from "$lib/user";
 	import Menu from './components/Menu.svelte';
 	import Alerts from './components/Alerts.svelte';

@@ -2,8 +2,9 @@ import { readable } from "svelte/store";
 import { ajax } from "./ajax";
 import type { Language, Role } from "./constants";
 import { privateStore } from "./privateStore";
-import { setLocale } from 'yup'
-import type { MessageParams } from 'yup/lib/types'
+import { setLocale } from 'yup';
+import type { MessageParams } from 'yup/lib/types';
+import { i18n } from 'svemantic';
 
 interface Dictionary {
 	hash: any;
@@ -16,9 +17,9 @@ export const languageStore = privateStore<Language>(),	//A- languageStore.value 
 export async function setLanguage(lng: Language) {		//B- setLanguage is used to manage the directories
 	const rv = await ajax.post({language: lng, roles: dictionary.roles}, '/user/ego'),
 		content = await rv.json();
+	languageStore.value = lng;
 	if(content) gotTree(content);
 	else updateTexts();
-	languageStore.value = lng;
 }
 
 export let dictionary: Dictionary;
@@ -28,9 +29,10 @@ export function resetDictionaries() {
 }
 
 language.subscribe((lng: Language)=> {
-	if(!dics[lng])
-		dics[lng] = {hash: {}, roles: []};
-	dictionary = dics[lng];
+	if(lng) {
+		if(!dics[lng]) dics[lng] = {hash: {}, roles: []};
+		dictionary = dics[lng];
+	}
 });
 
 function addTree(dst: any, src: any, prefix?: string) {
@@ -47,6 +49,8 @@ function addTree(dst: any, src: any, prefix?: string) {
 export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 	dictionary.roles.push(...roles);
 	addTree(dictionary.hash, tree);
+	// TODO Whole tree => .set
+	i18n.update(old => Object.assign({}, old, {fld: tree.fld}))
 	updateTexts();
 }
 
@@ -80,10 +84,11 @@ let updateTexts = ()=> {}
 type translationFunction = (key: string, parms?: any)=> string;
 export const T = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
 	updateTexts = ()=> {
+		const hash = dictionary.hash;
 		function entry(key: string, parms?: any): string {
 			if(!key) return '';
 			key = camel2dot(key);
-			return parmed(dictionary.hash[key], parms) || `[${key}]`;
+			return parmed(hash[key], parms) || `[${key}]`;
 		}
 		set(entry);
 		function paramdErr(name: string) {

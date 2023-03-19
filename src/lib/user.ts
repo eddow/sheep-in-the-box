@@ -47,7 +47,7 @@ function delay(prop: PropertyKey, cb: ()=> void) {
 		};
 	} else cb();
 }
-if(browser)
+if(browser)	// TODO Also send `ego` before user-change
 	window.addEventListener('beforeunload', (ev: BeforeUnloadEvent)=> {
 		for(let p of Object.keys(delays)) {
 			delays[p].cb();
@@ -97,7 +97,7 @@ export function setGlobalUser(userSpec: any, routeId: string | null) {
 	else {
 		const localVolatile = Object.create(
 			jsonCookies.preferences,
-			Object.getOwnPropertyDescriptors(browser ? localStorage.preferences : {})
+			Object.getOwnPropertyDescriptors(browser && localStorage.preferences || {})
 		);
 		function accsLP(side: Side, upd: (lp: any)=> void): any {
 			const preferences = side == Side.client ? localVolatile : jsonCookies.preferences || {};

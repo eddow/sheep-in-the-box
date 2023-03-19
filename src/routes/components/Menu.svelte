@@ -19,27 +19,37 @@
 	import { language, setLanguage, T } from "$lib/intl";
 	import type { Language } from '$lib/constants';
 	import Login from './Login.svelte';
+	import { Button, Buttons, Popup } from 'svemantic';
 	
-	let isOpen = false, logingIn = false;
-
-	function handleUpdate(event: any) {
-		isOpen = event.detail.isOpen;
-	}
+	let doneLogingIn: ()=> void;
 	
 	function setLng(e: CustomEvent) {
 		setLanguage(<Language>e.detail);
 	}
 </script>
+
+<section id="nav_menu" class="">
+	<nav class="ui top attached menu">
+		<div class="item">
+			SitB
+		</div>
+		<div class="right menu">
+			<div class="browse item">
+				{$T('cmd.login')}
+			</div>
+			<div class="item">
+				<Buttons class="user-mgt">
+					<Button icon="user" />
+					<Popup on="click" bind:hide={doneLogingIn}>
+						<Login on:set-user on:done={doneLogingIn} />
+					</Popup>
+					<Languages language={$language} on:set-language={setLng} />
+				</Buttons>
+			</div>
+		</div>
+	</nav>
+</section>
 <Navbar color="light" light expand="md">
-	<NavbarBrand href="/">SitB</NavbarBrand>
-	<NavbarToggler on:click={() => (isOpen = !isOpen)} />
-	<Collapse {isOpen} navbar expand="md" on:update={handleUpdate} class="ms-auto">
-		<Nav>
-			<NavItem>
-				Blah
-			</NavItem>
-		</Nav>
-	</Collapse>
 	{#if $user?.roles.adm}
 		<Dropdown>
 			<DropdownToggle caret><Icon name="person-lines-fill" /></DropdownToggle>
@@ -69,20 +79,17 @@
 			</DropdownMenu>
 		</Dropdown>
 	{/if}
-	<Nav>
-		<NavItem>
-			<User on:set-user on:login={()=> logingIn = !logingIn} />
-		</NavItem>
-		<NavItem>
-			<div style="width: .5em;">&nbsp;</div>
-		</NavItem>
-		<NavItem>
-			<Languages language={$language} on:set-language={setLng} />
-		</NavItem>
-	</Nav>
 </Navbar>
-<Collapse isOpen={logingIn}>
-	<Navbar color="light" light expand="md">
-		<Login on:set-user on:done={()=> logingIn = false} />
-	</Navbar>
-</Collapse>
+<style lang="scss" global>
+	//TODO: make this work
+.ui.buttons.user-mgt {
+	> .button:first-child {
+		border-top-left-radius: 1rem;
+		border-bottom-left-radius: 1rem;
+	}
+	> .button:last-child {
+		border-top-right-radius: 1rem;
+		border-bottom-right-radius: 1rem;
+	}
+}
+</style>

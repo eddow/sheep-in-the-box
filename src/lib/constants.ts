@@ -5,8 +5,8 @@ export const languages: Record<string, string> = {
 	ro: 'Română'
 };
 
-const mods: Record<string, string> = {en: 'gb'};
-export const flag = (lng: string) => 'fi fi-'+(mods[lng] || lng);
+export const flags: Record<string, string> = {en: 'gb uk'};
+export const flag = (lng: string) => (flags[lng] || lng);
 
 export type Role = 'adm' | 'trad' | 'sell' | 'dev' | 'lgdn';
 export const roles = ['adm', 'trad', 'sell', 'dev'];
@@ -21,10 +21,16 @@ export interface Roles {
 
 export interface User {
 	email: string;
-	roles: string | Roles;
+	roles: Roles;
 	language: Language;
 	preferences: any;
 }
 
+export interface UserSys {
+	email: string;
+	roles: string;
+	language: Language;
+	preferences: any;
+}
 export const textTypes = ['', 'tpl', 'html', 'md'];
 export type TextType = '' | 'tpl' | 'html' | 'md';

@@ -1,3 +1,4 @@
+// TODO? Kill me?
 export type Listener = (...args: any[])=> Promise<boolean> | boolean | undefined;
 export type Subscription = (listener: Listener)=> (()=> boolean);
 export function listenable() {
@@ -10,7 +11,7 @@ export function listenable() {
 			}
 		},
 		async raise(...args: any[]) {
-			let entry, entries = listeners.entries();
+			let entry: IteratorResult<[Listener, Listener], any>, entries = listeners.entries();
 			while(entry = entries.next(), !entry.done) {
 				let result = entry.value[0](...args);
 				if(result instanceof Promise) result = await result;

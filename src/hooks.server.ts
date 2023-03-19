@@ -24,7 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const user = await authed(event);
 	resetDictionaries();
 	let llng = event.params.lng || user?.language || event.cookies.get('language');
-	if(!event.locals.language) {
+	if(!llng) {
 		llng = event.request.headers.get('accept-language')?.
 				split(';').map(x=> x.split(' ')[1]).
 				find(x=> x && x in languages) ||
