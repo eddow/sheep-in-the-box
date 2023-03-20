@@ -11,13 +11,7 @@ export const flag = (lng: string) => (flags[lng] || lng);
 export type Role = 'adm' | 'trad' | 'sell' | 'dev' | 'lgdn';
 export const roles = ['adm', 'trad', 'sell', 'dev'];
 
-export interface Roles {
-	adm: boolean;
-	trad: boolean;
-	sell: boolean;
-	dev: boolean;
-	lgdn: boolean;
-}
+export type Roles = Record<Role, boolean>;
 
 export interface User {
 	email: string;

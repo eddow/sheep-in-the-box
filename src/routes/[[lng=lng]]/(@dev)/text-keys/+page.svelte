@@ -6,7 +6,7 @@
 	import StringContent from "$lib/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
 	import { roles, textTypes, type Language } from "$lib/constants";
-	import { T, ajax, alert } from "$lib/globals";
+	import { T, ajax } from "$lib/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$lib/components/table/Column.svelte";
 	import Preview from "$lib/components/Preview.svelte";
@@ -15,6 +15,7 @@
 	import { preference, Side } from "$lib/preferences";
 	import { user } from "$lib/user";
 	import type { Writable } from "svelte/store";
+	import { toast } from "svemantic";
 	
 	export let data: PageData;
 	let textRoles: any[];
@@ -24,7 +25,7 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		dictionary = data.dictionary;
 	async function saveCB(row: any, old: any, diff: any) {
 		if(!row.key) {
-			alert({message: $T('err.key.no'), color: 'danger'});
+			toast({message: $T('err.key.no'), class: 'error'});
 			return false;
 		}
 		if(diff.key && old.key) {
@@ -59,7 +60,7 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	}
 </script>
 <div style="width: 100%">
-	<Languages style="float: left;" bind:language={$kLang} on:set-language={reloadKeys} />
+	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
 	<h1>
 		{$T('ttl.text-keys')}
 	</h1>
@@ -79,7 +80,7 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	<Column prop="type" title={$T('fld.type')} {row} let:value>
 		<Select options={textTypes} {value} />
 	</Column>
-	<Edition create="both" edition="both" {row} deleteConfirmation={{message: 'msg.delete-key', title: 'ttl.delete-key'}}>
+	<Edition create="both" edition="both" {row} deleteConfirmation="msg.delete-key">
 		<svelte:fragment slot="row" let:row>
 			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>

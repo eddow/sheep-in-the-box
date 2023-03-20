@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
-	import { goto } from "$app/navigation";
-	import { ajax, T, user, alert } from "$lib/globals";
+	import { toast } from 'svemantic';
+		import { goto } from "$app/navigation";
+	import { ajax, T, } from "$lib/globals";
 	import type { PageData } from "./$types";
 	import { Button, Card, CardBody, CardFooter, CardTitle, FormGroup, Input } from "sveltestrap";
 	import { object, string } from "yup";
@@ -21,8 +21,8 @@
 		const { values } = detail, {[name]: pass} = values;
 		goto('/');
 		if((await ajax.post({pass}, '', [401])).ok)
-			alert({message: $T('msg.pw.code'), color: 'success'});
-		else alert({message: $T('err.pw.code'), color: 'danger'});
+			toast({message: $T('msg.pw.code'), class: 'success'});
+		else toast({message: $T('err.pw.code'), class: 'error'});
 	}
 </script>
 <Form {schema} on:submit={submit}>

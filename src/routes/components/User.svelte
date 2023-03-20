@@ -1,11 +1,38 @@
 <script lang="ts">
-	import { DropdownItem, DropdownMenu, DropdownToggle, ButtonDropdown, FormGroup, Input, Label, Button, Popover, ButtonGroup, Icon } from 'sveltestrap';
 	import { createEventDispatcher } from 'svelte';
-	import { T, languageStore } from '$lib/intl';
+	import { T, dictionary, gotTree, languageStore } from '$lib/intl';
 	import { ajax, user } from '$lib/globals';
+	import { Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast } from "svemantic";
 
 	const dispatch = createEventDispatcher();
+	let doneLogingIn: ()=> void;
 
+	async function register({detail: {values: {email}, context: {reset}}}: CustomEvent) {
+		const rv = await ajax.put({email}, '/user');
+		if(await rv.json()) {
+			reset();
+			toast({message: $T('msg.mail-sent', {email})});
+			doneLogingIn();
+		}
+	}
+
+	async function login({detail: {values, context: {reset}}}: CustomEvent) {
+		let rv = await ajax.post({...values, roles: dictionary.roles}, '/user', [401]);
+		if(rv.ok) {
+			reset();
+			const login = await rv.json();
+			dispatch('set-user', login.user);
+			languageStore.value = login.user.language;
+			if(login.dictionary)
+				gotTree(login.dictionary);
+			doneLogingIn();
+		} else if(rv.status === 401) {
+			const cnt = await(rv.json());
+			if(cnt) languageStore.value = cnt;
+			toast({message: $T('err.login'), class: 'error'});
+			dispatch('set-user', null);
+		}
+	}
 	async function logout() {
 		const rv = await ajax.delete({}, '/user'), cnt = await(rv.json());
 		if(cnt) languageStore.value = cnt;
@@ -13,16 +40,44 @@
 	}
 </script>
 {#if $user}
-	<ButtonDropdown>
-		<DropdownToggle color="primary" class="btn-rounded prefix-icon">
-			<Icon name="person-fill" />{$user.email}
-		</DropdownToggle>
-		<DropdownMenu>
-			<DropdownItem href="/user" class="prefix-icon"><Icon name="gear-fill" />{$T('cmd.configure')}</DropdownItem>
-			<DropdownItem divider />
-			<DropdownItem on:click={logout} class="prefix-icon"><Icon name="box-arrow-left" />{$T('cmd.logout')}</DropdownItem>
-		</DropdownMenu>
-	</ButtonDropdown>
+	<Dropdown class="icon button" icon="colored blue user">
+		<Menu slot="menu" vertical>
+			<div class="right-aligned header">{$user.email}</div>
+			<LinkItem icon="cog" href="/user">{$T('cmd.configure')}</LinkItem>
+			<div class="ui divider"></div>
+			<LinkItem icon="sign out alternate" on:click={logout}>{$T('cmd.logout')}</LinkItem>
+		</Menu>
+	</Dropdown>
 {:else}
-	<Button id="anonIcon" on:click={()=> dispatch('login')} class="btn-rounded"><Icon name="person-fill" /></Button>
+	<Button icon="user" />
+	<Popup on="click" bind:hide={doneLogingIn}>
+		<Tabs active="login" let:spec headerClass="two-items">
+			<Page key="login" {spec}>
+				<Header slot="header">{$T('cmd.login')}</Header>
+				<Form on:submit={login}>
+					<Field required validate="email" icon="at" name="email" leftIcon />
+					<Field required type="password" icon="key" name="password" leftIcon />
+					<Button primary fluid submit icon="sign in alternate">{$T('cmd.login')}</Button>
+				</Form>
+			</Page>
+			<Page {spec}>
+				<Header slot="header">{$T('cmd.register')}</Header>
+				<Form on:submit={register}>
+					<Field required validate="email" icon="at" name="email" leftIcon />
+					<Button primary fluid submit icon={['user', 'corner green add']}>{$T('cmd.register')}</Button>
+				</Form>
+			</Page>
+		</Tabs>
+	</Popup>
 {/if}
+<style lang="scss" global>
+.right-aligned {
+	text-align: right;
+}
+.ui.menu.two-items {
+
+	> .item {
+    	width: 50%;
+	}
+}
+</style>

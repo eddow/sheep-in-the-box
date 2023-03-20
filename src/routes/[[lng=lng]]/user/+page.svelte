@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { ajax, T, user, alert } from "$lib/globals";
+	import { ajax, T, user } from "$lib/globals";
 	import { Button, Card, CardBody, CardFooter, CardTitle } from "sveltestrap";
 	import { object, string } from "yup";
 	import Form from "$lib/components/form/Form.svelte";
 	import GInput from "$lib/components/form/GInput.svelte";
+	import { toast } from "svemantic";
 
 $:	if(!$user) goto('/');
 	const schema = object({
@@ -19,9 +20,9 @@ $:	if(!$user) goto('/');
 		const { values, context } = e.detail, {passCur, passNew} = values;
 		let rv = await ajax.patch({passCur, passNew});
 		if(Math.floor(rv.status/100) === 4)
-			alert({message: $T('err.pw.wrong'), color: 'danger'});
+			toast({message: $T('err.pw.wrong'), class: 'error'});
 		else {
-			alert({message: $T('msg.pw.changed'), color: 'success'});
+			toast({message: $T('msg.pw.changed'), class: 'success'});
 			context.reset();
 		}
 	}

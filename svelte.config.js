@@ -15,7 +15,11 @@ const config = {
 		nodeLoaderPlugin()
 	],
 	kit: {
-		adapter: adapter()
+		adapter: adapter(),
+		alias: {
+			$svemantic: './src/svemantic',
+			svemantic: './src/svemantic'
+		}
 	}
 };
 

@@ -2,8 +2,6 @@
 	import "svemantic";
 	import { accessible, setGlobalUser } from "$lib/user";
 	import Menu from './components/Menu.svelte';
-	import Alerts from './components/Alerts.svelte';
-	import Confirm from "./components/Confirm.svelte";
 	import './styles.scss';		// TODO The CSS is cached, but something is reaallllyyy slow
 	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
@@ -17,27 +15,14 @@
 			cancel();
 	});
 </script>
-<div class="app">
-	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
-	<main>
-		<slot />
-	</main>
-	<Alerts />
-	<Confirm />
-</div>
+<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
+<main>
+	<slot />
+</main>
 
 <style>
-	.app {
-		display: flex;
-		flex-direction: column;
-		min-height: 100vh;
-	}
-
 	main {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		padding: 1rem;
+		padding: 5rem;
 		width: 100%;
 		margin: 0 auto;
 		box-sizing: border-box;

@@ -1,54 +1,56 @@
 <script lang="ts">
-	import {
-		Collapse,
-		Navbar,
-		NavbarToggler,
-		NavbarBrand,
-		Nav,
-		NavItem,
-		NavLink,
-		Dropdown,
-		DropdownToggle,
-		DropdownMenu,
-		DropdownItem,
-		Icon
-	} from 'sveltestrap';
 	import User from './User.svelte';
 	import Languages from '$lib/components/Languages.svelte';
 	import { user } from '$lib/globals';
 	import { language, setLanguage, T } from "$lib/intl";
-	import type { Language } from '$lib/constants';
-	import Login from './Login.svelte';
-	import { Button, Buttons, Popup } from 'svemantic';
-	
-	let doneLogingIn: ()=> void;
-	
+	import type { Language, Role } from '$lib/constants';
+	import { Buttons, Menu, Dropdown, Icon, LinkItem, toast } from 'svemantic';
+	import { browser } from '$app/environment';
+		
 	function setLng(e: CustomEvent) {
 		setLanguage(<Language>e.detail);
 	}
+	let toolbox: boolean;
+	$: toolbox = $user && ['adm', 'dev', 'trad'].some((r: string)=> $user.roles[<Role>r]);
 </script>
 
 <section id="nav_menu" class="">
-	<nav class="ui top attached menu">
+	<nav class="ui top fixed menu">
 		<div class="item">
 			SitB
 		</div>
 		<div class="right menu">
-			<div class="browse item">
-				{$T('cmd.login')}
-			</div>
+			{#if toolbox}
+				<div class="item">
+					<Dropdown class="icon button" icon="tools">
+						<Menu slot="menu" vertical>
+							{#if $user?.roles.adm}
+								<LinkItem icon={['user', 'corner cog']} href="/users">{$T('ttl.users')}</LinkItem>
+							{/if}
+							{#if $user?.roles.trad}
+								<LinkItem icon="language" href="/translations">{$T('ttl.translations')}</LinkItem>
+							{/if}
+							{#if $user?.roles.dev}
+								<div class="ui horizontal divider header"><Icon icon="code" /></div>
+								<LinkItem icon="key" href="/text-keys">{$T('ttl.text-keys')}</LinkItem>
+								<a class="nav-link prefix-icon item" data-sveltekit-preload-data="off" data-sveltekit-reload href="/export">
+									<Icon icon="cloud download alternate" />{$T('mnu.db-dld')}
+								</a>
+							{/if}
+						</Menu>
+					</Dropdown>
+				</div>
+			{/if}
 			<div class="item">
 				<Buttons class="user-mgt">
-					<Button icon="user" />
-					<Popup on="click" bind:hide={doneLogingIn}>
-						<Login on:set-user on:done={doneLogingIn} />
-					</Popup>
+					<User on:set-user />
 					<Languages language={$language} on:set-language={setLng} />
 				</Buttons>
 			</div>
 		</div>
 	</nav>
 </section>
+<!--
 <Navbar color="light" light expand="md">
 	{#if $user?.roles.adm}
 		<Dropdown>
@@ -79,7 +81,7 @@
 			</DropdownMenu>
 		</Dropdown>
 	{/if}
-</Navbar>
+</Navbar> -->
 <style lang="scss" global>
 	//TODO: make this work
 .ui.buttons.user-mgt {

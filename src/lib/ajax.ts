@@ -1,4 +1,4 @@
-import { alert } from "./globals";
+import { toast } from "svemantic";
 
 interface Ajax {
 	(input: RequestInfo | URL, init?: RequestInit, throughStatus?: number[]): Promise<Response>;
@@ -18,7 +18,7 @@ function shortCut(method: string, body?: any, url?: string, throughStatus?: numb
 export const ajax: Ajax = Object.assign(async (input: RequestInfo | URL, init?: RequestInit, throughStatus?: number[]): Promise<Response>=> {
 	const rv = await fetch(input, init);
 	if(!rv.ok && (!throughStatus || !throughStatus.includes(rv.status)))
-		alert({message: (await rv.json()).message || rv.statusText, color: 'danger'});
+		toast({message: (await rv.json()).message || rv.statusText, class: 'error'});
 	return rv;
 }, {
 	get(url?: string, throughStatus?: number[]) { return shortCut('GET', null, url, throughStatus); },
