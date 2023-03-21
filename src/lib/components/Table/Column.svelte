@@ -1,25 +1,33 @@
 <script lang="ts">
-	import { specialRow, getTblCtx, setClmnCtx } from './utils'
+	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext } from './utils'
 	import { writable } from "svelte/store";
 	import { T } from '$lib/globals';
+	import { Cell, Td, Th } from 'svemantic';
+	import type { ComponentProps } from 'svelte';
 
-	export let prop: string = '';
+	type T = $$Generic;
+	type keyT = keyof T & string;
+
+	export let prop: keyT|undefined = undefined;
 	export let title: string = '';
 	export let headers: boolean = false;
 	export let html: boolean = false;
-	let thProps: any;
-$:	thProps = headers ? {'data-scope': 'row'} : {};
-	export let row: any;
+	let thProps: ComponentProps<Th>;
+$:	thProps = headers ? {scope: 'row'} : {};
+	let specRow: T|undefined = undefined;
+	export {specRow as row};
 	const tblSetFilter = getTblCtx().setFilter;
 	export let value: any = null;
+	const rowCtx = getRowCtx<RowContext<T>>();
+	let row: T = specRow === undefined ? rowCtx?.row : specRow;
 $:	value = (prop && row && (typeof row === 'object') && row[prop]) || '';
-	const config = writable({});
+	const config = writable<any>({});
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
 $:	config.set({...$config, title: title === undefined ? (prop && $T('fld.'+prop)) : title});
 $:	config.set({...$config, headers});
 $:	config.set({...$config, html});
-	let ctx: any = {
+	let ctx: ColumnContext = {
 		setFilter(filter: (name: any)=> boolean) {
 			console.assert(!!prop, 'A filtered column must define a `prop`')
 			tblSetFilter(prop, filter && ((row: any)=> filter(row[prop])));
@@ -28,28 +36,28 @@ $:	config.set({...$config, html});
 	};
 	setClmnCtx(ctx);
 </script>
-{#if !row}
-	<div class="td">`Column` is to be used in a `Table` only</div>
+{#if !rowCtx}
+	<Td class="error message">`Column` is to be used in a `Table` only</Td>
 {:else if row === specialRow.filter}
 	<slot name="filter">
-		<div class="td" />
+		<Th></Th>
 	</slot>
 {:else if row === specialRow.header}
 	<slot name="header">
-		<div class="th" data-scope="col">{title || prop}</div>
+		<Th scope="col">{title || prop || ''}</Th>
 	</slot>
 {:else if row === specialRow.footer}
 	<slot name="footer">
-		<div class="th" data-scope="col" />
+		<Th scope="col" />
 	</slot>
 {:else}
 	<slot {row} {value}>
-		<div class={headers?'th':'td'} {...thProps}>
+		<Cell element={headers?'th':'td'} {...thProps}>
 			{#if html}
 				{@html value}
 			{:else}
 				{value}
 			{/if}
-		</div>
+		</Cell>
 	</slot>
 {/if}

@@ -66,21 +66,21 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 	</h1>
 </div>
 <Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
-	<Column prop="key" title={$T('fld.key')} {row} let:value>
+	<Column prop="key" title={$T('fld.key')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
-	<Column prop="text" title={$T('fld.text')} {row} let:value>
+	<Column prop="text" title={$T('fld.text')} let:value>
 		<StringContent slot="filter" />
 		<Text area {value} />
 	</Column>
-	<Column prop="role" title={$T('fld.role')} {row} let:value>
+	<Column prop="role" title={$T('fld.role')} let:value>
 		<Select options={textRoles} {value} />
 	</Column>
-	<Column prop="type" title={$T('fld.type')} {row} let:value>
+	<Column prop="type" title={$T('fld.type')} let:value>
 		<Select options={textTypes} {value} />
 	</Column>
-	<Edition create="both" edition="both" {row} deleteConfirmation="msg.delete-key">
+	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
 		<svelte:fragment slot="row" let:row>
 			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>

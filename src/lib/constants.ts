@@ -1,5 +1,5 @@
 export type Language = 'en' | 'fr' | 'ro';
-export const languages: Record<string, string> = {
+export const languages: Record<Language, string> = {
 	en: 'English',
 	fr: 'Français',
 	ro: 'Română'

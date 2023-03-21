@@ -28,7 +28,7 @@ export interface EditingTableContext<T=any> extends TableContext<T> {
 
 export interface EditionContext {
 	editing: Readable<Editing>;
-	schema: OptionalObjectSchema<ObjectShape>;
+	schema?: OptionalObjectSchema<ObjectShape>;	//TODO remove after -> semantic
 }
 
 export interface RowEditionContext extends EditionContext {

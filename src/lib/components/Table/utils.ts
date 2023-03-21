@@ -17,6 +17,7 @@ export interface TableContext<T=any> {
 	setFilter(key: any, filter?: (row: T)=> boolean): void;
 }
 export interface RowContext<T=any> {
+	row: T;
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;
@@ -31,7 +32,7 @@ export interface ColumnContext<T=any> {
 
 export function setTblCtx<T extends TableContext = TableContext>(c: T) { setContext(tableContextKey, c); }
 export function getTblCtx<T extends TableContext = TableContext>() { return assertNnull(getContext<T>(tableContextKey), 'Element in a table'); }
-export function setRowCtx<T extends RowContext = RowContext>(c: T) { setContext(rowContextKey, c); }
-export function getRowCtx<T extends RowContext = RowContext>() { return assertNnull(getContext<T>(rowContextKey), 'Element in a row'); }
+export function setRowCtx<T extends RowContext<any> = RowContext<any>>(c: T) { setContext(rowContextKey, c); }
+export function getRowCtx<T extends RowContext<any> = RowContext<any>>() { return assertNnull(getContext<T>(rowContextKey), 'Element in a row'); }
 export function setClmnCtx<T extends ColumnContext = ColumnContext>(c: T) { setContext(columnContextKey, c); }
 export function getClmnCtx<T extends ColumnContext = ColumnContext>() { return assertNnull(getContext<T>(columnContextKey), 'Element in a column'); }

@@ -26,12 +26,12 @@ $:	options = roles.map(r=> ({value: r, text: $T('role.'+r)}));
 	}
 </script>
 <Table key="_id" {schema} data={users} columnFilters {saveCB} let:row>
-	<Column prop="email" title={$T('fld.email')} {row} let:value>
+	<Column prop="email" title={$T('fld.email')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
-	<Column prop="roles" title={$T('fld.role')} {row} let:value>
+	<Column prop="roles" title={$T('fld.role')} let:value>
 		<MultiSelect {value} {options} />
 	</Column>
-	<Edition edition="row" {row} />
+	<Edition edition="row" />
 </Table>

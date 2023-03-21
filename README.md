@@ -2,6 +2,19 @@
 
 Nothing to see here, I use this repo for sharing w/ pals and "saving" my work.
 
+## install
+
+[https://fomantic-ui.com/introduction/getting-started.html]
+```sh
+$ cd node_modules/fomantic-ui
+$ npx gulp install
+```
+
+```sh
+$ cd semantic/
+$ npx gulp build
+```
+
 # svemantic
 
 -> remove link in src/svemantic

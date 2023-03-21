@@ -1,65 +1,52 @@
 <script lang="ts">
-	import Form from "$lib/components/form/Form.svelte";
-	import Column from "$lib/components/table/Column.svelte";
-	import Table from "$lib/components/table/Table.svelte";
-	import Text from "$lib/components/table/edition/Text.svelte";
-	import { Button, Icon, ModalBody, ModalFooter, ModalHeader, Spinner } from "sveltestrap";
+	import { Buttons, Button, ModalForm, type ModalSaveFunction } from "svemantic";
 	import { T } from "$lib/globals";
-	import { createEventDispatcher } from "svelte";
 	import type { LangItem } from "../lngConfig.svelte";
-	import { object, string, type ObjectSchema } from "yup";
 	import { Editing, setEdtnCtx } from "$lib/components/table/edition/utils";
 	import { privateStore } from "$lib/privateStore";
 	import Preview from "$lib/components/Preview.svelte";
 	import Code from "$lib/components/table/edition/Code.svelte";
+	import { displayTable } from "$sitb/components/table/collections";
 
-	const dispatch = createEventDispatcher();
-	export let model: any, saving: boolean,
-		reference: LangItem[], work: LangItem[];
-	let nonKeyRef: LangItem[];
+	const { Table, Column } = displayTable<DictionaryEntry>();
+	export let save: ModalSaveFunction, model: DictionaryEntry|undefined, reference: LangItem[], work: LangItem[];
+	let nonKeyRef: LangItem[], reducedModel: Partial<DictionaryEntry>|undefined = undefined;
 $:	nonKeyRef = reference.filter(r=> r.id !== 'key');
-	let schema: ObjectSchema<any>;
-$:	schema = object(work.reduce((ttl: any, cur: LangItem)=> ({...ttl, [cur.id]: string()}), {}));
+$:	reducedModel =model &&  work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: model[c]}), {});
 	setEdtnCtx({
-		editing: privateStore(Editing.Yes).store,
-		schema
+		editing: privateStore(Editing.Yes).store
 	});
+	
 	let previewed: Record<string, boolean> = {}
 	function preview(lng: LangItem) {
 		previewed[lng.id] = !previewed[lng.id];
 	}
 </script>
-<Form {schema} on:submit={({detail})=> dispatch('save', detail)}>
-	<ModalHeader>{model.key}</ModalHeader>
-	<ModalBody>
-		<Table key="key" data={[model]} let:row>
-			{#each nonKeyRef as lng (lng.id)}
-				<Column prop={lng.id} title="" let:value {row}>
-					<div class="th prefix-icon" slot="header">
-						<i class={lng.icon}></i>{lng.text}
-					</div>
-					<Preview type={model.type} text={value} />
-				</Column>
-			{/each}
-			{#each work as lng (lng.id)}
-				<Column prop={lng.id} let:value {row}>
-					<div class="th" slot="header">
-						{#if model.type}
-							<Button size="sm" type="button" color={previewed[lng.id]?'info':'secondary'} on:click={()=> { preview(lng); }}>
-								<Icon name="eye" />
-							</Button>
-						{/if}
-						<span class="prefix-icon"><i class={lng.icon}></i>{lng.text}</span>
-					</div>
-					<Code style="height: 50vh;" preview={previewed[lng.id] ? model.type : ''} {value} />
-				</Column>
-			{/each}
-		</Table>
-	</ModalBody>
-	<ModalFooter>
-		{#if saving}<Spinner size="sm" />{:else}
-			<Button type="reset" class="prefix-icon" color="secondary" on:click={()=> dispatch('cancel')}><Icon name="x-lg" />{$T('cmd.cancel')}</Button>
-			<Button type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</Button>
-		{/if}
-	</ModalFooter>
-</Form>
+<ModalForm fullscreen bind:save model={reducedModel}>
+	<svelte:fragment slot="header">{model?.key}</svelte:fragment>
+	<Table key="key" data={model?[model]:[]} let:row>
+		{#each nonKeyRef as lng (lng.id)}
+			<Column prop={lng.id} title="" let:value>
+				<div class="th prefix-icon" slot="header">
+					<i class={lng.icon}></i>{lng.text}
+				</div>
+				<Preview type={model?.type} text={value} />
+			</Column>
+		{/each}
+		{#each work as lng (lng.id)}
+			<Column prop={lng.id} let:value>
+				<div class="th" slot="header">
+					{#if model?.type}
+						<Button small primary={previewed[lng.id]} on:click={()=> { preview(lng); }} icon=eye />
+					{/if}
+					<span class="prefix-icon"><i class={lng.icon}></i>{lng.text}</span>
+				</div>
+				<Code style="height: 50vh;" preview={previewed[lng.id] ? model?.type : ''} {value} />
+			</Column>
+		{/each}
+	</Table>
+	<Buttons slot="actions">
+		<Button cancel class="prefix-icon" icon="times">{$T('cmd.cancel')}</Button>
+		<Button submit class="prefix-icon" primary icon="save outline">{$T('cmd.save')}</Button>
+	</Buttons>
+</ModalForm>

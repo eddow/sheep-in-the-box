@@ -15,14 +15,27 @@
 			cancel();
 	});
 </script>
-<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
-<main>
-	<slot />
-</main>
+<div class="app">
+	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
+	<div class="main">
+		<slot />
+	</div>
+</div>
 
 <style>
-	main {
-		padding: 5rem;
+	
+	.app {/*
+		display: flex;
+		flex-direction: column;*/
+		height: 100vh;
+		overflow-y: auto;
+	}
+
+	.main {/*
+		flex: 1;
+		display: flex;
+		flex-direction: column;*/
+		padding: 5rem 1rem;
 		width: 100%;
 		margin: 0 auto;
 		box-sizing: border-box;

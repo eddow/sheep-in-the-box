@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { Tr } from 'svemantic';
 	import { setRowCtx } from './utils'
 	
-	export let row: any;
+	type T = $$Generic;
+	export let row: T;
 	export let context: any = {};
-	setRowCtx(context);
+	setRowCtx({row, ...context});
 </script>
-<div class="tr" {...$$restProps}>
+<Tr {...$$restProps}>
 	<slot {row} />
-</div>
+</Tr>

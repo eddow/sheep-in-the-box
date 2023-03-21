@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { Cell, Field } from 'svemantic';
 	import { FormGroup } from 'sveltestrap';
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import { Dialog, getEdtnCtx, type EditingRowContext, type EditionContext } from './utils';
@@ -15,12 +16,12 @@ $:	headers = <boolean>$config.headers;
 	export let getDisplay = (x: string, row: any)=> x;
 	export let value: any;
 	let thProps: any;
-$:	thProps = headers ? {'data-scope': 'row'} : {};
+$:	thProps = headers ? {'scope': 'row'} : {};
 </script>
 {#if dialog === Dialog.Body}
-	<FormGroup floating label={title}>
+	<Field name={prop} fluid label={title}>
 		<slot />
-	</FormGroup>
+	</Field>
 {:else if dialog === Dialog.Wrapped}
 	{#if $editing}
 		<slot />
@@ -35,11 +36,11 @@ $:	thProps = headers ? {'data-scope': 'row'} : {};
 	{/if}
 {:else if !dialog}
 	{#if $editing}
-		<div class={headers?'th':'td'} {...thProps}>
+		<Cell element={headers?'th':'td'} {...thProps}>
 			<slot />
-		</div>
+		</Cell>
 	{:else}
-		<div class={headers?'th':'td'} {...thProps}>
+		<Cell element={headers?'th':'td'} {...thProps}>
 			<slot name="display">
 				{#if html(value, row)}
 					{@html getDisplay(value, row)}
@@ -47,6 +48,6 @@ $:	thProps = headers ? {'data-scope': 'row'} : {};
 					{getDisplay(value, row)}
 				{/if}
 			</slot>
-		</div>
+		</Cell>
 	{/if}
 {/if}

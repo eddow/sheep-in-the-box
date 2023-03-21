@@ -1,19 +1,22 @@
 <script lang="ts" context="module">
+	type LangId = Language | 'key';
 	export interface LangItem {
-		id: string;
+		id: LangId;
 		icon: string;
 		text: string;
 	}
+	const { Table, Column } = displayTable<never>();
 </script>
 <script lang="ts">
 	import Horizontal from "$lib/components/dnd/Horizontal.svelte";
-	import { flag, languages } from "$lib/constants";
+	import { flag, languages, type Language } from "$lib/constants";
 	import { T, user } from "$lib/globals";
 	import { preference, Side } from "$lib/preferences";
-	import { Card, CardBody, CardHeader, CardTitle, Col, Container, Row } from "sveltestrap";
+	import { displayTable } from '$lib/components/table/collections';
 	
 	const tradLngs = preference('tradLngs', Side.server),
-		allItems: LangItem[] = [{id: 'key', icon: 'bi-key', text: $T('fld.key')}].concat(Object.keys(languages).map(id=> ({id, icon: flag(id), text: languages[id]}))),
+		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $T('fld.key')}]
+			.concat((<Language[]>Object.keys(languages)).map((id: Language)=> ({id, icon: flag(id)+' flag', text: languages[id]}))),
 		groupIdx: Record<string, number> = {unused: 0, ref: 1, work: 2};
 	const [ref, wrk] = $tradLngs ?
 		$tradLngs.split(':').map((x: string)=> x.split('.').filter(x=>x)) :
@@ -45,26 +48,24 @@ $:	allItems[0].text = $T('fld.key');
 	function setAvailableZones(id: string) {	// Test on:mousemove to avoid the few misses on:mousedown
 		groups[2].noDrop = id === 'key';
 	}
-	export let hide = false;
 </script>
-{#if !hide}
-	<Container>
-		<Row>
-			{#each groups as group(group.id)}
-				<Col md="4">
-					<Card>
-						<CardHeader><CardTitle>{$T('fld.trad.grp.'+group.id)}</CardTitle></CardHeader>
-						<CardBody>
-							<Horizontal style="height: 1.5em" items={group.items} let:item
-								dropFromOthersDisabled={group.noDrop}
-								itemWidth="2em" on:reordered={({detail})=> reordered(group.id, detail)}
-							>
-								<i class={item.icon} on:mousemove={()=> setAvailableZones(item.id)}></i>
-							</Horizontal>
-						</CardBody>
-					</Card>
-				</Col>
-			{/each}
-		</Row>
-	</Container>
-{/if}
+<Table>
+	{#each groups as group(group.id)}
+		<Column>
+			<th slot="header" class="flags">{$T('fld.trad.grp.'+group.id)}</th>
+			<td>
+				<Horizontal style="height: 1.5em" items={group.items} let:item
+					dropFromOthersDisabled={group.noDrop}
+					itemWidth="2em" on:reordered={({detail})=> reordered(group.id, detail)}
+				>
+					<i class={item.icon} on:mousemove={()=> setAvailableZones(item.id)}></i>
+				</Horizontal>
+			</td>
+		</Column>
+	{/each}
+</Table>
+<style lang="scss">
+	th.flags {
+		width: 12em;
+	}
+</style>

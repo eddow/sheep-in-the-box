@@ -1,6 +1,5 @@
 <script lang="ts">
 	import type { TextType } from "$lib/constants";
-	import { Input } from "sveltestrap";
 	import Preview from "../Preview.svelte";
 
 	export let name: string;

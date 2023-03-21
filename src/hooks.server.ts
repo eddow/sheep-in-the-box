@@ -6,6 +6,7 @@ import { resetDictionaries } from '$lib/intl';
 import { flat, t } from '$lib/server/intl';
 import { setCookie, setSSR } from '$lib/cookies';
 
+//TODO: 404 -> infinite reload loop
 
 // Version when `user.roles` is still a string
 function accessible(routeId: string, user: any) {

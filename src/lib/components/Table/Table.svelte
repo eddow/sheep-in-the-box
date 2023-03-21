@@ -1,81 +1,92 @@
 <script lang="ts">
+	import { Table } from 'svemantic';
 	import TableRow from './TableRow.svelte'
 	import { specialRow, setTblCtx } from './utils'
-  	import { exclude } from '../utils/exclude'
-  	import { prefixFilter } from '../utils/prefixFilter'
 	import { privateStore } from '$lib/privateStore';
+	import type { ComponentProps } from 'svelte';
 	// ? https://www.npmjs.com/package/svelte-tiny-virtual-list
+
+	type T = $$Generic;
+	type keyT = keyof T & string;
+
+	interface $$Props extends ComponentProps<Table<T>> {
+		data?: T[];
+		
+		columnFilters?: boolean;
+		columnHeaders?: boolean;
+		columnFooters?: boolean;
+		filters?: Map<any, (row: T)=> boolean>;
+		context?: any;
+		rowType?: typeof TableRow;
+		unfiltered?: T[];
+		key?: keyT;
+		displayedData?: T[];
+	}
 
 	export let columnFilters: boolean = false;
 	export let columnHeaders: boolean = true;
 	export let columnFooters: boolean = false;
-	export let filters = new Map<any, (row: any)=> boolean>();
+	export let filters = new Map<any, (row: T)=> boolean>();
 	export let context = {};
 	export let rowType = TableRow;
-	export let data: any[];
-	export let unfiltered: any[] = [];
+	export let data: T[] = <T[]>[null];
+	export let unfiltered: T[] = [];
 	const dataStore = privateStore(data);
 $:	dataStore.value = data;
 	setTblCtx({
 		...context,
 		data: dataStore.store,
-		setFilter(key: any, filter?: (row: any)=> boolean) {
+		setFilter(key: keyT, filter?: (row: T)=> boolean) {
 			if(filter) filters.set(key, filter);
 			else filters.delete(key);
-			filters = new Map<any, (row: any)=> boolean>(filters);
+			filters = filters;
 		}
 	});
-	export let key: string | null = null;
-	function rowId(row: any) { return key && row[key]; }
-	export let displayedData: any[] = [];
+	export let key: keyT | undefined = undefined;
+	function rowId(row: T) { return key && row[key]; }
+	export let displayedData: T[] = [];
 $:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');	// Indexes are not a good key as they change while filtering
-$:	displayedData = data.filter((row: any)=>
+$:	displayedData = data.filter((row: T)=>
 		~unfiltered.indexOf(row) ||
 		Array.from(filters.values()).every(filter=> filter(row)))
 	// TODO Forward classes & styles
 </script>
-<div class="table" {...exclude($$props, ['tr$'])}>
-	{#if $$slots.header}
-		<div class="thead">
-			<slot name="header" />
-		</div>
-	{/if}
-	{#if columnHeaders}
-		<div class="thead">
-			<svelte:component this={rowType} id="header" row={specialRow.header} {...prefixFilter($$props, 'tr$')}>
+<Table {...$$restProps}>
+	<thead>
+		<slot name="header" />
+		{#if columnHeaders}
+			<svelte:component this={rowType} id="header" row={specialRow.header}>
 				<slot row={specialRow.header} />
 			</svelte:component>
-		</div>
-	{/if}
-	{#if columnFilters}
-		<div class="thead">
-			<svelte:component this={rowType} id="filter" row={specialRow.filter} {...prefixFilter($$props, 'tr$')}>
+		{/if}
+		{#if columnFilters}
+			<svelte:component this={rowType} id="filter" row={specialRow.filter}>
 				<slot row={specialRow.filter} />
 			</svelte:component>
-		</div>
-	{/if}
-	<div class="tbody">
+		{/if}
+	</thead>
+	<tbody>
 		{#each displayedData as row, ndx (rowId(row) || ndx)}
-			<svelte:component this={rowType} id={rowId(row)} row={row} {...prefixFilter($$props, 'tr$')}>
+			<svelte:component this={rowType} id={rowId(row)} row={row}>
 				<slot row={row} />
 			</svelte:component>
 		{/each}
-	</div>
+	</tbody>
 	{#if columnFooters}
-		<div class="tfoot">
-			<svelte:component this={rowType} id="footer" row={specialRow.footer} {...prefixFilter($$props, 'tr$')}>
+		<tfoot>
+			<svelte:component this={rowType} id="footer" row={specialRow.footer}>
 				<slot row={specialRow.footer} />
 			</svelte:component>
-		</div>
+		</tfoot>
 	{/if}
 	{#if $$slots.footer}
-		<div class="tfoot">
+		<tfoot>
 			<slot name="footer" />
-		</div>
+		</tfoot>
 	{/if}
 	{#if $$slots.once}
-		<div style="display: none">
-			<slot name="once" />
-		</div>
+		<tfoot style="display: none">
+			<td><slot name="once" /></td>
+		</tfoot>
 	{/if}
-</div>
+</Table>

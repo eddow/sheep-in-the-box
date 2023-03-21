@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Input from '$lib/components/form/Input.svelte';
+	import { Input } from 'svemantic';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx } from '../utils'
 
@@ -12,5 +12,5 @@ $:	prop = <string>$config.prop;
 	export let autofocus: boolean = false;
 </script>
 <Editor {...$$restProps} {value}>
-	<Input {placeholder} {autofocus} type={area ? 'textarea' : 'text'} bind:value name={prop} />
+	<Input {placeholder} {autofocus} type={area ? 'area' : 'text'} bind:value name={prop} />
 </Editor>

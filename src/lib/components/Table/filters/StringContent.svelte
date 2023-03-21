@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Input } from 'sveltestrap';
+	import { Input, Th } from 'svemantic';
 	import { getClmnCtx } from '../utils';
 	export let value: string = '';
 	export let beginsWith: boolean = false;
@@ -9,6 +9,6 @@ $:	setFilter(value ?
 		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v||'')) :
 		undefined);
 </script>
-<div class="th" data-scope="col">
-	<Input type="search" bind:value />
-</div>
+<Th scope="col">
+	<Input fluid type="search" bind:value icon="search" />
+</Th>

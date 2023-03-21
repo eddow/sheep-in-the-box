@@ -18,7 +18,9 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$svemantic: './src/svemantic',
-			svemantic: './src/svemantic'
+			svemantic: './src/svemantic',
+			$sitb: './src/lib',
+			$lib: './src/lib'
 		}
 	}
 };

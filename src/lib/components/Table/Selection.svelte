@@ -1,12 +1,14 @@
 <script lang="ts">
+	import { Th } from 'svemantic';
 	import Column from './Column.svelte'
 	import {getRowCtx, getTblCtx} from './utils'
 // TODO Re-check
-	export let selection: Set<any>;
-	let row: any;
+	type T = $$Generic;
+	export let selection: Set<T>;
+	let row: T;
 	let all: 'indeterminate'|boolean;
 	let selected: boolean;
-	let data: any[];
+	let data: T[];
 	$: selected = selection.has(row);
 	$: all = (selection.size === 0) ? false :
 		(selection.size === data.length) ? true :
@@ -20,14 +22,14 @@
 		if(!hie.indeterminate)
 			selection = new Set(hie.checked?data:[]);
 	}
-	getTblCtx().data.subscribe((v: any[])=> { data = v; });
+	getTblCtx().data.subscribe((v: T[])=> { data = v; });
 </script>
-<Column {row}>
-	<div class="th" slot="header" data-scope="col">
+<Column>
+	<Th slot="header" scope="col">
 		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
 			on:change={onChangeAll} />
-	</div>
-	<div class="th" data-scope="row">
+	</Th>
+	<Th scope="row">
 		<input type="checkbox" checked={selected} on:change={onChangeOne} />
-	</div>
+	</Th>
 </Column>

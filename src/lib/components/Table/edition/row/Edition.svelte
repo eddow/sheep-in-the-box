@@ -6,13 +6,13 @@
 	import { T } from '$lib/intl';;
 	import { Popup, Button, toast } from 'svemantic';
 
-	const { dialog } = getRowCtx<EditingRowContext>();
+	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext>();
 	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
 	const { deletable } = getTblCtx<EditingTableContext>();
 	export let edition: Edition = 'row';
 	export let create: Edition = false;
 	export let creation: ()=> any = ()=> ({});
-	export let row: any;
+	export let row: any = gvnRow;
 	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
@@ -32,13 +32,13 @@
 		<slot name="dialog" adding={false} row={row} />
 	{/if}
 {:else if !dialog}
-	<Column {row}>
-		<div class="th" data-scope="col" slot="header">
+	<Column>
+		<div class="th" scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<StrpButton size="sm" on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></StrpButton>{/if}
 			{#if hasSpec(create, 'dialog')}<StrpButton size="sm" on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></StrpButton>{/if}
 			<slot name="header" />
 		</div>
-		<div class="th" class:editing={!!$editing} data-scope="row">
+		<div class="th" class:editing={!!$editing} scope="row">
 			{#if $editing == Editing.Working}
 				<Spinner size="sm" />
 			{:else if $editing}
