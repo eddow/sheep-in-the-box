@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { Cell, Field } from 'svemantic';
-	import { FormGroup } from 'sveltestrap';
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import { Dialog, getEdtnCtx, type EditingRowContext, type EditionContext } from './utils';
 
@@ -34,11 +33,9 @@ $:	header = <boolean>$config.header;
 	{/if}
 {:else if !dialog}
 	{#if $editing}
-		<Cell header scope="row">
-			<slot />
-		</Cell>
+		<slot />
 	{:else}
-		<Cell header scope="row">
+		<Cell {header} scope="row">
 			<slot name="display">
 				{#if html(value, row)}
 					{@html getDisplay(value, row)}

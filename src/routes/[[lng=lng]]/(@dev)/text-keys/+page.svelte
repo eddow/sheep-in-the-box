@@ -15,7 +15,7 @@
 	import { preference, Side } from "$sitb/preferences";
 	import { user } from "$sitb/user";
 	import type { Writable } from "svelte/store";
-	import { toast } from "svemantic";
+	import { toast, type DropdownOption } from "svemantic";
 	
 	export let data: PageData;
 	let textRoles: any[];
@@ -58,27 +58,26 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('r
 		}
 		dictionary = dictionaries[lng];
 	}
+	let textTypeOptions: DropdownOption[] = textTypes.map(ttp=> ({value: ttp, text: $I('ttp.'+(ttp || 'none'))}))
 </script>
-<div style="width: 100%">
+<h1 class="ui top attached centered block header">
+	{$I('ttl.text-keys')}
 	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
-	<h1>
-		{$I('ttl.text-keys')}
-	</h1>
-</div>
-<Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
+</h1>
+<Table class="attached" compact="very" singleLine striped selectable key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
 	<Column prop="key" title={$I('fld.key')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
 	<Column prop="text" title={$I('fld.text')} let:value>
 		<StringContent slot="filter" />
-		<Text area {value} />
+		<Text {value} />
 	</Column>
 	<Column prop="role" title={$I('fld.role')} let:value>
 		<Select options={textRoles} {value} />
 	</Column>
 	<Column prop="type" title={$I('fld.type')} let:value>
-		<Select options={textTypes} {value} />
+		<Select options={textTypeOptions} {value} />
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
 		<svelte:fragment slot="row">

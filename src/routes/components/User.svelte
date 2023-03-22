@@ -51,19 +51,19 @@
 {:else}
 	<Button icon="user" />
 	<Popup on="click" bind:hide={doneLogingIn}>
-		<Tabs active="login" let:spec headerClass="two-items">
-			<Page key="login" {spec}>
+		<Tabs active="login" headerClass="two-items">
+			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>
 				<Form on:submit={login}>
-					<Field required validate="email" icon="at" name="email" leftIcon />
-					<Field required type="password" icon="key" name="password" leftIcon />
+					<Field required validate="email" left-icon="at" name="email" />
+					<Field required type="password" left-icon="key" name="password" />
 					<Button primary fluid submit icon="sign in alternate">{$I('cmd.login')}</Button>
 				</Form>
 			</Page>
-			<Page {spec}>
+			<Page>
 				<Header slot="header">{$I('cmd.register')}</Header>
 				<Form on:submit={register}>
-					<Field required validate="email" icon="at" name="email" leftIcon />
+					<Field required validate="email" left-icon="at" name="email" />
 					<Button primary fluid submit icon={['user', 'corner green add']}>{$I('cmd.register')}</Button>
 				</Form>
 			</Page>

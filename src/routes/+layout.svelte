@@ -21,9 +21,11 @@
 		<slot />
 	</div>
 </div>
+<style lang="scss" global>
+	.main h1.top.header .button {
+		vertical-align: bottom;
+	}
 
-<style>
-	
 	.app {/*
 		display: flex;
 		flex-direction: column;*/

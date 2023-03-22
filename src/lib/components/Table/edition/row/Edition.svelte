@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Column from '../../Column.svelte'
 	import { getRowCtx, getTblCtx } from '../../utils';
-	import { Button as StrpButton, Icon } from 'sveltestrap';
 	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
 	import { I } from '$sitb/intl';;
 	import { Popup, Button, toast, Loader } from 'svemantic';
@@ -21,23 +20,22 @@
 	async function remove(skipConf: boolean = false) {
 		if(deleteConfirmation && !skipConf)
 			return;
-		toast({message: 'DELETION!', class: 'error'});
-		//await deleteRow();
+		await deleteRow();
 	}
 </script>
 {#if dialog === Dialog.Footer}
 	<Loader inverted loading={$editing == Editing.Working} />
-	<StrpButton type="StrpButton" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$I('cmd.cancel')}</StrpButton>
-	<StrpButton type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$I('cmd.save')}</StrpButton>
+	<Button class="prefix-icon" on:click={cancelEdit} icon="times">{$I('cmd.cancel')}</Button>
+	<Button submit class="prefix-icon" primary icon="save">{$I('cmd.save')}</Button>
 	<slot name="dialog" adding={false} row={row} />
 {:else if !dialog}
 	<Column>
-		<th class="collapsing" scope="col" slot="header">
+		<th scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> addRow(creation())} color="green" icon="add" />{/if}
-			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} color="green" icon={['external alternate', 'corner add']} />{/if}
+			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} icon={['external alternate', 'green corner add']} />{/if}
 			<slot name="header" />
 		</th>
-		<th class:editing={!!$editing} scope="row">
+		<th class="collapsing" class:editing={!!$editing} scope="row">
 			<Loader inverted loading={$editing == Editing.Working} />
 			{#if $editing}
 				<Button tiny submit primary icon="save" />
@@ -51,7 +49,7 @@
 					<Button tiny on:click={()=> remove()} color="red" icon="trash alternate outline" />
 					{#if deleteConfirmation}
 						<Popup on="click">
-							<div class="content">{$I(deleteConfirmation)}</div>
+							<div class="header">{$I(deleteConfirmation)}</div>
 							<Button color="red" icon="trash alternate outline" fluid on:click={()=> remove(true)}>{$I('cmd.delete')}</Button>
 						</Popup>
 					{/if}

@@ -84,9 +84,4 @@ $:	displayedData = data.filter((row: T)=>
 			<slot name="footer" />
 		</tfoot>
 	{/if}
-	{#if $$slots.once}
-		<tfoot style="display: none">
-			<td><slot name="once" /></td>
-		</tfoot>
-	{/if}
 </Table>

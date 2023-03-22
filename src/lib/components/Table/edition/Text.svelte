@@ -12,5 +12,5 @@ $:	prop = <string>$config.prop;
 	export let autofocus: boolean = false;
 </script>
 <Editor {...$$restProps} {value}>
-	<Input {placeholder} {autofocus} type={area ? 'area' : 'text'} bind:value name={prop} />
+	<td><Input {placeholder} {autofocus} type={area ? 'area' : 'text'} bind:value name={prop} /></td>
 </Editor>

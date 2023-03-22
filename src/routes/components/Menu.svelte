@@ -22,7 +22,7 @@
 		{#if toolbox}
 			<div class="item">
 				<Dropdown class="icon button" icon="tools">
-					<Menu slot="menu" vertical>
+					<Menu vertical>
 						{#if $user?.roles.adm}
 							<LinkItem icon={['user', 'corner cog']} href="/users">{$I('ttl.users')}</LinkItem>
 						{/if}

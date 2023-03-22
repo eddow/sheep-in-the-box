@@ -10,5 +10,5 @@ $:	setFilter(value ?
 		undefined);
 </script>
 <Th scope="col">
-	<Input fluid type="search" bind:value icon="search" />
+	<Input fluid type="search" bind:value left-icon="search" />
 </Th>

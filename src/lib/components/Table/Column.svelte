@@ -50,7 +50,7 @@ $:	config.set({...$config, html});
 	</slot>
 {:else}
 	<slot {row} {value}>
-		<Cell header scope="row">
+		<Cell {header} scope="row">
 			{#if html}
 				{@html value}
 			{:else}

@@ -47,13 +47,15 @@
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 	{#if editing.value}
-		<Input autofocus leftAction transparent fluid el="td" name={prop} bind:value={editingValue}>
-			<svelte:fragment slot="left-action">
-				<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
-				<Button tiny primary on:click={submit} icon="save outline" />
-				<Loader inverted loading={editing.value === Editing.Working} />
-			</svelte:fragment>
-		</Input>
+		<td>
+			<Input autofocus primary tabular name={prop} bind:value={editingValue}>
+				<svelte:fragment slot="left-action">
+					<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
+					<Button tiny primary on:click={submit} icon="save outline" />
+					<Loader inverted loading={editing.value === Editing.Working} />
+				</svelte:fragment>
+			</Input>
+		</td>
 	{:else}
 		<td>
 			<Buttons>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { DictionaryEntry } from './DictionaryEntry';
 	import { Buttons, Button, ModalForm, type ModalSaveFunction } from "svemantic";
 	import { I } from "$sitb/globals";
 	import type { LangItem } from "../lngConfig.svelte";
@@ -12,7 +13,7 @@
 	export let save: ModalSaveFunction, model: DictionaryEntry|undefined, reference: LangItem[], work: LangItem[];
 	let nonKeyRef: LangItem[], reducedModel: Partial<DictionaryEntry>|undefined = undefined;
 $:	nonKeyRef = reference.filter(r=> r.id !== 'key');
-$:	reducedModel =model &&  work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: model[c]}), {});
+$:	reducedModel = model && work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: model![c]}), {});
 	setEdtnCtx({
 		editing: privateStore(Editing.Yes).store
 	});
@@ -27,21 +28,21 @@ $:	reducedModel =model &&  work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: m
 	<Table key="key" data={model?[model]:[]} let:row>
 		{#each nonKeyRef as lng (lng.id)}
 			<Column prop={lng.id} title="" let:value>
-				<div class="th prefix-icon" slot="header">
+				<th class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
-				</div>
-				<Preview type={model?.type} text={value} />
+				</th>
+				<td><Preview type={model?.type||''} text={value} /></td>
 			</Column>
 		{/each}
 		{#each work as lng (lng.id)}
 			<Column prop={lng.id} let:value>
-				<div class="th" slot="header">
+				<th slot="header">
 					{#if model?.type}
 						<Button small primary={previewed[lng.id]} on:click={()=> { preview(lng); }} icon=eye />
 					{/if}
 					<span class="prefix-icon"><i class={lng.icon}></i>{lng.text}</span>
-				</div>
-				<Code style="height: 50vh;" preview={previewed[lng.id] ? model?.type : ''} {value} />
+				</th>
+				<td><Code style="height: 50vh;" preview={previewed[lng.id] ? model?.type : ''} {value} /></td>
 			</Column>
 		{/each}
 	</Table>

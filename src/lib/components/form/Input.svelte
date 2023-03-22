@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { I } from "$sitb/globals";
+	/*import { I } from "$sitb/globals";
 	import { Input } from "sveltestrap";
 	import { getFrmCtx } from "./utils";
 
@@ -12,8 +12,9 @@
 $:	allErrors = (errors||[]).concat($frmErrors[name]||[]);
 	export let placeholder: string | undefined = undefined;
 	let computedPH: string;
-$:	computedPH = placeholder === undefined ? $I('fld.'+name) : placeholder;
+$:	computedPH = placeholder === undefined ? $I('fld.'+name) : placeholder;*/
 </script>
-<Input invalid={!!allErrors.length} bind:value bind:checked feedback={allErrors} {name} placeholder={computedPH} {...$$restProps}>
+sveltestrat-input
+<!--Input invalid={!!allErrors.length} bind:value bind:checked feedback={allErrors} {name} placeholder={computedPH} {...$$restProps}>
 	<slot />
-</Input>
+</Input-->

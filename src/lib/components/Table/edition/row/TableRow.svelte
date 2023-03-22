@@ -1,31 +1,20 @@
 <script lang="ts">
 	import { Dialog, Editing, getEdtnCtx, setEdtnCtx, type EditingRowContext, type RowEditionContext } from "../utils";
-	import { useCSR } from "$sitb/utils";
-	import { createForm } from "felte";
-	import { validator } from '@felte/validator-yup';
 	import { createEventDispatcher } from 'svelte';
 	import { setFrmCtx, type FormAction, type FormContext } from "$sitb/components/form/utils";
 	import { setRowCtx } from "../../utils";
-	import Form from "$sitb/components/form/Form.svelte";
 	import { privateStore } from "$sitb/privateStore";
+	import { Form } from "svemantic";
 
 	export let row: any;
 	const EditionContext = getEdtnCtx<RowEditionContext>(),
-		{ addedRows, schema, cancelEdit, save, deleteRow } = EditionContext;
+		{ addedRows, cancelEdit, save, deleteRow } = EditionContext;
 
-	const dispatch = createEventDispatcher();
-
-	const dataRow = typeof row !== 'string';
-	// @ts-ignore
-	export const formInfo = dataRow ? useCSR(()=> createForm({
-		async onSubmit(values: any, context: any) {
-			dispatch('submit', {values, context});
-		},
-		extend: validator({schema})
-	})) : {form: null}, form = <FormAction>formInfo.form;
-	if(dataRow) setFrmCtx(<FormContext>formInfo);
-	const editing = privateStore<Editing>(addedRows.has(row) ? Editing.Yes : Editing.No);
-	setRowCtx<EditingRowContext>({ dialog: Dialog.None});
+	let adding = addedRows.has(row);
+	const dataRow = typeof row !== 'string',
+		editing = privateStore<Editing>(adding ? Editing.Yes : Editing.No);
+	$: adding = addedRows.has(row);
+	setRowCtx<EditingRowContext>({ dialog: Dialog.None, row });
 	
 	async function saveRow(e: CustomEvent) {
 		editing.value = Editing.Working;
@@ -54,7 +43,7 @@
 	});
 </script>
 {#if dataRow && editing.value}
-	<Form tabular {...$$restProps} on:submit={saveRow}>
+	<Form tabular primary={editing && !adding} positive={adding} class="edition" {...$$restProps} on:submit={saveRow}>
 		<slot {row} />
 	</Form>
 {:else}

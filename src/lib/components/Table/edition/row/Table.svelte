@@ -104,24 +104,21 @@ $:	allRows = [...added, ...data];
 	<slot {row} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
-	<svelte:fragment slot="once">
-		<Modal keyboard={true} size="xl" isOpen={modalOpened}>
-			{#if dialogRow}
-				<Form {schema} on:submit={saveRow}>
-					{#if title}<ModalHeader>{title}</ModalHeader>{/if}
-					<ModalBody>
-						<ModalPart dialog={Dialog.Body}>
-							<slot row={dialogRow} />
-						</ModalPart>
-					</ModalBody>
-					<ModalFooter>
-						<ModalPart dialog={Dialog.Footer}>
-							<slot row={dialogRow} />
-						</ModalPart>
-					</ModalFooter>
-				</Form>
-			{/if}
-		</Modal>
-		<slot name="once" />
-	</svelte:fragment>
 </Table>
+<Modal keyboard={true} size="xl" isOpen={modalOpened}>
+	{#if dialogRow}
+		<Form {schema} on:submit={saveRow}>
+			{#if title}<ModalHeader>{title}</ModalHeader>{/if}
+			<ModalBody>
+				<ModalPart dialog={Dialog.Body}>
+					<slot row={dialogRow} />
+				</ModalPart>
+			</ModalBody>
+			<ModalFooter>
+				<ModalPart dialog={Dialog.Footer}>
+					<slot row={dialogRow} />
+				</ModalPart>
+			</ModalFooter>
+		</Form>
+	{/if}
+</Modal>
