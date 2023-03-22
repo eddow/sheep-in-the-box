@@ -54,11 +54,11 @@
 	});
 </script>
 {#if dataRow && editing.value}
-	<Form {schema} class="tr" {...$$restProps} on:submit={saveRow}>
+	<Form tabular {...$$restProps} on:submit={saveRow}>
 		<slot {row} />
 	</Form>
 {:else}
-	<div class="tr" {...$$restProps}>
+	<tr {...$$restProps}>
 		<slot {row} />
-	</div>
+	</tr>
 {/if}

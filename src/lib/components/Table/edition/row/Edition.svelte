@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Column from '../../Column.svelte'
 	import { getRowCtx, getTblCtx } from '../../utils';
-	import { Button as StrpButton, Icon, Spinner } from 'sveltestrap';
+	import { Button as StrpButton, Icon } from 'sveltestrap';
 	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
 	import { T } from '$sitb/intl';;
-	import { Popup, Button, toast } from 'svemantic';
+	import { Popup, Button, toast, Loader } from 'svemantic';
 
 	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext>();
 	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
@@ -26,31 +26,29 @@
 	}
 </script>
 {#if dialog === Dialog.Footer}
-	{#if $editing == Editing.Working}<Spinner size="sm" />{:else}
-		<StrpButton type="StrpButton" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</StrpButton>
-		<StrpButton type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</StrpButton>
-		<slot name="dialog" adding={false} row={row} />
-	{/if}
+	<Loader inverted loading={$editing == Editing.Working} />
+	<StrpButton type="StrpButton" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</StrpButton>
+	<StrpButton type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</StrpButton>
+	<slot name="dialog" adding={false} row={row} />
 {:else if !dialog}
 	<Column>
-		<div class="th" scope="col" slot="header">
-			{#if hasSpec(create, 'row')}<StrpButton size="sm" on:click={()=> addRow(creation())} color="success"><Icon name="plus" /></StrpButton>{/if}
-			{#if hasSpec(create, 'dialog')}<StrpButton size="sm" on:click={()=> editModal(creation())} color="success"><Icon name="file-plus" /></StrpButton>{/if}
+		<th class="collapsing" scope="col" slot="header">
+			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> addRow(creation())} color="green" icon="add" />{/if}
+			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} color="green" icon={['external alternate', 'corner add']} />{/if}
 			<slot name="header" />
-		</div>
-		<div class="th" class:editing={!!$editing} scope="row">
-			{#if $editing == Editing.Working}
-				<Spinner size="sm" />
-			{:else if $editing}
-				<StrpButton size="sm" type="submit" color="primary"><Icon name="save" /></StrpButton>
-				<StrpButton size="sm" type="StrpButton" on:click={cancelEdit} color="warning"><Icon name="x-lg" /></StrpButton>
+		</th>
+		<th class:editing={!!$editing} scope="row">
+			<Loader inverted loading={$editing == Editing.Working} />
+			{#if $editing}
+				<Button tiny submit primary icon="save" />
+				<Button tiny on:click={cancelEdit} color="yellow" icon="times" />
 				<slot name="row" editing={true} row={$editing} />
 				<slot name="edit-row" row={$editing} />
 			{:else}
-				{#if hasSpec(edition, 'row')}<StrpButton size="sm" type="StrpButton" on:click={startEdit} color="secondary"><Icon name="pencil" /></StrpButton>{/if}
-				{#if hasSpec(edition, 'dialog')}<StrpButton size="sm" type="StrpButton" on:click={()=> editModal(row)} color="secondary"><Icon name="box-arrow-up-left" /></StrpButton>{/if}
+				{#if hasSpec(edition, 'row')}<Button tiny on:click={startEdit} icon="edit outline" />{/if}
+				{#if hasSpec(edition, 'dialog')}<Button tiny on:click={()=> editModal(row)} icon="external alternate" />{/if}
 				{#if deletable}
-					<StrpButton size="sm" type="StrpButton" on:click={()=> remove()} color="danger"><Icon name="trash" /></StrpButton>
+					<Button tiny on:click={()=> remove()} color="red" icon="trash alternate outline" />
 					{#if deleteConfirmation}
 						<Popup on="click">
 							<div class="content">{$T(deleteConfirmation)}</div>
@@ -61,6 +59,6 @@
 				<slot name="row" editing={false} row={row} />
 				<slot name="display-row" row={row} />
 			{/if}
-		</div>
+		</th>
 	</Column>
 {/if}

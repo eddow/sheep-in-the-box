@@ -10,10 +10,8 @@
 
 	export let prop: keyT|undefined = undefined;
 	export let title: string = '';
-	export let headers: boolean = false;
+	export let header: boolean = false;
 	export let html: boolean = false;
-	let thProps: ComponentProps<Th>;
-$:	thProps = headers ? {scope: 'row'} : {};
 	let specRow: T|undefined = undefined;
 	export {specRow as row};
 	const tblSetFilter = getTblCtx().setFilter;
@@ -25,7 +23,7 @@ $:	value = (prop && row && (typeof row === 'object') && row[prop]) || '';
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
 $:	config.set({...$config, title: title === undefined ? (prop && $T('fld.'+prop)) : title});
-$:	config.set({...$config, headers});
+$:	config.set({...$config, header});
 $:	config.set({...$config, html});
 	let ctx: ColumnContext = {
 		setFilter(filter: (name: any)=> boolean) {
@@ -52,7 +50,7 @@ $:	config.set({...$config, html});
 	</slot>
 {:else}
 	<slot {row} {value}>
-		<Cell element={headers?'th':'td'} {...thProps}>
+		<Cell header scope="row">
 			{#if html}
 				{@html value}
 			{:else}

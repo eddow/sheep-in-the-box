@@ -81,10 +81,10 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 		<Select options={textTypes} {value} />
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
-		<svelte:fragment slot="row" let:row>
+		<svelte:fragment slot="row">
 			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
-		<svelte:fragment slot="dialog" let:row>
+		<svelte:fragment slot="dialog">
 			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>

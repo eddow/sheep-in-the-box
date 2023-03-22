@@ -7,16 +7,14 @@
 	const { dialog } = getRowCtx<EditingRowContext>();
 	const { editing } = getEdtnCtx();
 	const { config } = getClmnCtx();
-	let prop: string, title: string, headers: boolean;
+	let prop: string, title: string, header: boolean;
 	let row: any = null;	// Should the editor has access to `row` ?
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
-$:	headers = <boolean>$config.headers;
+$:	header = <boolean>$config.header;
 	export let html = (x:string, row: any)=> $config.html;
 	export let getDisplay = (x: string, row: any)=> x;
 	export let value: any;
-	let thProps: any;
-$:	thProps = headers ? {'scope': 'row'} : {};
 </script>
 {#if dialog === Dialog.Body}
 	<Field name={prop} fluid label={title}>
@@ -36,11 +34,11 @@ $:	thProps = headers ? {'scope': 'row'} : {};
 	{/if}
 {:else if !dialog}
 	{#if $editing}
-		<Cell element={headers?'th':'td'} {...thProps}>
+		<Cell header scope="row">
 			<slot />
 		</Cell>
 	{:else}
-		<Cell element={headers?'th':'td'} {...thProps}>
+		<Cell header scope="row">
 			<slot name="display">
 				{#if html(value, row)}
 					{@html getDisplay(value, row)}

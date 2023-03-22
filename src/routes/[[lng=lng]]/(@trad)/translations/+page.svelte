@@ -66,7 +66,7 @@
 		</RoColumn>
 	{/each}
 	{#each work as lng (lng.id)}
-		<Column prop={lng.id} {type} {saveCB} {row} let:value>
+		<Column prop={lng.id} {saveCB} {row} let:value>
 			<Th class="prefix-icon" slot="header">
 				<i class={lng.icon}></i>{lng.text}
 			</Th>

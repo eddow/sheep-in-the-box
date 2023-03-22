@@ -25,7 +25,7 @@ export interface ColumnContext<T=any> {
 		value?: T,
 		prop?: string,
 		title?: string,
-		headers?: boolean,
+		header?: boolean,
 		html?: boolean
 	}>;
 }

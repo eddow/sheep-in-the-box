@@ -14,7 +14,7 @@
 
 	export let saveCB: SaveCallback;
 	export let prop: keyT;
-	export let headers: boolean = false;
+	export let header: boolean = false;
 	export let row: T;
 	// TODO Manage type for cell-edit & validate - idea: slot in <Input> & manage w/ saveCB
 	let empty = false, editingValue: T[keyT];
@@ -42,24 +42,24 @@
 	// Bug on blur->validate: field not found
 	// TODO Esc->cancel
 </script>
-<ColumnT {prop} {headers} {...$$restProps}>
+<ColumnT {prop} {header} {...$$restProps}>
 	<slot name="filter" slot="filter" />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
-		{#if editing.value}
-			<Input autofocus leftAction transparent fluid element="td" name={prop} bind:value={editingValue}>
-				<svelte:fragment slot="action">
-					<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
-					<Button tiny primary on:click={submit} icon="save outline" />
-					<Loader inverted loading={editing.value === Editing.Working} />
-				</svelte:fragment>
-			</Input>
-		{:else}
-			<td>
-				<Buttons>
-					<Button tiny on:click={startEdit} icon="edit outline" primary={empty} />
-				</Buttons>
-				<slot {row} value={row[prop]} />
-			</td>
-		{/if}
+	{#if editing.value}
+		<Input autofocus leftAction transparent fluid el="td" name={prop} bind:value={editingValue}>
+			<svelte:fragment slot="left-action">
+				<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
+				<Button tiny primary on:click={submit} icon="save outline" />
+				<Loader inverted loading={editing.value === Editing.Working} />
+			</svelte:fragment>
+		</Input>
+	{:else}
+		<td>
+			<Buttons>
+				<Button tiny on:click={startEdit} icon="edit outline" primary={empty} />
+			</Buttons>
+			<slot {row} value={row[prop]} />
+		</td>
+	{/if}
 </ColumnT>
