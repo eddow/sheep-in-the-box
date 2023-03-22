@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T } from "$lib/globals";
+	import { T } from "$sitb/globals";
 	import { FormGroup } from "sveltestrap";
 	import { exclude } from "../utils/exclude";
 	import { prefixFilter } from "../utils/prefixFilter";

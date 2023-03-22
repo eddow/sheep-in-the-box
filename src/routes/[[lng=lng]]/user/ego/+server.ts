@@ -1,8 +1,8 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from '@sveltejs/kit';
-import { flat, tree } from '$lib/server/intl';
-import { setLanguage, persistPreference } from '$lib/server/user';
-import { setCookie } from '$lib/cookies';
+import { flat, tree } from '$sitb/server/intl';
+import { setLanguage, persistPreference } from '$sitb/server/user';
+import { setCookie } from '$sitb/cookies';
 
 ////// API related to "my user"
 

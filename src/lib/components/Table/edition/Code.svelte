@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Code from '$lib/components/form/Code.svelte';
+	import Code from '$sitb/components/form/Code.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';
-	import type { TextType } from '$lib/constants';
+	import type { TextType } from '$sitb/constants';
 
 	export let value: string;
 	const { config } = getClmnCtx();

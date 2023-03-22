@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { useCSR } from "$lib/utils";
+	import { useCSR } from "$sitb/utils";
 	import { createForm } from "felte";
 	import { validator } from '@felte/validator-yup';
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";

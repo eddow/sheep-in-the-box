@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { TextType } from "$lib/constants";
-	import { parmed } from "$lib/intl";
+	import type { TextType } from "$sitb/constants";
+	import { parmed } from "$sitb/intl";
 	import { markdown } from "markdown";
 	import po from "./previewObject";
 	

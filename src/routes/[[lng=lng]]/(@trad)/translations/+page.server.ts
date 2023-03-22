@@ -1,4 +1,4 @@
-import { getTradDictionaries } from "$lib/server/intl";
+import { getTradDictionaries } from "$sitb/server/intl";
 
 export async function load(event: Partial<Record<string, any>>) {
 	/*const lngs = locals.preferences.tradLngs,

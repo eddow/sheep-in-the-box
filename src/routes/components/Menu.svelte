@@ -1,9 +1,9 @@
 <script lang="ts">
 	import User from './User.svelte';
-	import Languages from '$lib/components/Languages.svelte';
-	import { user } from '$lib/globals';
-	import { language, setLanguage, T } from "$lib/intl";
-	import type { Language, Role } from '$lib/constants';
+	import Languages from '$sitb/components/Languages.svelte';
+	import { user } from '$sitb/globals';
+	import { language, setLanguage, T } from "$sitb/intl";
+	import type { Language, Role } from '$sitb/constants';
 	import { Buttons, Menu, Dropdown, Icon, LinkItem, toast } from 'svemantic';
 	import { browser } from '$app/environment';
 		

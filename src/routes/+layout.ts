@@ -1,5 +1,5 @@
-import { gotTree, languageStore } from "$lib/intl";
-import type { Role } from "$lib/constants";
+import { gotTree, languageStore } from "$sitb/intl";
+import type { Role } from "$sitb/constants";
 
 export async function load({data}: {data: any}) {
 	languageStore.value = data.language;

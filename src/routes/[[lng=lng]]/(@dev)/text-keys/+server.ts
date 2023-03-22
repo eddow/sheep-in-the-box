@@ -1,8 +1,8 @@
 import { error, json } from '@sveltejs/kit';
-import { create, deleteKey, getDevDictionary, renameKey, setKeyInfo, setTexts } from '$lib/server/intl';
+import { create, deleteKey, getDevDictionary, renameKey, setKeyInfo, setTexts } from '$sitb/server/intl';
 import type { RequestEvent } from './$types';
-import { t } from '$lib/server/intl';
-import type { Language } from '$lib/constants';
+import { t } from '$sitb/server/intl';
+import type { Language } from '$sitb/constants';
 
 export async function GET(event: RequestEvent) {
 	const language = event.url.search.substring(1);

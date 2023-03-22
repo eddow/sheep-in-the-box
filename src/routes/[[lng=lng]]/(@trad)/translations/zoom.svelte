@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { Buttons, Button, ModalForm, type ModalSaveFunction } from "svemantic";
-	import { T } from "$lib/globals";
+	import { T } from "$sitb/globals";
 	import type { LangItem } from "../lngConfig.svelte";
-	import { Editing, setEdtnCtx } from "$lib/components/table/edition/utils";
-	import { privateStore } from "$lib/privateStore";
-	import Preview from "$lib/components/Preview.svelte";
-	import Code from "$lib/components/table/edition/Code.svelte";
+	import { Editing, setEdtnCtx } from "$sitb/components/table/edition/utils";
+	import { privateStore } from "$sitb/privateStore";
+	import Preview from "$sitb/components/Preview.svelte";
+	import Code from "$sitb/components/table/edition/Code.svelte";
 	import { displayTable } from "$sitb/components/table/collections";
 
 	const { Table, Column } = displayTable<DictionaryEntry>();

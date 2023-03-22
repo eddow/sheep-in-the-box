@@ -1,19 +1,19 @@
 <script lang="ts">
-	import Edition from "$lib/components/table/edition/row/Edition.svelte";
-	import Text from "$lib/components/table/edition/Text.svelte";
-	import Select from "$lib/components/table/edition/Select.svelte";
-	import Table from "$lib/components/table/edition/row/Table.svelte";
-	import StringContent from "$lib/components/table/filters/StringContent.svelte";
+	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
+	import Text from "$sitb/components/table/edition/Text.svelte";
+	import Select from "$sitb/components/table/edition/Select.svelte";
+	import Table from "$sitb/components/table/edition/row/Table.svelte";
+	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
-	import { roles, textTypes, type Language } from "$lib/constants";
-	import { T, ajax } from "$lib/globals";
+	import { roles, textTypes, type Language } from "$sitb/constants";
+	import { T, ajax } from "$sitb/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
-	import Column from "$lib/components/table/Column.svelte";
-	import Preview from "$lib/components/Preview.svelte";
+	import Column from "$sitb/components/table/Column.svelte";
+	import Preview from "$sitb/components/Preview.svelte";
 	import { object, string } from "yup";
-	import Languages from "$lib/components/Languages.svelte";
-	import { preference, Side } from "$lib/preferences";
-	import { user } from "$lib/user";
+	import Languages from "$sitb/components/Languages.svelte";
+	import { preference, Side } from "$sitb/preferences";
+	import { user } from "$sitb/user";
 	import type { Writable } from "svelte/store";
 	import { toast } from "svemantic";
 	

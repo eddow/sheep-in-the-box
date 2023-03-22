@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { T, dictionary, gotTree, languageStore } from '$lib/intl';
-	import { ajax, user } from '$lib/globals';
+	import { T, dictionary, gotTree, languageStore } from '$sitb/intl';
+	import { ajax, user } from '$sitb/globals';
 	import { Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast } from "svemantic";
 
 	const dispatch = createEventDispatcher();

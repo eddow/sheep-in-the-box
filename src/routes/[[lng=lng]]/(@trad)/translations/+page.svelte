@@ -1,15 +1,15 @@
 <script lang="ts">
 	import type { DictionaryEntry } from './DictionaryEntry';
 	import { Button, Th, Td, Popup } from 'svemantic';
-	import { cellEditTable } from "$lib/components/table/collections";
-	import StringContent from "$lib/components/table/filters/StringContent.svelte";
-	import Text from "$lib/components/table/edition/Text.svelte";
-	import { ajax, T } from "$lib/globals";
+	import { cellEditTable } from "$sitb/components/table/collections";
+	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
+	import Text from "$sitb/components/table/edition/Text.svelte";
+	import { ajax, T } from "$sitb/globals";
 	import type { PageData } from "./$types";
 	import { string } from "yup";
 	import Zoom from "./zoom.svelte";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
-	import type { Language } from '$lib/constants';
+	import type { Language } from '$sitb/constants';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;

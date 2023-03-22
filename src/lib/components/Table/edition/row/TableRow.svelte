@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Dialog, Editing, getEdtnCtx, setEdtnCtx, type EditingRowContext, type RowEditionContext } from "../utils";
-	import { useCSR } from "$lib/utils";
+	import { useCSR } from "$sitb/utils";
 	import { createForm } from "felte";
 	import { validator } from '@felte/validator-yup';
 	import { createEventDispatcher } from 'svelte';
-	import { setFrmCtx, type FormAction, type FormContext } from "$lib/components/form/utils";
+	import { setFrmCtx, type FormAction, type FormContext } from "$sitb/components/form/utils";
 	import { setRowCtx } from "../../utils";
-	import Form from "$lib/components/form/Form.svelte";
-	import { privateStore } from "$lib/privateStore";
+	import Form from "$sitb/components/form/Form.svelte";
+	import { privateStore } from "$sitb/privateStore";
 
 	export let row: any;
 	const EditionContext = getEdtnCtx<RowEditionContext>(),

@@ -1,6 +1,6 @@
 import { error, json } from '@sveltejs/kit';
-import { login, logout, changePass, register } from "$lib/server/user";
-import { flat, tree } from '$lib/server/intl';
+import { login, logout, changePass, register } from "$sitb/server/user";
+import { flat, tree } from '$sitb/server/intl';
 import type { RequestEvent } from './$types';
 
 export async function GET(event: RequestEvent) {	//authed

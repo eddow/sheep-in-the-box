@@ -1,4 +1,4 @@
-import { assertNnull } from '$lib/utils';
+import { assertNnull } from '$sitb/utils';
 import { getContext, setContext } from 'svelte';
 import type { Readable } from 'svelte/store';
 import type { ObjectShape, OptionalObjectSchema } from 'yup/lib/object';

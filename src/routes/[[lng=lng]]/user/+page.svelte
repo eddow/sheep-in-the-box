@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { ajax, T, user } from "$lib/globals";
+	import { ajax, T, user } from "$sitb/globals";
 	import { Button, Card, CardBody, CardFooter, CardTitle } from "sveltestrap";
 	import { object, string } from "yup";
-	import Form from "$lib/components/form/Form.svelte";
-	import GInput from "$lib/components/form/GInput.svelte";
+	import Form from "$sitb/components/form/Form.svelte";
+	import GInput from "$sitb/components/form/GInput.svelte";
 	import { toast } from "svemantic";
 
 $:	if(!$user) goto('/');

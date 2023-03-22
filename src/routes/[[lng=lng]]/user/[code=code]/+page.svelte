@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { toast } from 'svemantic';
 		import { goto } from "$app/navigation";
-	import { ajax, T, } from "$lib/globals";
+	import { ajax, T, } from "$sitb/globals";
 	import type { PageData } from "./$types";
 	import { Button, Card, CardBody, CardFooter, CardTitle, FormGroup, Input } from "sveltestrap";
 	import { object, string } from "yup";
-	import Form from "$lib/components/form/Form.svelte";
-	import GInput from "$lib/components/form/GInput.svelte";
+	import Form from "$sitb/components/form/Form.svelte";
+	import GInput from "$sitb/components/form/GInput.svelte";
 
 	export let data: PageData;
 	const {exists} = data, name = exists ? 'passNew' : 'pass',

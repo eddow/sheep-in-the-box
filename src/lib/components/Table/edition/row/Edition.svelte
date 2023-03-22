@@ -3,7 +3,7 @@
 	import { getRowCtx, getTblCtx } from '../../utils';
 	import { Button as StrpButton, Icon, Spinner } from 'sveltestrap';
 	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
-	import { T } from '$lib/intl';;
+	import { T } from '$sitb/intl';;
 	import { Popup, Button, toast } from 'svemantic';
 
 	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext>();

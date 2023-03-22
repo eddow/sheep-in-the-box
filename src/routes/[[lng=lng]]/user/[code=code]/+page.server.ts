@@ -1,4 +1,4 @@
-import { registration, userExists } from "$lib/server/user";
+import { registration, userExists } from "$sitb/server/user";
 
 export async function load({params}: Partial<Record<string, any>>) {
 	const email = await registration(params.code);

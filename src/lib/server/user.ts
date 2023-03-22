@@ -1,14 +1,14 @@
 import { map, stringIds } from "./db";
-import User, { Registration, Session } from "$lib/server/objects/user";
+import User, { Registration, Session } from "$sitb/server/objects/user";
 import type { RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
 import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS, REGISTRATION_TIMEOUT }  from "$env/static/private";
 import type { Language } from "./objects/intl";
 import { markdown } from "markdown";
 import { createTransport } from "nodemailer";
-import { parmed } from "$lib/intl";
+import { parmed } from "$sitb/intl";
 import { getText } from "./intl";
-import { stringCookies } from "$lib/cookies";
+import { stringCookies } from "$sitb/cookies";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000

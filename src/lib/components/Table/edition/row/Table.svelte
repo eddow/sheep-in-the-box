@@ -10,8 +10,8 @@
 	import { exclude } from "../../../utils/exclude";
 	import { compare, Dialog, Editing, setEdtnCtx, type RowEditionContext } from "../utils";
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
-	import Form from "$lib/components/form/Form.svelte";
-	import { privateStore } from "$lib/privateStore";
+	import Form from "$sitb/components/form/Form.svelte";
+	import { privateStore } from "$sitb/privateStore";
 
 	export let saveCB: SaveCallback, deleteCB: DeleteCallback | undefined = undefined;
 	export let data: any[];

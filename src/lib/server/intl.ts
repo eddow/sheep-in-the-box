@@ -1,4 +1,4 @@
-import Intl, { IntlKey, type Language, type TextType } from "$lib/server/objects/intl";
+import Intl, { IntlKey, type Language, type TextType } from "$sitb/server/objects/intl";
 import { map, stringIds } from "./db";
 import type { Role } from "./objects/user";
 

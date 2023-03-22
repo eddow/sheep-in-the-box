@@ -1,10 +1,10 @@
 import type { Handle, HandleServerError, HandleFetch } from '@sveltejs/kit';
-import { authed, persistPreference } from '$lib/server/user';
-import { languages, type Language } from "$lib/server/objects/intl";
-import { allGroups, setSSPersistPreference } from '$lib/user';
-import { resetDictionaries } from '$lib/intl';
-import { flat, t } from '$lib/server/intl';
-import { setCookie, setSSR } from '$lib/cookies';
+import { authed, persistPreference } from '$sitb/server/user';
+import { languages, type Language } from "$sitb/server/objects/intl";
+import { allGroups, setSSPersistPreference } from '$sitb/user';
+import { resetDictionaries } from '$sitb/intl';
+import { flat, t } from '$sitb/server/intl';
+import { setCookie, setSSR } from '$sitb/cookies';
 
 //TODO: 404 -> infinite reload loop
 

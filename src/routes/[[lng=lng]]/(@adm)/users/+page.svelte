@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Edition from "$lib/components/table/edition/row/Edition.svelte";
-	import Text from "$lib/components/table/edition/Text.svelte";
-	import Table from "$lib/components/table/edition/row/Table.svelte";
-	import StringContent from "$lib/components/table/filters/StringContent.svelte";
-	import { ajax, T } from "$lib/globals";
+	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
+	import Text from "$sitb/components/table/edition/Text.svelte";
+	import Table from "$sitb/components/table/edition/row/Table.svelte";
+	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
+	import { ajax, T } from "$sitb/globals";
 	import { Button, Icon, Modal } from "sveltestrap";
 	import type { PageData } from "./$types";
 	import { object, string } from "yup";
-	import Column from "$lib/components/table/Column.svelte";
-	import MultiSelect from "$lib/components/table/edition/MultiSelect.svelte";
-	import { roles } from "$lib/constants";
-	import type { Option } from "$lib/components/form/MultiSelect.svelte";
+	import Column from "$sitb/components/table/Column.svelte";
+	import MultiSelect from "$sitb/components/table/edition/MultiSelect.svelte";
+	import { roles } from "$sitb/constants";
+	import type { Option } from "$sitb/components/form/MultiSelect.svelte";
 
 	export let data: PageData;
 	let users = data.users;

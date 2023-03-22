@@ -3,7 +3,7 @@
 </script>
 <script lang="ts">
 	import { Button, Buttons, Field, Form, FormModule, Input, Loader } from "svemantic";
-	import { privateStore } from "$lib/privateStore";
+	import { privateStore } from "$sitb/privateStore";
 	import Column from "../../Column.svelte";
 	import { setRowCtx } from "../../utils";
 	import { Dialog, Editing, setEdtnCtx, type EditingRowContext } from "../utils";
@@ -16,7 +16,7 @@
 	export let prop: keyT;
 	export let headers: boolean = false;
 	export let row: T;
-	// TODO Manage type for cell-edit & validate
+	// TODO Manage type for cell-edit & validate - idea: slot in <Input> & manage w/ saveCB
 	let empty = false, editingValue: T[keyT];
 	setRowCtx<EditingRowContext>({row, dialog: Dialog.Wrapped});
 	$: empty = row[prop] === undefined;
@@ -47,7 +47,7 @@
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 		{#if editing.value}
-			<Input autofocus leftAction transparent fluid element="td" name={prop} value={row[prop]}>
+			<Input autofocus leftAction transparent fluid element="td" name={prop} bind:value={editingValue}>
 				<svelte:fragment slot="action">
 					<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
 					<Button tiny primary on:click={submit} icon="save outline" />

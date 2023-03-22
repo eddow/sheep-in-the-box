@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext } from './utils'
 	import { writable } from "svelte/store";
-	import { T } from '$lib/globals';
+	import { T } from '$sitb/globals';
 	import { Cell, Td, Th } from 'svemantic';
 	import type { ComponentProps } from 'svelte';
 

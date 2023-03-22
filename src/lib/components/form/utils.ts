@@ -1,4 +1,4 @@
-import { assertNnull } from '$lib/utils';
+import { assertNnull } from '$sitb/utils';
 import type { Form, Paths, KnownStores, KnownHelpers } from '@felte/core';
 import { getContext, setContext } from 'svelte';
 

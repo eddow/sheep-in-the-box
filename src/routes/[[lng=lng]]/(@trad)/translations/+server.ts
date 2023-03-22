@@ -1,5 +1,5 @@
 import { error, json } from '@sveltejs/kit';
-import { getTradDictionaries, setTexts } from '$lib/server/intl';
+import { getTradDictionaries, setTexts } from '$sitb/server/intl';
 import type { RequestEvent } from './$types';
 
 export async function GET(event: RequestEvent) {	// Note: never used

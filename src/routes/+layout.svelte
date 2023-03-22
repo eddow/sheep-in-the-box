@@ -1,6 +1,6 @@
 <script lang="ts">
 	import "svemantic";
-	import { accessible, setGlobalUser } from "$lib/user";
+	import { accessible, setGlobalUser } from "$sitb/user";
 	import Menu from './components/Menu.svelte';
 	import './styles.scss';		// TODO The CSS is cached, but something is reaallllyyy slow
 	import type { LayoutData } from './$types';

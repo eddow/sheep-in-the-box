@@ -1,4 +1,4 @@
-import { tree } from "$lib/server/intl";
+import { tree } from "$sitb/server/intl";
 
 export async function load({locals}: Partial<Record<string, any>>) {
 	return {

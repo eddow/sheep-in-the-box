@@ -1,4 +1,4 @@
-import { allDB } from "$lib/server/export";
+import { allDB } from "$sitb/server/export";
 import { json, type RequestEvent } from "@sveltejs/kit";
 
 export async function GET(event: RequestEvent) {	//authed

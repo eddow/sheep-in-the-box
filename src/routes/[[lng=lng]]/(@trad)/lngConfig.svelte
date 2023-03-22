@@ -8,11 +8,11 @@
 	const { Table, Column } = displayTable<never>();
 </script>
 <script lang="ts">
-	import Horizontal from "$lib/components/dnd/Horizontal.svelte";
-	import { flag, languages, type Language } from "$lib/constants";
-	import { T, user } from "$lib/globals";
-	import { preference, Side } from "$lib/preferences";
-	import { displayTable } from '$lib/components/table/collections';
+	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
+	import { flag, languages, type Language } from "$sitb/constants";
+	import { T, user } from "$sitb/globals";
+	import { preference, Side } from "$sitb/preferences";
+	import { displayTable } from '$sitb/components/table/collections';
 	
 	const tradLngs = preference('tradLngs', Side.server),
 		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $T('fld.key')}]

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Input from '$lib/components/form/Input.svelte';
+	import Input from '$sitb/components/form/Input.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx } from '../utils'
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T } from "$lib/globals";
+	import { T } from "$sitb/globals";
 	import { Input } from "sveltestrap";
 	import { getFrmCtx } from "./utils";
 

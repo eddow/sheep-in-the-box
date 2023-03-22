@@ -1,8 +1,8 @@
 <script lang="ts">
-	import MultiSelect, { type Option } from '$lib/components/form/MultiSelect.svelte';
+	import MultiSelect, { type Option } from '$sitb/components/form/MultiSelect.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx } from '../utils'
-	import SlotFragment from '$lib/components/SlotFragment.svelte';
+	import SlotFragment from '$sitb/components/SlotFragment.svelte';
 
 	const { config } = getClmnCtx();
 	export let options: Option[] = [];

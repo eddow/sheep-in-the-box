@@ -1,4 +1,4 @@
-import Intl, { IntlKey } from "$lib/server/objects/intl";
+import Intl, { IntlKey } from "$sitb/server/objects/intl";
 import { map } from "./db";
 import User from "./objects/user";
 

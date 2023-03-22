@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { TextType } from "$lib/constants";
+	import type { TextType } from "$sitb/constants";
 	import Preview from "../Preview.svelte";
 
 	export let name: string;

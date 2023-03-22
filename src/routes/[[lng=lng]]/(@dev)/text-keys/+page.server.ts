@@ -1,4 +1,4 @@
-import { getDevDictionary } from "$lib/server/intl";
+import { getDevDictionary } from "$sitb/server/intl";
  
 export async function load({locals}: Partial<Record<string, any>>) {
 	return {

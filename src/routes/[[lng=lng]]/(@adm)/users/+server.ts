@@ -1,4 +1,4 @@
-import { patchUser } from '$lib/server/user';
+import { patchUser } from '$sitb/server/user';
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from './$types';
 

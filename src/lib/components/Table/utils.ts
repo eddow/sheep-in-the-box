@@ -1,4 +1,4 @@
-import { assertNnull } from '$lib/utils';
+import { assertNnull } from '$sitb/utils';
 import {setContext, getContext, tick} from 'svelte';
 import type {Readable, Writable} from 'svelte/store';
 

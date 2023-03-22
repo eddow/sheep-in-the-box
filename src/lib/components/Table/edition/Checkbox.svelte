@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Icon } from 'sveltestrap';
-	import Input from '$lib/components/form/Input.svelte';
+	import Input from '$sitb/components/form/Input.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx, getRowCtx } from '../utils'
 	import type { EditingRowContext } from './utils';

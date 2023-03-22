@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { flags, languages, type Language } from "$lib/constants";
+	import { flags, languages, type Language } from "$sitb/constants";
 	import { Languages } from "svemantic";
 
 	export let language: Language;
