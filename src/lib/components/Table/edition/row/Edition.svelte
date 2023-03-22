@@ -3,7 +3,7 @@
 	import { getRowCtx, getTblCtx } from '../../utils';
 	import { Button as StrpButton, Icon } from 'sveltestrap';
 	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
-	import { T } from '$sitb/intl';;
+	import { I } from '$sitb/intl';;
 	import { Popup, Button, toast, Loader } from 'svemantic';
 
 	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext>();
@@ -27,8 +27,8 @@
 </script>
 {#if dialog === Dialog.Footer}
 	<Loader inverted loading={$editing == Editing.Working} />
-	<StrpButton type="StrpButton" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$T('cmd.cancel')}</StrpButton>
-	<StrpButton type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$T('cmd.save')}</StrpButton>
+	<StrpButton type="StrpButton" class="prefix-icon" color="secondary" on:click={cancelEdit}><Icon name="x-lg" />{$I('cmd.cancel')}</StrpButton>
+	<StrpButton type="submit" class="prefix-icon" color="primary"><Icon name="save" />{$I('cmd.save')}</StrpButton>
 	<slot name="dialog" adding={false} row={row} />
 {:else if !dialog}
 	<Column>
@@ -51,8 +51,8 @@
 					<Button tiny on:click={()=> remove()} color="red" icon="trash alternate outline" />
 					{#if deleteConfirmation}
 						<Popup on="click">
-							<div class="content">{$T(deleteConfirmation)}</div>
-							<Button color="red" icon="trash alternate outline" fluid on:click={()=> remove(true)}>{$T('cmd.delete')}</Button>
+							<div class="content">{$I(deleteConfirmation)}</div>
+							<Button color="red" icon="trash alternate outline" fluid on:click={()=> remove(true)}>{$I('cmd.delete')}</Button>
 						</Popup>
 					{/if}
 				{/if}

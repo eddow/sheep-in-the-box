@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext } from './utils'
 	import { writable } from "svelte/store";
-	import { T } from '$sitb/globals';
+	import { I } from '$sitb/globals';
 	import { Cell, Td, Th } from 'svemantic';
 	import type { ComponentProps } from 'svelte';
 
@@ -22,7 +22,7 @@ $:	value = (prop && row && (typeof row === 'object') && row[prop]) || '';
 	const config = writable<any>({});
 $:	config.set({...$config, value});
 $:	config.set({...$config, prop});
-$:	config.set({...$config, title: title === undefined ? (prop && $T('fld.'+prop)) : title});
+$:	config.set({...$config, title: title === undefined ? (prop && $I('fld.'+prop)) : title});
 $:	config.set({...$config, header});
 $:	config.set({...$config, html});
 	let ctx: ColumnContext = {

@@ -6,7 +6,7 @@
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
 	import { roles, textTypes, type Language } from "$sitb/constants";
-	import { T, ajax } from "$sitb/globals";
+	import { I, ajax } from "$sitb/globals";
 	import { Button, Icon, Modal, ModalBody, ModalHeader } from "sveltestrap";
 	import Column from "$sitb/components/table/Column.svelte";
 	import Preview from "$sitb/components/Preview.svelte";
@@ -19,13 +19,13 @@
 	
 	export let data: PageData;
 	let textRoles: any[];
-$:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('role.'+(r||'none'))}));
+$:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
 	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $user.language);
 	let dictionaries = {[$kLang || $user.language]: data.dictionary},
 		dictionary = data.dictionary;
 	async function saveCB(row: any, old: any, diff: any) {
 		if(!row.key) {
-			toast({message: $T('err.key.no'), class: 'error'});
+			toast({message: $I('err.key.no'), class: 'error'});
 			return false;
 		}
 		if(diff.key && old.key) {
@@ -62,22 +62,22 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 <div style="width: 100%">
 	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
 	<h1>
-		{$T('ttl.text-keys')}
+		{$I('ttl.text-keys')}
 	</h1>
 </div>
 <Table key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
-	<Column prop="key" title={$T('fld.key')} let:value>
+	<Column prop="key" title={$I('fld.key')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
-	<Column prop="text" title={$T('fld.text')} let:value>
+	<Column prop="text" title={$I('fld.text')} let:value>
 		<StringContent slot="filter" />
 		<Text area {value} />
 	</Column>
-	<Column prop="role" title={$T('fld.role')} let:value>
+	<Column prop="role" title={$I('fld.role')} let:value>
 		<Select options={textRoles} {value} />
 	</Column>
-	<Column prop="type" title={$T('fld.type')} let:value>
+	<Column prop="type" title={$I('fld.type')} let:value>
 		<Select options={textTypes} {value} />
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
@@ -85,12 +85,12 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $T('r
 			{#if row.type}<Button size="sm" type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" /></Button>{/if}
 		</svelte:fragment>
 		<svelte:fragment slot="dialog">
-			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$T('cmd.preview')}</Button>{/if}
+			{#if row.type}<Button type="button" color="info" on:click={()=> { previewed = row; }}><Icon name="eye" />{$I('cmd.preview')}</Button>{/if}
 		</svelte:fragment>
 	</Edition>
 </Table>
 <Modal isOpen={!!previewed} size="xl">
-	<ModalHeader toggle={()=> { previewed = null; }}>{$T('ttl.preview')}</ModalHeader>
+	<ModalHeader toggle={()=> { previewed = null; }}>{$I('ttl.preview')}</ModalHeader>
 	<ModalBody>
 		<Preview text={previewed.text} type={previewed.type} />
 	</ModalBody>

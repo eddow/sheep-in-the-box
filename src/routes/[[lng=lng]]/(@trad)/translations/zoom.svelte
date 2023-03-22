@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Buttons, Button, ModalForm, type ModalSaveFunction } from "svemantic";
-	import { T } from "$sitb/globals";
+	import { I } from "$sitb/globals";
 	import type { LangItem } from "../lngConfig.svelte";
 	import { Editing, setEdtnCtx } from "$sitb/components/table/edition/utils";
 	import { privateStore } from "$sitb/privateStore";
@@ -46,7 +46,7 @@ $:	reducedModel =model &&  work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: m
 		{/each}
 	</Table>
 	<Buttons slot="actions">
-		<Button cancel class="prefix-icon" icon="times">{$T('cmd.cancel')}</Button>
-		<Button submit class="prefix-icon" primary icon="save outline">{$T('cmd.save')}</Button>
+		<Button cancel class="prefix-icon" icon="times">{$I('cmd.cancel')}</Button>
+		<Button submit class="prefix-icon" primary icon="save outline">{$I('cmd.save')}</Button>
 	</Buttons>
 </ModalForm>

@@ -4,7 +4,7 @@
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/Text.svelte";
-	import { ajax, T } from "$sitb/globals";
+	import { ajax, I } from "$sitb/globals";
 	import type { PageData } from "./$types";
 	import { string } from "yup";
 	import Zoom from "./zoom.svelte";
@@ -50,7 +50,7 @@
 	}
 </script>
 <h1 class="ui top attached centered block header">
-	{$T('ttl.translations')}
+	{$I('ttl.translations')}
 	<Button circular icon="cog" />
 	<Popup on="click" wide="very">
 		<LngConfig {config} />

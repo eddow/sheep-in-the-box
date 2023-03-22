@@ -3,7 +3,7 @@
 	import Text from "$sitb/components/table/edition/Text.svelte";
 	import Table from "$sitb/components/table/edition/row/Table.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
-	import { ajax, T } from "$sitb/globals";
+	import { ajax, I } from "$sitb/globals";
 	import { Button, Icon, Modal } from "sveltestrap";
 	import type { PageData } from "./$types";
 	import { object, string } from "yup";
@@ -20,17 +20,17 @@
 		roles: string()
 	});
 	let options: Option[];
-$:	options = roles.map(r=> ({value: r, text: $T('role.'+r)}));
+$:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 	async function saveCB(row: any, old: any, diff: any) {
 		await ajax.patch({...diff, _id: old._id});
 	}
 </script>
 <Table key="_id" {schema} data={users} columnFilters {saveCB} let:row>
-	<Column prop="email" title={$T('fld.email')} let:value>
+	<Column prop="email" title={$I('fld.email')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
-	<Column prop="roles" title={$T('fld.role')} let:value>
+	<Column prop="roles" title={$I('fld.role')} let:value>
 		<MultiSelect {value} {options} />
 	</Column>
 	<Edition edition="row" />

@@ -2,7 +2,7 @@
 	import User from './User.svelte';
 	import Languages from '$sitb/components/Languages.svelte';
 	import { user } from '$sitb/globals';
-	import { language, setLanguage, T } from "$sitb/intl";
+	import { language, setLanguage, I } from "$sitb/intl";
 	import type { Language, Role } from '$sitb/constants';
 	import { Buttons, Menu, Dropdown, Icon, LinkItem, toast } from 'svemantic';
 	import { browser } from '$app/environment';
@@ -24,16 +24,16 @@
 				<Dropdown class="icon button" icon="tools">
 					<Menu slot="menu" vertical>
 						{#if $user?.roles.adm}
-							<LinkItem icon={['user', 'corner cog']} href="/users">{$T('ttl.users')}</LinkItem>
+							<LinkItem icon={['user', 'corner cog']} href="/users">{$I('ttl.users')}</LinkItem>
 						{/if}
 						{#if $user?.roles.trad}
-							<LinkItem icon="language" href="/translations">{$T('ttl.translations')}</LinkItem>
+							<LinkItem icon="language" href="/translations">{$I('ttl.translations')}</LinkItem>
 						{/if}
 						{#if $user?.roles.dev}
 							<div class="ui horizontal divider header"><Icon icon="code" /></div>
-							<LinkItem icon="key" href="/text-keys">{$T('ttl.text-keys')}</LinkItem>
+							<LinkItem icon="key" href="/text-keys">{$I('ttl.text-keys')}</LinkItem>
 							<a class="nav-link prefix-icon item" data-sveltekit-preload-data="off" data-sveltekit-reload href="/export">
-								<Icon icon="cloud download alternate" />{$T('mnu.db-dld')}
+								<Icon icon="cloud download alternate" />{$I('mnu.db-dld')}
 							</a>
 						{/if}
 					</Menu>

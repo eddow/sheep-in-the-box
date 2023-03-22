@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { ajax, T, user } from "$sitb/globals";
+	import { ajax, I, user } from "$sitb/globals";
 	import { Button, Card, CardBody, CardFooter, CardTitle } from "sveltestrap";
 	import { object, string } from "yup";
 	import Form from "$sitb/components/form/Form.svelte";
@@ -12,7 +12,7 @@ $:	if(!$user) goto('/');
 		passCur: string().required(),
 		passNew: string().required(),
 		passCnf: string().test(
-			'confirmation', $T('err.pw.conf'),
+			'confirmation', $I('err.pw.conf'),
 			(value, ctx)=> value === ctx.parent.passNew
 		)
 	});
@@ -20,16 +20,16 @@ $:	if(!$user) goto('/');
 		const { values, context } = e.detail, {passCur, passNew} = values;
 		let rv = await ajax.patch({passCur, passNew});
 		if(Math.floor(rv.status/100) === 4)
-			toast({message: $T('err.pw.wrong'), class: 'error'});
+			toast({message: $I('err.pw.wrong'), class: 'error'});
 		else {
-			toast({message: $T('msg.pw.changed'), class: 'success'});
+			toast({message: $I('msg.pw.changed'), class: 'success'});
 			context.reset();
 		}
 	}
 </script>
 <Form {schema} on:submit={submit}>
 	<Card>
-		<CardTitle>{$T('ttl.pw.new')}</CardTitle>
+		<CardTitle>{$I('ttl.pw.new')}</CardTitle>
 		<CardBody>
 			<GInput name="passCur" type="password" style="min-width: 200px;" autofocus />
 			<GInput name="passNew" type="password" style="min-width: 200px;" />
@@ -37,7 +37,7 @@ $:	if(!$user) goto('/');
 		</CardBody>
 		<CardFooter>
 			<Button name="submit" color="primary">
-				{$T('cmd.pw.new')}
+				{$I('cmd.pw.new')}
 			</Button>
 		</CardFooter>
 	</Card>

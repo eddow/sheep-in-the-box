@@ -82,7 +82,7 @@ export function parmed(str: string, parms?: any): string {
 
 let updateTexts = ()=> {}
 type translationFunction = (key: string, parms?: any)=> string;
-export const T = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
+export const I = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
 	updateTexts = ()=> {
 		const hash = dictionary.hash;
 		function entry(key: string, parms?: any): string {

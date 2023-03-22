@@ -10,12 +10,12 @@
 <script lang="ts">
 	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
-	import { T, user } from "$sitb/globals";
+	import { I, user } from "$sitb/globals";
 	import { preference, Side } from "$sitb/preferences";
 	import { displayTable } from '$sitb/components/table/collections';
 	
 	const tradLngs = preference('tradLngs', Side.server),
-		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $T('fld.key')}]
+		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $I('fld.key')}]
 			.concat((<Language[]>Object.keys(languages)).map((id: Language)=> ({id, icon: flag(id)+' flag', text: languages[id]}))),
 		groupIdx: Record<string, number> = {unused: 0, ref: 1, work: 2};
 	const [ref, wrk] = $tradLngs ?
@@ -36,7 +36,7 @@
 	}
 	outputGroups();
 
-$:	allItems[0].text = $T('fld.key');
+$:	allItems[0].text = $I('fld.key');
 
 	function reordered(group: string, detail: any) {
 		groups[groupIdx[group]].items = detail.items;
@@ -52,7 +52,7 @@ $:	allItems[0].text = $T('fld.key');
 <Table>
 	{#each groups as group(group.id)}
 		<Column>
-			<th slot="header" class="flags">{$T('fld.trad.grp.'+group.id)}</th>
+			<th slot="header" class="flags">{$I('fld.trad.grp.'+group.id)}</th>
 			<td>
 				<Horizontal style="height: 1.5em" items={group.items} let:item
 					dropFromOthersDisabled={group.noDrop}
