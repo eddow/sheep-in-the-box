@@ -12,15 +12,16 @@
 	type keyT = string & keyof T;
 	const ColumnT = Column<T>;
 
-	export let saveCB: SaveCallback;
-	export let prop: keyT;
-	export let header: boolean = false;
-	export let row: T;
+	export let saveCB: SaveCallback,
+		prop: keyT,
+		header: boolean = false,
+		row: T;
 	// TODO Manage type for cell-edit & validate - idea: slot in <Input> & manage w/ saveCB
 	let empty = false, editingValue: T[keyT];
-	setRowCtx<EditingRowContext>({row, dialog: Dialog.Wrapped});
+	const editing = privateStore<Editing>(Editing.No), rowStore = privateStore<T>(row);
+	$: rowStore.value = row;
+	setRowCtx<EditingRowContext>({row: rowStore.store, dialog: Dialog.None});
 	$: empty = row[prop] === undefined;
-	const editing = privateStore<Editing>(Editing.No);
 	setEdtnCtx({
 		editing: editing.store
 	});
@@ -47,15 +48,14 @@
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 	{#if editing.value}
-		<td>
 			<Input autofocus primary tabular name={prop} bind:value={editingValue}>
 				<svelte:fragment slot="left-action">
 					<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
 					<Button tiny primary on:click={submit} icon="save outline" />
 					<Loader inverted loading={editing.value === Editing.Working} />
 				</svelte:fragment>
+				<slot {row} value={row[prop]} />
 			</Input>
-		</td>
 	{:else}
 		<td>
 			<Buttons>

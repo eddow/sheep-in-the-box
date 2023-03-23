@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-	export type SaveCallback<T = any> = (newValues: T, oldValues: T, diff: any) => Promise<boolean|void>;
+	export type SaveCallback<T = any> = (newValues: T, oldValues: T, diff: Partial<T>) => Promise<boolean|void>;
 	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|void>;
 </script>
 <script lang="ts">
@@ -12,34 +12,38 @@
 	import type { ObjectShape, OptionalObjectSchema } from "yup/lib/object";
 	import Form from "$sitb/components/form/Form.svelte";
 	import { privateStore } from "$sitb/privateStore";
+	import { ErrorNotSaved, ModalForm } from "svemantic";
+	import Buttons from "$svemantic/elements/button/Buttons.svelte";
+
+	type T = $$Generic<{}>;
+	type keyT = string & keyof T;
+
+	const TableT = Table<T>;
 
 	export let saveCB: SaveCallback, deleteCB: DeleteCallback | undefined = undefined;
-	export let data: any[];
-	export let key: string;
-	const addedRows = new Set<any>();
+	export let data: T[];
+	export let key: keyT;
+	const addedRows = new Set<T>();
 	const context = {deletable: !!deleteCB};
 
-	let added: any[] = [];
-$:	allRows = [...added, ...data];
-	let modalOpened = false,
-		dialogRow: any = null,
+	let added: T[] = [], allRows: T[];
+	$: {
+		allRows = [...added, ...data];
+	}
+	let dialogRow: T|undefined = undefined,
 		dialogEditing = privateStore<Editing>(Editing.Yes);
-	export let title: string = '';
-	
-	export let schema: OptionalObjectSchema<ObjectShape>;
 
-	function setEditing(editing: Editing, row?: any) {
+	function setEditing(editing: Editing, row?: T) {
 		if(!row || row === dialogRow)
 			dialogEditing.value = editing;
 	}
-	async function saveRow({detail}: CustomEvent) {
+	async function saveDialog(values: T) {
 		setEditing(Editing.Working);
-		if(await save(detail.values, dialogRow))		
-			modalOpened = false;
+		await save(values, dialogRow!);
 		setEditing(Editing.Yes);
 	}
 	
-	async function save(row: any, old: any) {
+	async function save(row: T, old: T) {
 		const diff = compare(row, old);
 		if(diff) {
 			setEditing(Editing.Working, old);
@@ -49,27 +53,25 @@ $:	allRows = [...added, ...data];
 			}
 			let ndxData = data.indexOf(old);
 			if(~ndxData) {
-				data[ndxData] = {...Object.assign(old, row)};
-				allRows = allRows;
+				data[ndxData] = {...Object.assign<T,T>(old, row)};
 			} else if(addedRows.delete(old)) {
 				added = Array.from(addedRows);
 				data = [row, ...data];
 			} else if(old === dialogRow) {
 				data = [row, ...data];
-				modalOpened = false;
 			}
-			else throw "Inconsistent saving behaviour";
+			else throw new ErrorNotSaved("Inconsistent saving behaviour");
 			setEditing(Editing.No, old);
-			dialogRow = null;
+			hide();
 		}
 		return true;
 	};
 
 	setEdtnCtx<RowEditionContext>({
-		addedRows, schema,
+		addedRows,
 		editing: dialogEditing.store,
 		save,
-		async deleteRow(row?: any) {
+		async deleteRow(row?: T) {
 			let exEditing = dialogEditing.value;
 			setEditing(Editing.Working, row);
 			try {
@@ -82,43 +84,39 @@ $:	allRows = [...added, ...data];
 				const ndx = data.indexOf(row);
 				if(~ndx)
 					data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
-			} else dialogRow = null;
+			} else hide();
 			return true;
 		},
-		cancelEdit(row?: any) {
+		cancelEdit(row?: T) {
 			if(row && addedRows.delete(row))
 				added = Array.from(addedRows);
-			modalOpened = false;
+			hide();
 		},
-		addRow(row?: any) {
-			addedRows.add(row || {});
+		addRow(row?: T) {
+			addedRows.add(row || <T>{});
 			added = Array.from(addedRows);
 		},
-		editModal(row?: any) {
-			dialogRow = row || {};
-			modalOpened = true;
+		editModal(row?: T) {
+			dialogRow = row || <T>{};
 		}
 	});
+	let hide: ()=> void;
 </script>
-<Table key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added} {context} let:row>
+<TableT key={key} {...exclude($$props, ['rowType', 'data'])} data={allRows} rowType={TableRow} unfiltered={added} {context} let:row>
 	<slot {row} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
-</Table>
-<Modal keyboard={true} size="xl" isOpen={modalOpened}>
-	{#if dialogRow}
-		<Form {schema} on:submit={saveRow}>
-			{#if title}<ModalHeader>{title}</ModalHeader>{/if}
-			<ModalBody>
-				<ModalPart dialog={Dialog.Body}>
+	<svelte:fragment slot="once">
+		<ModalForm bind:hide save={saveDialog} huge bind:model={dialogRow}>
+			<ModalPart dialog={Dialog.Body} row={dialogRow}>
+				<slot row={dialogRow} />
+			</ModalPart>
+			<Buttons slot="actions">
+				<ModalPart dialog={Dialog.Footer} row={dialogRow}>
 					<slot row={dialogRow} />
 				</ModalPart>
-			</ModalBody>
-			<ModalFooter>
-				<ModalPart dialog={Dialog.Footer}>
-					<slot row={dialogRow} />
-				</ModalPart>
-			</ModalFooter>
-		</Form>
-	{/if}
-</Modal>
+			</Buttons>
+		</ModalForm>
+		<slot name="once" />
+	</svelte:fragment>
+</TableT>

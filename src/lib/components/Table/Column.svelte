@@ -8,23 +8,26 @@
 	type T = $$Generic;
 	type keyT = keyof T & string;
 
-	export let prop: keyT|undefined = undefined;
-	export let title: string = '';
-	export let header: boolean = false;
-	export let html: boolean = false;
+	export let
+		prop: keyT|undefined = undefined,
+		title: string = '',
+		header: boolean = false,
+		html: boolean = false,
+		value: any = null,
+		collapsing: boolean = false;
 	let specRow: T|undefined = undefined;
 	export {specRow as row};
-	const tblSetFilter = getTblCtx().setFilter;
-	export let value: any = null;
-	const rowCtx = getRowCtx<RowContext<T>>();
-	let row: T = specRow === undefined ? rowCtx?.row : specRow;
-$:	value = (prop && row && (typeof row === 'object') && row[prop]) || '';
+	const tblSetFilter = getTblCtx().setFilter,
+	rowCtx = getRowCtx<RowContext<T>>()?.row;
+	let row: T;
 	const config = writable<any>({});
-$:	config.set({...$config, value});
-$:	config.set({...$config, prop});
-$:	config.set({...$config, title: title === undefined ? (prop && $I('fld.'+prop)) : title});
-$:	config.set({...$config, header});
-$:	config.set({...$config, html});
+	$: row = specRow === undefined ? $rowCtx : specRow;
+	$: value = (prop && row && (typeof row === 'object') && row[prop]) || '';
+	$: config.set({...$config, value});
+	$: config.set({...$config, prop});
+	$: config.set({...$config, title: title === undefined ? (prop && $I('fld.'+prop)) : title});
+	$: config.set({...$config, header});
+	$: config.set({...$config, html});
 	let ctx: ColumnContext = {
 		setFilter(filter: (name: any)=> boolean) {
 			console.assert(!!prop, 'A filtered column must define a `prop`')
@@ -50,7 +53,7 @@ $:	config.set({...$config, html});
 	</slot>
 {:else}
 	<slot {row} {value}>
-		<Cell {header} scope="row">
+		<Cell {header} scope="row" {collapsing}>
 			{#if html}
 				{@html value}
 			{:else}

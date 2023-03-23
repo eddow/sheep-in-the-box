@@ -11,6 +11,7 @@
 	let prop: string, title: string;
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
+// TODO Use semantic checkbox
 </script>
 <Editor value={checked} {...$$restProps}>
 	<Icon slot="display" name={checked?'check':'x'} />

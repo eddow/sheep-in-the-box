@@ -72,16 +72,19 @@ $:	displayedData = data.filter((row: T)=>
 			</svelte:component>
 		{/each}
 	</tbody>
-	{#if columnFooters}
-		<tfoot>
+	<tfoot>
+		{#if columnFooters}
 			<svelte:component this={rowType} id="footer" row={specialRow.footer}>
 				<slot row={specialRow.footer} />
 			</svelte:component>
-		</tfoot>
-	{/if}
-	{#if $$slots.footer}
-		<tfoot>
-			<slot name="footer" />
-		</tfoot>
+		{/if}
+		<slot name="footer" />
+	</tfoot>
+	{#if $$slots.once}
+		<tr style="display: none">
+			<td>
+				<slot name="once" />
+			</td>
+		</tr>
 	{/if}
 </Table>

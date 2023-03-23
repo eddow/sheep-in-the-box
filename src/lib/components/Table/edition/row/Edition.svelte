@@ -5,13 +5,16 @@
 	import { I } from '$sitb/intl';;
 	import { Popup, Button, toast, Loader } from 'svemantic';
 
-	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext>();
+	type T = $$Generic;
+
+	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext<T>>();
 	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
 	const { deletable } = getTblCtx<EditingTableContext>();
-	export let edition: Edition = 'row';
-	export let create: Edition = false;
-	export let creation: ()=> any = ()=> ({});
-	export let row: any = gvnRow;
+	export let edition: Edition = 'row',
+		create: Edition = false,
+		creation: ()=> T = ()=> (<T>{});
+	let row: T;
+	$: row = $gvnRow;
 	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
@@ -25,9 +28,9 @@
 </script>
 {#if dialog === Dialog.Footer}
 	<Loader inverted loading={$editing == Editing.Working} />
-	<Button class="prefix-icon" on:click={cancelEdit} icon="times">{$I('cmd.cancel')}</Button>
+	<Button cancel class="prefix-icon" on:click={cancelEdit} icon="times">{$I('cmd.cancel')}</Button>
 	<Button submit class="prefix-icon" primary icon="save">{$I('cmd.save')}</Button>
-	<slot name="dialog" adding={false} row={row} />
+	<slot name="dialog" adding={false} {row} />
 {:else if !dialog}
 	<Column>
 		<th scope="col" slot="header">
@@ -46,16 +49,16 @@
 				{#if hasSpec(edition, 'row')}<Button tiny on:click={startEdit} icon="edit outline" />{/if}
 				{#if hasSpec(edition, 'dialog')}<Button tiny on:click={()=> editModal(row)} icon="external alternate" />{/if}
 				{#if deletable}
-					<Button tiny on:click={()=> remove()} color="red" icon="trash alternate outline" />
+					<Button tiny on:click={()=> remove()} negative icon="trash alternate outline" />
 					{#if deleteConfirmation}
 						<Popup on="click">
 							<div class="header">{$I(deleteConfirmation)}</div>
-							<Button color="red" icon="trash alternate outline" fluid on:click={()=> remove(true)}>{$I('cmd.delete')}</Button>
+							<Button negative icon="trash alternate outline" on:click={()=> remove(true)}>{$I('cmd.delete')}</Button>
 						</Popup>
 					{/if}
 				{/if}
-				<slot name="row" editing={false} row={row} />
-				<slot name="display-row" row={row} />
+				<slot name="row" editing={false} {row} />
+				<slot name="display-row" {row} />
 			{/if}
 		</th>
 	</Column>

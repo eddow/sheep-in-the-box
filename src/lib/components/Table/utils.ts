@@ -1,6 +1,6 @@
 import { assertNnull } from '$sitb/utils';
-import {setContext, getContext, tick} from 'svelte';
-import type {Readable, Writable} from 'svelte/store';
+import { setContext, getContext } from 'svelte';
+import type { Readable, Writable } from 'svelte/store';
 
 const tableContextKey = Symbol('tableContext');
 const rowContextKey = Symbol('rowContext');
@@ -17,7 +17,7 @@ export interface TableContext<T=any> {
 	setFilter(key: any, filter?: (row: T)=> boolean): void;
 }
 export interface RowContext<T=any> {
-	row: T;
+	row: Readable<T>;
 }
 export interface ColumnContext<T=any> {
 	setFilter(filter?: (value: T)=> boolean): void;

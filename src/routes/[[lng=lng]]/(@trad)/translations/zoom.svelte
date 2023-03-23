@@ -23,7 +23,7 @@ $:	reducedModel = model && work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: m
 		previewed[lng.id] = !previewed[lng.id];
 	}
 </script>
-<ModalForm fullscreen bind:save model={reducedModel}>
+<ModalForm fullscreen {save} model={reducedModel}>
 	<svelte:fragment slot="header">{model?.key}</svelte:fragment>
 	<Table key="key" data={model?[model]:[]} let:row>
 		{#each nonKeyRef as lng (lng.id)}

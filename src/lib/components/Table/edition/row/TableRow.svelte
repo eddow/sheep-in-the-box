@@ -1,21 +1,22 @@
 <script lang="ts">
 	import { Dialog, Editing, getEdtnCtx, setEdtnCtx, type EditingRowContext, type RowEditionContext } from "../utils";
-	import { createEventDispatcher } from 'svelte';
-	import { setFrmCtx, type FormAction, type FormContext } from "$sitb/components/form/utils";
 	import { setRowCtx } from "../../utils";
 	import { privateStore } from "$sitb/privateStore";
 	import { Form } from "svemantic";
 
-	export let row: any;
+	type T = $$Generic;
+
+	export let row: T;
 	const EditionContext = getEdtnCtx<RowEditionContext>(),
 		{ addedRows, cancelEdit, save, deleteRow } = EditionContext;
 
 	let adding = addedRows.has(row);
 	const dataRow = typeof row !== 'string',
-		editing = privateStore<Editing>(adding ? Editing.Yes : Editing.No);
+		editing = privateStore<Editing>(adding ? Editing.Yes : Editing.No),
+		rowStore = privateStore<T>(row);
 	$: adding = addedRows.has(row);
-	setRowCtx<EditingRowContext>({ dialog: Dialog.None, row });
-	
+	$: rowStore.value = row;
+	setRowCtx<EditingRowContext>({row: rowStore.store, dialog: Dialog.None});
 	async function saveRow(e: CustomEvent) {
 		editing.value = Editing.Working;
 		editing.value = (await save(e.detail.values, row)) ? Editing.No : Editing.Yes;

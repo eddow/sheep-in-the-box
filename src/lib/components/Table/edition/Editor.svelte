@@ -11,14 +11,13 @@
 $:	prop = <string>$config.prop;
 $:	title = <string>$config.title;
 $:	header = <boolean>$config.header;
-	export let html = (x:string, row: any)=> $config.html;
-	export let getDisplay = (x: string, row: any)=> x;
-	export let value: any;
+	export let
+		html = (x:string, row: any)=> $config.html,
+		getDisplay = (x: any, row: any)=> x,
+		value: any;
 </script>
 {#if dialog === Dialog.Body}
-	<Field name={prop} fluid label={title}>
-		<slot />
-	</Field>
+	<Field><slot /></Field>
 {:else if dialog === Dialog.Wrapped}
 	{#if $editing}
 		<slot />

@@ -4,13 +4,12 @@
 	import Table from "$sitb/components/table/edition/row/Table.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import { ajax, I } from "$sitb/globals";
-	import { Button, Icon, Modal } from "sveltestrap";
+	import Select from "$sitb/components/table/edition/Select.svelte";
 	import type { PageData } from "./$types";
 	import { object, string } from "yup";
 	import Column from "$sitb/components/table/Column.svelte";
-	import MultiSelect from "$sitb/components/table/edition/MultiSelect.svelte";
 	import { roles } from "$sitb/constants";
-	import type { Option } from "$sitb/components/form/MultiSelect.svelte";
+	import type { DropdownOption } from "svemantic";
 
 	export let data: PageData;
 	let users = data.users;
@@ -19,19 +18,22 @@
 		email: string().required(),
 		roles: string()
 	});
-	let options: Option[];
+	let options: DropdownOption[];
 $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 	async function saveCB(row: any, old: any, diff: any) {
 		await ajax.patch({...diff, _id: old._id});
 	}
 </script>
-<Table key="_id" {schema} data={users} columnFilters {saveCB} let:row>
+<h1 class="ui top attached centered block header">
+	{$I('ttl.users')}
+</h1>
+<Table key="_id" {schema} data={users} columnFilters {saveCB}>
 	<Column prop="email" title={$I('fld.email')} let:value>
 		<StringContent slot="filter" />
 		<Text {value}  />
 	</Column>
 	<Column prop="roles" title={$I('fld.role')} let:value>
-		<MultiSelect {value} {options} />
+		<Select multiple {value} {options} delimiter=" " />
 	</Column>
 	<Edition edition="row" />
 </Table>
