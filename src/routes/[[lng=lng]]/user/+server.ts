@@ -8,9 +8,9 @@ export async function GET(event: RequestEvent) {	//authed
 }
 
 export async function POST(event: RequestEvent) {	//login
-	const {email, password, roles} = await event.request.json();
+	const {email, pass, roles} = await event.request.json();
 	// roles is the list of roles for whom the client already has the dictionary
-	let user = await login(event, email, password);
+	let user = await login(event, email, pass);
 	if(!user) {
 		logout(event);
 		return json(event.locals.language, {status: 401});

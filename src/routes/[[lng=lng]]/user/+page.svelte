@@ -1,13 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { ajax, I, user } from "$sitb/globals";
-	import { Button, Card, CardBody, CardFooter, CardTitle } from "sveltestrap";
-	import { object, string } from "yup";
-	import Form from "$sitb/components/form/Form.svelte";
-	import GInput from "$sitb/components/form/GInput.svelte";
-	import { toast } from "svemantic";
+	import { Col, Input, Form, Field, Button, toast } from "svemantic";
 
 $:	if(!$user) goto('/');
+/* TODO
 	const schema = object({
 		passCur: string().required(),
 		passNew: string().required(),
@@ -15,30 +12,45 @@ $:	if(!$user) goto('/');
 			'confirmation', $I('err.pw.conf'),
 			(value, ctx)=> value === ctx.parent.passNew
 		)
-	});
+	});*/
 	async function submit(e: CustomEvent) {
 		const { values, context } = e.detail, {passCur, passNew} = values;
+		toast({message: 'submit', class: 'success'});/*
 		let rv = await ajax.patch({passCur, passNew});
 		if(Math.floor(rv.status/100) === 4)
 			toast({message: $I('err.pw.wrong'), class: 'error'});
 		else {
 			toast({message: $I('msg.pw.changed'), class: 'success'});
 			context.reset();
-		}
+		}*/
 	}
 </script>
-<Form {schema} on:submit={submit}>
-	<Card>
-		<CardTitle>{$I('ttl.pw.new')}</CardTitle>
-		<CardBody>
-			<GInput name="passCur" type="password" style="min-width: 200px;" autofocus />
-			<GInput name="passNew" type="password" style="min-width: 200px;" />
-			<GInput name="passCnf" type="password" style="min-width: 200px;" />
-		</CardBody>
-		<CardFooter>
-			<Button name="submit" color="primary">
-				{$I('cmd.pw.new')}
-			</Button>
-		</CardFooter>
-	</Card>
-</Form>
+
+<div class="ui main container">
+	<h3 class="ui top attached segment">{$I('ttl.pw.new')}</h3>
+	<Form on:submit={submit} class="two column doubling stackable grid attached vertical bottom aligned basic segment">
+		<Col><Field label required name="passCur"><Input type="password" /></Field></Col>
+		<Col><Field label required name="passNew" validate="different[passCur]"><Input type="password" /></Field></Col>
+		<Col><Field label required name="passCnf" validate="match[passNew]"><Input type="password" /></Field></Col>
+		<Col><Button fluid primary submit>{$I('cmd.pw.new')}</Button></Col>
+	</Form>
+</div>
+
+<style lang="scss">
+
+.main.container {
+	position: relative;
+	width: 700px !important;
+	left: 0;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+@media only screen and (max-width: 820px) {
+	.main.container {
+		width: auto !important;
+		margin-left: 1em !important;
+		margin-right: 1em !important;
+	}
+}
+</style>

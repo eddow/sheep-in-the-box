@@ -9,14 +9,7 @@
 	import GInput from "$sitb/components/form/GInput.svelte";
 
 	export let data: PageData;
-	const {exists} = data, name = exists ? 'passNew' : 'pass',
-		schema = object({
-		[name]: string().required(),
-		passCnf: string().required().test(
-			'confirmation', $I('err.pw.conf'),
-			(value, ctx)=> !!value && value === ctx.parent[name]
-		)
-	});
+	const {exists} = data, name = exists ? 'passNew' : 'pass';
 	async function submit({detail}: CustomEvent) {
 		const { values } = detail, {[name]: pass} = values;
 		goto('/');
@@ -25,7 +18,7 @@
 		else toast({message: $I('err.pw.code'), class: 'error'});
 	}
 </script>
-<Form {schema} on:submit={submit}>
+<Form schema={} on:submit={submit}>
 	<Card>
 		<CardTitle>{$I(exists?'ttl.pw.new':'ttl.pw.set')}</CardTitle>
 		<CardBody>

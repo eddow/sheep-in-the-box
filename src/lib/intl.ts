@@ -5,6 +5,7 @@ import { privateStore } from "./privateStore";
 import { setLocale } from 'yup';
 import type { MessageParams } from 'yup/lib/types';
 import { i18n } from 'svemantic';
+import { field } from "$svemantic/i18n";
 
 interface Dictionary {
 	hash: any;
@@ -90,6 +91,7 @@ export const I = readable<translationFunction>(x=> `[${x}]`, (set: (t: translati
 			key = camel2dot(key);
 			return parmed(hash[key], parms) || `[${key}]`;
 		}
+		field.set(f=> f ? entry('fld.'+f) : '[no-name]');
 		set(entry);
 		function paramdErr(name: string) {
 			return (params: MessageParams)=> entry('err.'+name, params);

@@ -1,4 +1,4 @@
 {
 	"alias-resolver.type": "custom",
-	"alias-resolver.accessPath": "vite.config.ts"
+	"alias-resolver.accessPath": ""
 }

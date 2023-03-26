@@ -2,8 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { I, dictionary, gotTree, languageStore } from '$sitb/intl';
 	import { ajax, user } from '$sitb/globals';
-	import { Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast } from "svemantic";
-	import Input from '$svemantic/elements/input/Input.svelte';
+	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast } from "svemantic";
 
 	const dispatch = createEventDispatcher();
 	let doneLogingIn: ()=> void;
@@ -42,7 +41,7 @@
 </script>
 {#if $user}
 	<Dropdown class="icon button" icon="colored blue user">
-		<Menu slot="menu" vertical>
+		<Menu vertical>
 			<div class="right-aligned header">{$user.email}</div>
 			<LinkItem icon="cog" href="/user">{$I('cmd.configure')}</LinkItem>
 			<div class="ui divider"></div>
@@ -56,11 +55,11 @@
 			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>
 				<Form on:submit={login}>
-					<Field label name="email">
-						<Input required validate="email" left-icon="at" name="email" />
+					<Field required label name="email" validate="email">
+						<Input left-icon="at" name="email" />
 					</Field>
-					<Field label name="password">
-						<Input required type="password" left-icon="key" name="password" />
+					<Field required label name="pass">
+						<Input type="password" left-icon="key" />
 					</Field>
 					<Button primary fluid submit icon="sign in alternate">{$I('cmd.login')}</Button>
 				</Form>
@@ -68,8 +67,8 @@
 			<Page>
 				<Header slot="header">{$I('cmd.register')}</Header>
 				<Form on:submit={register}>
-					<Field label name="email">
-						<Input required validate="email" left-icon="at" name="email" />
+					<Field label name="email" required validate="email">
+						<Input left-icon="at" name="email" />
 					</Field>
 					<Button primary fluid submit icon={['user', 'corner green add']}>{$I('cmd.register')}</Button>
 				</Form>

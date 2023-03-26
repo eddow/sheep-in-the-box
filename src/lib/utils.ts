@@ -1,15 +1,5 @@
-import { browser, dev } from "$app/environment";
-import { readable } from "svelte/store";
-import type { FormContext } from "./components/form/utils";
+import { dev } from "$app/environment";
 
-const emptyFormInfo: FormContext = <FormContext>{
-	form: (node: any)=> {},
-	errors: readable({}),
-	touched: readable({})
-};
-export function useCSR(usage: ()=> FormContext): FormContext {
-	return browser ? usage() : emptyFormInfo;
-}
 const assertNnull = dev ? <T>(v: T, msg: string): T => {
 	console.assert(!!v, msg);
 	return v;

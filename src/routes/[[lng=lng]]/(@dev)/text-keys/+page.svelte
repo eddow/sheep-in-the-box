@@ -51,12 +51,6 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('r
 		return (await ajax.delete({key: row.key})).ok;
 	}
 	let previewed: DictionaryEntry|undefined = undefined;
-	const schema = object({
-		key: string().required(),
-		text: string(),
-		role: string(),
-		type: string()
-	});
 	async function reloadKeys({detail: lng}: CustomEvent<Language>) {
 		if(!dictionaries[lng]) {
 			let qr = await ajax.get('?'+lng);
@@ -70,10 +64,10 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('r
 	{$I('ttl.text-keys')}
 	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
 </h1>
-<Table class="attached" compact="very" singleLine striped selectable key="_id" {schema} data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
+<Table class="attached" compact="very" singleLine striped selectable key="_id" data={dictionary} columnFilters {saveCB} {deleteCB} let:row>
 	<Column prop="key" title={$I('fld.key')} let:value>
 		<StringContent slot="filter" />
-		<Text {value} />
+		<Text required {value} />
 	</Column>
 	<Column prop="text" title={$I('fld.text')} let:value>
 		<StringContent slot="filter" />
