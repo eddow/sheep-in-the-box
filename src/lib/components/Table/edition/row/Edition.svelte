@@ -1,15 +1,17 @@
 <script lang="ts">
 	import Column from '../../Column.svelte'
-	import { getRowCtx, getTblCtx } from '../../utils';
-	import { Dialog, Editing, getEdtnCtx, type EditingRowContext, type EditingTableContext, type Edition, type RowEditionContext } from '../utils';
+	import { getRowCtx, getTblCtx } from '../../contexts';
+	import { type Dialog, type Editing, getEdtnCtx, type RowContext } from '../contexts';
 	import { I } from '$sitb/intl';;
 	import { Popup, Button, toast, Loader } from 'svemantic';
+	import type { AddableEditionContext, RowEditionContext } from './contexts';
 
+	type Edition = 'dialog'|'row'|'both'|false;
 	type T = $$Generic;
 
-	const { dialog, row: gvnRow } = getRowCtx<EditingRowContext<T>>();
-	const { editing, startEdit, cancelEdit, deleteRow, addRow, editModal } = getEdtnCtx<RowEditionContext>();
-	const { deletable } = getTblCtx<EditingTableContext>();
+	const { model: gvnRow } = getRowCtx<RowContext<T>>();
+	const { dialog, editing, deleteRow, startEdit } = getEdtnCtx<RowEditionContext<T>>();
+	const { deletable, add, editModal } = getTblCtx<AddableEditionContext<T>>();
 	export let edition: Edition = 'row',
 		create: Edition = false,
 		creation: ()=> T = ()=> (<T>{});
@@ -26,23 +28,23 @@
 		await deleteRow();
 	}
 </script>
-{#if dialog === Dialog.Footer}
-	<Loader inverted loading={$editing == Editing.Working} />
-	<Button cancel class="prefix-icon" on:click={cancelEdit} icon="times">{$I('cmd.cancel')}</Button>
+{#if dialog === 'actions'}
+	<Loader inverted loading={$editing === 'working'} />
+	<Button cancel class="prefix-icon" icon="times">{$I('cmd.cancel')}</Button>
 	<Button submit class="prefix-icon" primary icon="save">{$I('cmd.save')}</Button>
 	<slot name="dialog" adding={false} {row} />
 {:else if !dialog}
 	<Column>
 		<th scope="col" slot="header">
-			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> addRow(creation())} color="green" icon="add" />{/if}
+			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> add(creation())} color="green" icon="add" />{/if}
 			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} icon={['external alternate', 'green corner add']} />{/if}
 			<slot name="header" />
 		</th>
-		<th class="collapsing" class:editing={!!$editing} scope="row">
-			<Loader inverted loading={$editing == Editing.Working} />
+		<th class="ui collapsing buttons" class:editing={!!$editing} scope="row">
+			<Loader inverted loading={$editing == 'working'} />
 			{#if $editing}
 				<Button tiny submit primary icon="save" />
-				<Button tiny on:click={cancelEdit} color="yellow" icon="times" />
+				<Button tiny cancel color="yellow" icon="times" />
 				<slot name="row" editing={true} row={$editing} />
 				<slot name="edit-row" row={$editing} />
 			{:else}

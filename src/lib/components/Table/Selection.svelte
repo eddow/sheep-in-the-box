@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { Th } from 'svemantic';
 	import Column from './Column.svelte'
-	import { getRowCtx, getTblCtx, type RowContext } from './utils'
+	import { getRowCtx, getTblCtx, type RowContext } from './contexts'
 // TODO Re-check
 	type T = $$Generic;
 	export let selection: Set<T>;
-	const row = getRowCtx<RowContext>()?.row;
+	const model = getRowCtx<RowContext>()?.model;
 	let all: 'indeterminate'|boolean;
 	let selected: boolean;
 	let data: T[];
-	$: selected = selection.has($row);
+	$: selected = selection.has($model);
 	$: all = (selection.size === 0) ? false :
 		(selection.size === data.length) ? true :
 		'indeterminate';
 	function onChangeOne(evt: Event) {
-		selection[(evt.target as HTMLInputElement).checked?'add':'delete']($row);
+		selection[(evt.target as HTMLInputElement).checked?'add':'delete']($model);
 		selection = new Set(selection);
 	}
 	function onChangeAll(evt: Event) {

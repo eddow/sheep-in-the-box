@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Input, Th } from 'svemantic';
-	import { getClmnCtx } from '../utils';
+	import { getClmnCtx } from '../contexts';
 	export let value: string = '';
 	export let beginsWith: boolean = false;
 	export let caseSensitive: boolean = false;

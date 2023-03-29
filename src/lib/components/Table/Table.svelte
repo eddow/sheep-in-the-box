@@ -1,81 +1,81 @@
 <script lang="ts">
 	import { Table } from 'svemantic';
 	import TableRow from './TableRow.svelte'
-	import { specialRow, setTblCtx } from './utils'
+	import { specialRow, setTblCtx } from './contexts'
 	import { privateStore } from '$sitb/privateStore';
-	import type { ComponentProps } from 'svelte';
+	import type { ComponentProps, ComponentType } from 'svelte';
 	// ? https://www.npmjs.com/package/svelte-tiny-virtual-list
 
 	type T = $$Generic;
 	type keyT = keyof T & string;
+	const TableT = Table<T>;
 
 	interface $$Props extends ComponentProps<Table<T>> {
-		data?: T[];
-		
+		data: T[];
 		columnFilters?: boolean;
 		columnHeaders?: boolean;
 		columnFooters?: boolean;
-		filters?: Map<any, (row: T)=> boolean>;
+		filters?: Map<any, (model: T)=> boolean>;
 		context?: any;
-		rowType?: typeof TableRow;
+		rowType?: ComponentType;
 		unfiltered?: T[];
 		key?: keyT;
 		displayedData?: T[];
 	}
 
-	export let columnFilters: boolean = false;
-	export let columnHeaders: boolean = true;
-	export let columnFooters: boolean = false;
-	export let filters = new Map<any, (row: T)=> boolean>();
-	export let context = {};
-	export let rowType = TableRow;
-	export let data: T[] = <T[]>[null];
-	export let unfiltered: T[] = [];
-	const dataStore = privateStore(data);
-$:	dataStore.value = data;
+	export let
+		columnFilters: boolean = false,
+		columnHeaders: boolean = true,
+		columnFooters: boolean = false,
+		filters = new Map<any, (model: T)=> boolean>(),
+		context = {},
+		rowType: ComponentType = TableRow,
+		data: T[],
+		unfiltered: T[] = [],
+		key: keyT | undefined = undefined;
+	let displayedData: T[] = [];
+	const dataPrv = privateStore(data);
+	$: dataPrv.value = data;
 	setTblCtx({
 		...context,
-		data: dataStore.store,
-		setFilter(key: keyT, filter?: (row: T)=> boolean) {
+		data: dataPrv.store,
+		setFilter(key: keyT, filter?: (model: T)=> boolean) {
 			if(filter) filters.set(key, filter);
 			else filters.delete(key);
 			filters = filters;
 		}
 	});
-	export let key: keyT | undefined = undefined;
-	function rowId(row: T) { return key && row[key]; }
-	export let displayedData: T[] = [];
+	function rowId(model: T) { return key && model[key]; }
 $:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');	// Indexes are not a good key as they change while filtering
-$:	displayedData = data.filter((row: T)=>
-		~unfiltered.indexOf(row) ||
-		Array.from(filters.values()).every(filter=> filter(row)))
+$:	displayedData = data.filter((model: T)=>
+		unfiltered.includes(model) || Array.from(filters.values()).every(filter=> filter(model)))
 	// TODO Forward classes & styles
 </script>
-<Table {...$$restProps}>
+<TableT {...$$restProps}>
 	<thead>
 		<slot name="header" />
 		{#if columnHeaders}
-			<svelte:component this={rowType} id="header" row={specialRow.header}>
-				<slot row={specialRow.header} />
+			<svelte:component this={rowType} id="header" model={specialRow.header}>
+				<slot model={specialRow.header} />
 			</svelte:component>
 		{/if}
 		{#if columnFilters}
-			<svelte:component this={rowType} id="filter" row={specialRow.filter}>
-				<slot row={specialRow.filter} />
+			<svelte:component this={rowType} id="filter" model={specialRow.filter}>
+				<slot model={specialRow.filter} />
 			</svelte:component>
 		{/if}
 	</thead>
 	<tbody>
-		{#each displayedData as row, ndx (rowId(row) || ndx)}
-			<svelte:component this={rowType} id={rowId(row)} row={row}>
-				<slot row={row} />
+		{#each displayedData as model, ndx (rowId(model) || ndx)}
+			<svelte:component this={rowType} id={rowId(model)} model={model}>
+				<slot model={model} />
 			</svelte:component>
 		{/each}
 	</tbody>
 	<tfoot>
 		{#if columnFooters}
-			<svelte:component this={rowType} id="footer" row={specialRow.footer}>
-				<slot row={specialRow.footer} />
+			<svelte:component this={rowType} id="footer" model={specialRow.footer}>
+				<slot model={specialRow.footer} />
 			</svelte:component>
 		{/if}
 		<slot name="footer" />
@@ -87,4 +87,4 @@ $:	displayedData = data.filter((row: T)=>
 			</td>
 		</tr>
 	{/if}
-</Table>
+</TableT>

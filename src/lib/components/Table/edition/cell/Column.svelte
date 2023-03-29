@@ -1,67 +1,77 @@
-<script context="module" lang="ts">
-	export type SaveCallback<V=any, R=any> = (prop: string, value: V, oldValues: R) => Promise<boolean|undefined|unknown>;
-</script>
 <script lang="ts">
-	import { Button, Buttons, Field, Form, FormModule, Input, Loader } from "svemantic";
+	import { Button, Cell, Form } from "svemantic";
 	import { privateStore } from "$sitb/privateStore";
 	import Column from "../../Column.svelte";
-	import { setRowCtx } from "../../utils";
-	import { Dialog, Editing, setEdtnCtx, type EditingRowContext } from "../utils";
+	import { type Editing, setEdtnCtx, getTblCtx, type TableEditionContext, getRowCtx, type ItemEditionContext, type RowContext } from "../contexts";
+	import type { ComponentProps } from "svelte";
+	import CellAction from "./CellAction.svelte";
+	import { compare } from "$sitb/utils";
 
 	type T = $$Generic;
 	type keyT = string & keyof T;
 	const ColumnT = Column<T>;
 
-	export let saveCB: SaveCallback,
-		prop: keyT,
-		header: boolean = false,
-		row: T;
-	// TODO Manage type for cell-edit & validate - idea: slot in <Input> & manage w/ saveCB
-	let empty = false, editingValue: T[keyT];
-	const editing = privateStore<Editing>(Editing.No), rowStore = privateStore<T>(row);
-	$: rowStore.value = row;
-	setRowCtx<EditingRowContext>({row: rowStore.store, dialog: Dialog.None});
-	$: empty = row[prop] === undefined;
-	setEdtnCtx({
-		editing: editing.store
-	});
 	function startEdit() {
-		editing.value = Editing.Yes;
-		editingValue = row[prop];
+		editing.value = true;
 	}
-	function cancelEdit() {
-		editing.value = Editing.No;
+	function cancel() {
+		editing.value = false;
 	}
-	async function submit() {
-		editing.value = Editing.Working;
-		if(editingValue === row[prop] || false !== await saveCB(prop, editingValue, row)) {
-			row[prop] = editingValue;
-			editing.value = Editing.No;
-		} else
-			editing.value = Editing.Yes;
+	async function submit({detail: {values}}: CustomEvent<{values: T}>) {
+		const mdl = $model, diff = compare(values, mdl);
+		if(diff) {
+			editing.value = 'working';
+			try {
+				await save(mdl, diff);
+				editing.value = false;
+			} catch(x) {
+				editing.value = true;
+				throw x;
+			}
+		}
 	}
+
+	interface $$Props extends ComponentProps<Column<T>> {}
+
+	const
+		rowCtx = getRowCtx<RowContext<T>>(),
+		model = rowCtx?.model;
+
+	export let
+		name: keyT|undefined = undefined,
+		header: boolean = false;
+	// TODO? Have a prop-given `value` when `name` is undefined
+	console.assert(name, 'Name is compulsory for cell-edit columns')
+	let empty = false, uniqued: Partial<T> = {}, value: any;
+	const
+		editing = privateStore<Editing>(false),
+		{ save } = getTblCtx<TableEditionContext<T>>(),
+		context: ItemEditionContext = {
+			editing: editing.store,
+			dialog: false,
+			actions: CellAction
+		};
+	$: empty = $model[name!] === undefined;
+	$: value = $model[name!];
+	$: uniqued = <Partial<T>>{[name!]: value};
+	let form: ((...parms: any[])=> any)|undefined;
+	$: context.form = form;
+	setEdtnCtx(context);
 	// Bug on blur->validate: field not found
 	// TODO Esc->cancel
 </script>
-<ColumnT {prop} {header} {...$$restProps}>
-	<slot name="filter" slot="filter" />
-	<slot name="header" slot="header" />
+<ColumnT {name} {header} {...$$restProps}>
+	<slot name="filter" slot="filter"><td></td></slot>
+	<slot name="header" slot="header" let:title {title}><th scope="col">{title}</th></slot>
 	<slot name="footer" slot="footer" />
 	{#if editing.value}
-			<Input autofocus primary tabular name={prop} bind:value={editingValue}>
-				<svelte:fragment slot="left-action">
-					<Button tiny color="yellow" on:click={cancelEdit} icon="times" />
-					<Button tiny primary on:click={submit} icon="save outline" />
-					<Loader inverted loading={editing.value === Editing.Working} />
-				</svelte:fragment>
-				<slot {row} value={row[prop]} />
-			</Input>
+		<Form el="td" class="editor" tabular bind:form on:cancel={cancel} on:submit={submit} model={uniqued}>
+			<slot {model} {value} />
+		</Form>
 	{:else}
-		<td>
-			<Buttons>
-				<Button tiny on:click={startEdit} icon="edit outline" primary={empty} />
-			</Buttons>
-			<slot {row} value={row[prop]} />
-		</td>
+		<Cell {header} scope="row">
+			<Button tiny on:click={startEdit} icon="edit outline" primary={empty} />
+			<slot {model} {value} />
+		</Cell>
 	{/if}
 </ColumnT>

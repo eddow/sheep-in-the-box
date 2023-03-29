@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
-	import Text from "$sitb/components/table/edition/Text.svelte";
+	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import Table from "$sitb/components/table/edition/row/Table.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import { ajax, I } from "$sitb/globals";
-	import Select from "$sitb/components/table/edition/Select.svelte";
+	import Select from "$sitb/components/table/edition/editor/Select.svelte";
 	import type { PageData } from "./$types";
 	import Column from "$sitb/components/table/Column.svelte";
 	import { roles } from "$sitb/constants";
@@ -15,7 +15,7 @@
 
 	let options: DropdownOption[];
 $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
-	async function saveCB(row: any, old: any, diff: any) {
+	async function saveCB(old: any, diff: any) {
 		await ajax.patch({...diff, _id: old._id});
 	}
 </script>
@@ -23,12 +23,12 @@ $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 	{$I('ttl.users')}
 </h1>
 <Table key="_id" data={users} columnFilters {saveCB}>
-	<Column prop="email" title={$I('fld.email')} let:value>
+	<Column name="email" title={$I('fld.email')}>
 		<StringContent slot="filter" />
-		<Text {value}  />
+		<Text />
 	</Column>
-	<Column prop="roles" title={$I('fld.role')} let:value>
-		<Select multiple {value} {options} delimiter=" " />
+	<Column name="roles" title={$I('fld.role')}>
+		<Select multiple {options} delimiter=" " />
 	</Column>
 	<Edition edition="row" />
 </Table>

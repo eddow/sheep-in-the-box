@@ -1,16 +1,16 @@
 <script lang="ts">
 	import Code from '$sitb/components/form/Code.svelte';
 	import Editor from './Editor.svelte'
-	import { getClmnCtx } from '../utils'
+	import { getClmnCtx } from '../contexts'
 	import type { TextType } from '$sitb/constants';
 
 	export let value: string,
 		autofocus: boolean = false,
 		preview: TextType = '';
 	const { config } = getClmnCtx();
-	let prop: string;
-$:	prop = <string>$config.prop;
+	let name: string;
+$:	name = <string>$config.name;
 </script>
 <Editor {value}>
-	<Code {autofocus} bind:value name={prop} {preview} {...$$restProps} />
+	<Code {autofocus} bind:value name={name} {preview} {...$$restProps} />
 </Editor>

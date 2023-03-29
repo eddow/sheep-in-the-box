@@ -3,7 +3,7 @@
 	import { Buttons, Button, ModalForm, type ModalSaveFunction } from "svemantic";
 	import { I } from "$sitb/globals";
 	import type { LangItem } from "../lngConfig.svelte";
-	import { Editing, setEdtnCtx } from "$sitb/components/table/edition/utils";
+	import { Editing, setEdtnCtx } from "$sitb/components/table/edition/contexts";
 	import { privateStore } from "$sitb/privateStore";
 	import Preview from "$sitb/components/Preview.svelte";
 	import Code from "$sitb/components/table/edition/Code.svelte";
@@ -27,7 +27,7 @@ $:	reducedModel = model && work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: m
 	<svelte:fragment slot="header">{model?.key}</svelte:fragment>
 	<Table key="key" data={model?[model]:[]} let:row>
 		{#each nonKeyRef as lng (lng.id)}
-			<Column prop={lng.id} title="" let:value>
+			<Column name={lng.id} title="" let:value>
 				<th class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
 				</th>
@@ -35,7 +35,7 @@ $:	reducedModel = model && work.map(lng=> lng.id).reduce((p, c)=> ({...p, [c]: m
 			</Column>
 		{/each}
 		{#each work as lng (lng.id)}
-			<Column prop={lng.id} let:value>
+			<Column name={lng.id} let:value>
 				<th slot="header">
 					{#if model?.type}
 						<Button small primary={previewed[lng.id]} on:click={()=> { preview(lng); }} icon=eye />

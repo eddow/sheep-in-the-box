@@ -1,64 +1,68 @@
 <script lang="ts">
-	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext } from './utils'
-	import { writable } from "svelte/store";
+	import { privateStore } from '$sitb/privateStore';
+	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext, setCellCtx, getCellCtx } from './contexts'
 	import { I } from '$sitb/globals';
 	import { Cell, Td, Th } from 'svemantic';
-	import type { ComponentProps } from 'svelte';
+	import CellDisplay from './CellDisplay.svelte';
 
 	type T = $$Generic;
 	type keyT = keyof T & string;
 
+	const ungivenValue = {};	// unique constant
+
 	export let
-		prop: keyT|undefined = undefined,
-		title: string = '',
+		name: keyT|undefined = undefined,
+		title: string|true = true,
 		header: boolean = false,
-		html: boolean = false,
-		value: any = null,
-		collapsing: boolean = false;
-	let specRow: T|undefined = undefined;
-	export {specRow as row};
+		controls: ConstructorOfATypedSvelteComponent|undefined = undefined,
+		collapsing: boolean = false,
+		html: ((row: any)=> boolean)|boolean = false,
+		getDisplay = (x: any, row: any)=> x?.toString() || '',
+		value: any = ungivenValue,
+		cellContext: any = {};
+	let field = privateStore({name});
 	const tblSetFilter = getTblCtx().setFilter,
-	rowCtx = getRowCtx<RowContext<T>>()?.row;
-	let row: T;
-	const config = writable<any>({});
-	$: row = specRow === undefined ? $rowCtx : specRow;
-	$: value = (prop && row && (typeof row === 'object') && row[prop]) || '';
-	$: config.set({...$config, value});
-	$: config.set({...$config, prop});
-	$: config.set({...$config, title: title === undefined ? (prop && $I('fld.'+prop)) : title});
-	$: config.set({...$config, header});
-	$: config.set({...$config, html});
-	let ctx: ColumnContext = {
-		setFilter(filter: (name: any)=> boolean) {
-			console.assert(!!prop, 'A filtered column must define a `prop`')
-			tblSetFilter(prop, filter && ((row: any)=> filter(row[prop])));
-		},
-		config
-	};
-	setClmnCtx(ctx);
+		titlePrv = privateStore<string>(),
+		valuePrv = privateStore<any>(),
+		rowCtx = getRowCtx<RowContext<T>>(),
+		model = rowCtx?.model,
+		// TODO : one name/id per column, one columnContext / (table * clmn)
+		context: ColumnContext<T> = {
+			setFilter(filter: (name: any)=> boolean) {
+				console.assert(!!name, 'A filtered column must define a `name`')
+				tblSetFilter(name, filter && ((model: any)=> filter(model[name])));
+			},
+			controls,
+			html,
+			getDisplay,
+			header,
+			field: field.store,
+			title: titlePrv.store
+		};
+	setClmnCtx(context);
+	$: field.value = {name, text: $I(`fld.${name||'unnamed'}`)};
+	$: titlePrv.value = title === true ? field.value.text : title;
+	$: valuePrv.value = value === ungivenValue ? name !== undefined ? $model[name] : undefined : value;
+	setCellCtx({ value: valuePrv.store, ...cellContext });
 </script>
 {#if !rowCtx}
 	<Td class="error message">`Column` is to be used in a `Table` only</Td>
-{:else if row === specialRow.filter}
+{:else if $model === specialRow.filter}
 	<slot name="filter">
 		<Th></Th>
 	</slot>
-{:else if row === specialRow.header}
-	<slot name="header">
-		<Th scope="col">{title || prop || ''}</Th>
+{:else if $model === specialRow.header}
+	<slot name="header" title={titlePrv.value}>
+		<Th scope="col">{titlePrv.value}</Th>
 	</slot>
-{:else if row === specialRow.footer}
+{:else if $model === specialRow.footer}
 	<slot name="footer">
 		<Th scope="col" />
 	</slot>
 {:else}
-	<slot {row} {value}>
+	<slot row={$model} value={value === undefined ? name && $model[name] : value}>
 		<Cell {header} scope="row" {collapsing}>
-			{#if html}
-				{@html value}
-			{:else}
-				{value}
-			{/if}
+			<CellDisplay />
 		</Cell>
 	</slot>
 {/if}

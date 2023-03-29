@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { privateStore } from '$sitb/privateStore';
 	import { Tr } from 'svemantic';
-	import { setRowCtx } from './utils'
+	import { setRowCtx } from './contexts'
 	
 	type T = $$Generic;
 	export let
-		row: T,
+		model: T,
 		context: any = {};
-	const rowStore = privateStore<T>(row);
-	$: rowStore.value = row;
-	setRowCtx({row: rowStore.store, ...context});
+	const modelPrv = privateStore<T>(model);
+	$: modelPrv.value = model;
+	setRowCtx({model: modelPrv.store, ...context});
 </script>
 <Tr {...$$restProps}>
-	<slot {row} />
+	<slot {model} />
 </Tr>

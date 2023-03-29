@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Editor from './Editor.svelte'
-	import { getClmnCtx, getRowCtx } from '../utils'
-	import { Select, type DropdownOption } from 'svemantic';
-	import type { EditingRowContext } from './utils';
+	import { Field, Input, Select, type DropdownOption, type RulesSpec } from 'svemantic';
+	import { getCellCtx, getClmnCtx, getEdtnCtx, getRowCtx, type RowContext } from '../contexts';
 
 // TODO: multiple
 	function itmDisplay(value: string) {
@@ -15,17 +14,16 @@
 		return value.map(itmDisplay).join(textDelimiter);
 	}
 
-	const { config } = getClmnCtx(),
-		{ dialog } = getRowCtx<EditingRowContext>();
-	let prop: string;
-$:	prop = <string>$config.prop;
+	const { field } = getClmnCtx(),
+		{ value } = getCellCtx();
+		
 	export let
 		multiple: boolean = false,
 		options: DropdownOption[],
 		delimiter: string = ',',
-		value: string,
-		textDelimiter: string = ', ';
+		textDelimiter: string = ', ',
+		placeholder: string | undefined = undefined;
 </script>
-<Editor {...$$restProps} {getDisplay} {value}>
-	<Select class="collapsing" placeholder fluid={!!dialog} el={dialog ? 'div' : 'td'} {options} {multiple} name={prop} {delimiter} bind:value />
+<Editor {...$$restProps} {getDisplay}>
+	<Select class="collapsing" {placeholder} fluid {options} {multiple} name={$field.name} {delimiter} value={$value} />
 </Editor>

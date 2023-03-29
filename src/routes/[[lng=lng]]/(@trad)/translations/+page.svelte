@@ -1,25 +1,25 @@
 <script lang="ts">
+	import { ErrorNotSaved } from 'svemantic';
 	import type { DictionaryEntry } from './DictionaryEntry';
 	import { Button, Th, Td, Popup } from 'svemantic';
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
-	import Text from "$sitb/components/table/edition/Text.svelte";
+	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import { ajax, I } from "$sitb/globals";
 	import type { PageData } from "./$types";
 	import { string } from "yup";
-	import Zoom from "./zoom.svelte";
+	//import Zoom from "./zoom.svelte";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import type { Language } from '$sitb/constants';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;
-	const {Table, Column, RoColumn} = cellEditTable<DictionaryEntry>()
+	const { Table, Column, RoColumn } = cellEditTable<DictionaryEntry>()
 	let reference: LangItem[], work: LangItem[];
 	function config(cnf: {reference: LangItem[], work: LangItem[]}) {
 		reference = cnf.reference;
 		work = cnf.work;
 	}
-	const type = string();
 
 	function html(value?: string) {
 		return value === undefined;
@@ -30,9 +30,9 @@
 			value;
 	}
 
-	async function saveCB(language: string, text: string, row: any) {
-		if(row[language] !== text)
-			return await ajax.patch({key: row.key, diff: {[language]: text}});
+	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
+		const rv = await ajax.patch({key: old.key, diff});
+		if(!rv.ok) throw new ErrorNotSaved(await rv.text());
 	}
 
 	let modaled: DictionaryEntry|undefined = undefined;
@@ -56,9 +56,9 @@
 		<LngConfig {config} />
 	</Popup>
 </h1>
-<Table class="attached" compact="very" singleLine striped selectable key="key" data={dictionary} columnFilters let:row>
+<Table class="attached" compact="very" {saveCB} singleLine striped selectable key="key" data={dictionary} columnFilters>
 	{#each reference as lng (lng.id)}
-		<RoColumn prop={lng.id} title="">
+		<RoColumn name={lng.id} title="">
 			<Th collapsing class="prefix-icon" slot="header">
 				<i class={lng.icon}></i>{lng.text}
 			</Th>
@@ -66,19 +66,21 @@
 		</RoColumn>
 	{/each}
 	{#each work as lng (lng.id)}
-		<Column prop={lng.id} {saveCB} {row} let:value>
+		<Column name={lng.id} {html} {getDisplay}>
 			<Th class="prefix-icon" slot="header">
 				<i class={lng.icon}></i>{lng.text}
 			</Th>
 			<StringContent slot="filter" />
-			<Text {html} {getDisplay} placeholder="" {value} />
+			<Text placeholder="" />
 		</Column>
 	{/each}
+<!--
 	<RoColumn>
 		<th class="collapsing" slot="header" />
 		<Td>
-			<Button tiny on:click={()=> modaled = row} primary={!!row.type} icon="external alternate" />
+			<Button tiny on:click={()=> modaled = model} primary={!!model.type} icon="external alternate" />
 		</Td>
 	</RoColumn>
+-->
 </Table>
-<Zoom model={modaled} save={saveModal} {reference} {work} />
+<!--Zoom model={modaled} save={saveModal} {reference} {work} /-->

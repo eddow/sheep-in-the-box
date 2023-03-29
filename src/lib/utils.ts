@@ -15,3 +15,17 @@ export function debugProxy(o: any) {
 		}
 	});
 }
+
+export function compare(dst: any, src: any): any {
+	let rv: any = null;
+	function spec(k: string) {
+		if(!rv) rv = {};
+		rv[k] = dst[k];
+	}
+	// Finally, do not add unspecified values
+	//for(const k in dst) if(!(k in src)) spec(k);
+	for(const k in src)
+		if(JSON.stringify(src[k]) !== JSON.stringify(dst[k]))
+			spec(k);
+	return rv;
+}
