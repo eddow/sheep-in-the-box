@@ -1,14 +1,15 @@
 <script lang="ts">
 	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
-	import Table from "$sitb/components/table/edition/row/Table.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import { ajax, I } from "$sitb/globals";
 	import Select from "$sitb/components/table/edition/editor/Select.svelte";
 	import type { PageData } from "./$types";
-	import Column from "$sitb/components/table/Column.svelte";
-	import { roles } from "$sitb/constants";
+	import { roles, type UserSys } from "$sitb/constants";
 	import type { DropdownOption } from "svemantic";
+	import { rowEditTable } from "$sitb/components/table/collections";
+
+	const { Table, Column } = rowEditTable<UserSys>()
 
 	export let data: PageData;
 	let users = data.users;

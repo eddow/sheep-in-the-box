@@ -66,18 +66,18 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('r
 	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
 </h1>
 <Table class="attached" compact="very" singleLine striped selectable key="_id" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
-	<Column name="key" title={$I('fld.key')} let:value>
+	<Column name="key" title={$I('fld.key')}>
 		<StringContent slot="filter" />
 		<Text required />
 	</Column>
-	<Column name="text" title={$I('fld.text')} let:value>
+	<Column name="text" title={$I('fld.text')}>
 		<StringContent slot="filter" />
 		<Text type="area" />
 	</Column>
-	<Column name="role" title={$I('fld.role')} let:value>
+	<Column name="role" title={$I('fld.role')}>
 		<Select options={textRoles} />
 	</Column>
-	<Column name="type" title={$I('fld.type')} let:value>
+	<Column name="type" title={$I('fld.type')}>
 		<Select options={textTypeOptions} />
 	</Column>
 	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">

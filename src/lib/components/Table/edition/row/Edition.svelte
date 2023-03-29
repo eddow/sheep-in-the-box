@@ -46,7 +46,7 @@
 				<Button tiny submit primary icon="save" />
 				<Button tiny cancel color="yellow" icon="times" />
 				<slot name="row" editing={true} row={$editing} />
-				<slot name="edit-row" row={$editing} />
+				<slot name="edit-row" model={$editing} />
 			{:else}
 				{#if hasSpec(edition, 'row')}<Button tiny on:click={startEdit} icon="edit outline" />{/if}
 				{#if hasSpec(edition, 'dialog')}<Button tiny on:click={()=> editModal(row)} icon="external alternate" />{/if}

@@ -21,6 +21,7 @@ export interface User {
 }
 
 export interface UserSys {
+	_id: string;
 	email: string;
 	roles: string;
 	language: Language;

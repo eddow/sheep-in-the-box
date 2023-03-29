@@ -60,10 +60,10 @@
 	// Bug on blur->validate: field not found
 	// TODO Esc->cancel
 </script>
-<ColumnT {name} {header} {...$$restProps}>
-	<slot name="filter" slot="filter"><td></td></slot>
-	<slot name="header" slot="header" let:title {title}><th scope="col">{title}</th></slot>
-	<slot name="footer" slot="footer" />
+<ColumnT {name} {header} let:title {...$$restProps}>
+	<slot name="filter" slot="filter"><th></th></slot>
+	<slot name="header" slot="header"><th scope="col">{title}</th></slot>
+	<slot name="footer" slot="footer"><th scope="col" /></slot>
 	{#if editing.value}
 		<Form el="td" class="editor" tabular bind:form on:cancel={cancel} on:submit={submit} model={uniqued}>
 			<slot {model} {value} />
@@ -71,7 +71,7 @@
 	{:else}
 		<Cell {header} scope="row">
 			<Button tiny on:click={startEdit} icon="edit outline" primary={empty} />
-			<slot {model} {value} />
+			<slot {model} {value} {title} />
 		</Cell>
 	{/if}
 </ColumnT>

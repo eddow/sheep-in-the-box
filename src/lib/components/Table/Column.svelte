@@ -2,7 +2,7 @@
 	import { privateStore } from '$sitb/privateStore';
 	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext, setCellCtx, getCellCtx } from './contexts'
 	import { I } from '$sitb/globals';
-	import { Cell, Td, Th } from 'svemantic';
+	import { Cell } from 'svemantic';
 	import CellDisplay from './CellDisplay.svelte';
 
 	type T = $$Generic;
@@ -46,23 +46,26 @@
 	setCellCtx({ value: valuePrv.store, ...cellContext });
 </script>
 {#if !rowCtx}
-	<Td class="error message">`Column` is to be used in a `Table` only</Td>
+	<td class="error message">`Column` is to be used in a `Table` only</td>
 {:else if $model === specialRow.filter}
 	<slot name="filter">
-		<Th></Th>
+		<th></th>
 	</slot>
 {:else if $model === specialRow.header}
-	<slot name="header" title={titlePrv.value}>
-		<Th scope="col">{titlePrv.value}</Th>
+	<slot name="header">
+		<th scope="col">{titlePrv.value}</th>
 	</slot>
 {:else if $model === specialRow.footer}
-	<slot name="footer">
-		<Th scope="col" />
-	</slot>
+	<slot name="footer"><th scope="col" /></slot>
 {:else}
-	<slot row={$model} value={value === undefined ? name && $model[name] : value}>
+	<slot model={$model} value={value === undefined ? name && $model[name] : value} title={titlePrv.value}>
 		<Cell {header} scope="row" {collapsing}>
 			<CellDisplay />
 		</Cell>
 	</slot>
 {/if}
+<style lang="scss" global>
+	td.editor {
+		padding: 0 !important;
+	}
+</style>

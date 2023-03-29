@@ -22,10 +22,8 @@ export function compare(dst: any, src: any): any {
 		if(!rv) rv = {};
 		rv[k] = dst[k];
 	}
-	// Finally, do not add unspecified values
-	//for(const k in dst) if(!(k in src)) spec(k);
-	for(const k in src)
-		if(JSON.stringify(src[k]) !== JSON.stringify(dst[k]))
+	for(const k in dst)
+		if(!(k in src) || JSON.stringify(src[k]) !== JSON.stringify(dst[k]))
 			spec(k);
 	return rv;
 }
