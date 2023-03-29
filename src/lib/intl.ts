@@ -2,8 +2,6 @@ import { readable } from "svelte/store";
 import { ajax } from "./ajax";
 import type { Language, Role } from "./constants";
 import { privateStore } from "./privateStore";
-import { setLocale } from 'yup';
-import type { MessageParams } from 'yup/lib/types';
 import { i18n, i18nField } from 'svemantic';
 
 interface Dictionary {
@@ -92,55 +90,6 @@ export const I = readable<translationFunction>(x=> `[${x}]`, (set: (t: translati
 		}
 		i18nField.set(f=> f ? entry('fld.'+f) : '[no-name]');
 		set(entry);
-		function paramdErr(name: string) {
-			return (params: MessageParams)=> entry('err.'+name, params);
-		}
-		setLocale({
-			mixed: {
-				//default?: Message;
-				default: paramdErr('invalid'),
-				required: paramdErr('required')
-				/*
-				oneOf?: Message<{
-					values: any;
-				}>;
-				notOneOf?: Message<{
-					values: any;
-				}>;
-				notType?: Message;
-				defined?: Message;*/
-			},
-			string: {
-				email: paramdErr('email')
-				
-    /*length?: Message<{
-        length: number;
-    }>;
-    min?: Message<{
-        min: number;
-    }>;
-    max?: Message<{
-        max: number;
-    }>;
-    matches?: Message<{
-        regex: RegExp;
-    }>;
-    url?: Message<{
-        regex: RegExp;
-    }>;
-    uuid?: Message<{
-        regex: RegExp;
-    }>;
-    trim?: Message;
-    lowercase?: Message;
-    uppercase?: Message;*/
-			}
-			/*number?: NumberLocale
-			date?: DateLocale
-			boolean?: BooleanLocale
-			object?: ObjectLocale
-			array?: ArrayLocale*/
-		});
 	};
 	updateTexts();
 	return ()=> { updateTexts = ()=> {}; };

@@ -1,5 +1,4 @@
 import { writable, type Writable } from "svelte/store";
-import type { boolean } from "yup";
 
 interface Preference extends Writable<string|undefined> {
 	forward: (v: string)=> void;

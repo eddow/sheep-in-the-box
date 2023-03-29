@@ -4,25 +4,15 @@
 	import { Col, Input, Form, Field, Button, toast } from "svemantic";
 
 $:	if(!$user) goto('/');
-/* TODO
-	const schema = object({
-		passCur: string().required(),
-		passNew: string().required(),
-		passCnf: string().test(
-			'confirmation', $I('err.pw.conf'),
-			(value, ctx)=> value === ctx.parent.passNew
-		)
-	});*/
 	async function submit(e: CustomEvent) {
 		const { values, context } = e.detail, {passCur, passNew} = values;
-		toast({message: 'submit', class: 'success'});/*
 		let rv = await ajax.patch({passCur, passNew});
 		if(Math.floor(rv.status/100) === 4)
 			toast({message: $I('err.pw.wrong'), class: 'error'});
 		else {
 			toast({message: $I('msg.pw.changed'), class: 'success'});
 			context.reset();
-		}*/
+		}
 	}
 </script>
 

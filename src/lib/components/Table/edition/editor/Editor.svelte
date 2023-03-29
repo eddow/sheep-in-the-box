@@ -14,7 +14,7 @@
 		validate: RulesSpec|undefined = undefined;
 	let cs: string = actions ? 'left action' : '';
 </script>
-{#if $editing}
+{#if $editing && dialog !== 'actions'}
 	<Field {required} {validate} name={$field.name} label={dialog && $title}>
 		<Input class={cs} fluid={!dialog} form={edtnCtx.form}>
 			<svelte:component this={actions} />
@@ -26,8 +26,10 @@
 		<CellDisplay {getDisplay} />
 	</slot>
 {/if}
-<style lang="scss">
-	td.editor {
-		padding: 0 !important;
-	}
+<style lang="scss" global>
+td.editor .ui.input textarea {
+	min-height: 2.6em;
+	border: 0;
+	overflow-y: hidden;
+}
 </style>

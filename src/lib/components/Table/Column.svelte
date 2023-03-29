@@ -68,4 +68,9 @@
 	td.editor {
 		padding: 0 !important;
 	}
+	td.ui.form, .ui.form td {
+		.field {
+			margin: 0;
+		}
+	}
 </style>

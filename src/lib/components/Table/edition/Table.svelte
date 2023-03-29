@@ -56,9 +56,7 @@
 	<svelte:fragment slot="once">
 		<slot name="modal" model={modalModel}>
 			<ModalEdit bind:model={modalModel}>
-				{#if modalModel}
-					<slot model={modalModel} />
-				{/if}
+				<slot model={modalModel} />
 			</ModalEdit>
 		</slot>
 		<slot name="once" />

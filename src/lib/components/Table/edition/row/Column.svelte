@@ -11,7 +11,7 @@
 	interface $$Props extends ComponentProps<Column<T>> {}
 
 	const
-		{ editing } = getEdtnCtx();
+		{ editing, dialog } = getEdtnCtx();
 
 	export let
 		name: keyT|undefined = undefined,
@@ -23,7 +23,11 @@
 	<slot name="filter" slot="filter"><th></th></slot>
 	<slot name="header" slot="header"><th scope="col">{title}</th></slot>
 	<slot name="footer" slot="footer"><th scope="col" /></slot>
-	<Cell {header} scope="row" class={cs}>
+	{#if dialog}
 		<slot {title} />
-	</Cell>
+	{:else}
+		<Cell {header} scope="row" class={cs}>
+			<slot {title} />
+		</Cell>
+	{/if}
 </ColumnT>

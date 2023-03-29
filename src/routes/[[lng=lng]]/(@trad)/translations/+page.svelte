@@ -7,7 +7,6 @@
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import { ajax, I } from "$sitb/globals";
 	import type { PageData } from "./$types";
-	import { string } from "yup";
 	//import Zoom from "./zoom.svelte";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import type { Language } from '$sitb/constants';

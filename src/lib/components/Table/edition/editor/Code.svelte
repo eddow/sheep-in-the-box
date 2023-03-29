@@ -4,13 +4,8 @@
 	import { getClmnCtx } from '../contexts'
 	import type { TextType } from '$sitb/constants';
 
-	export let value: string,
-		autofocus: boolean = false,
-		preview: TextType = '';
-	const { config } = getClmnCtx();
-	let name: string;
-$:	name = <string>$config.name;
+	export let preview: TextType = '';
 </script>
-<Editor {value}>
-	<Code {autofocus} bind:value name={name} {preview} {...$$restProps} />
+<Editor>
+	TODO
 </Editor>
