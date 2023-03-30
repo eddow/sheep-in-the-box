@@ -3,7 +3,7 @@ import { authed, persistPreference } from '$sitb/server/user';
 import { languages, type Language } from "$sitb/server/objects/intl";
 import { allGroups, setSSPersistPreference } from '$sitb/user';
 import { resetDictionaries } from '$sitb/intl';
-import { flat, t } from '$sitb/server/intl';
+import { flat, i } from '$sitb/server/intl';
 import { setCookie, setSSR } from '$sitb/cookies';
 
 //TODO: 404 -> infinite reload loop
@@ -18,7 +18,7 @@ function accessible(routeId: string, user: any) {
 	return true;
 }
 
-export const handle: Handle = async ({ event, resolve }) => {
+export const handle: Handle = async ({ event, resolve })=> {
 	setSSR(event.cookies);
 	setSSPersistPreference(persistPreference);
 
@@ -34,7 +34,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	}
 	event.locals.language = <Language>llng;
 	event.locals.preferences = (user ? user.preferences : event.cookies.get('preferences')) || {};
-	event.locals.dictionary = await flat(event.locals.language, ((<string>event.locals.user?.roles)?.split(' ') || []).concat(['']));
+	event.locals.dictionary = await flat(event.locals.language, ((event.locals.user?.roles)?.split(' ') || []).concat(['']));
 	if(event.route.id && !accessible(event.route.id, user)) {
 		return new Response('"Not avail"', /^text\/html/.test(event.request.headers.get('accept') || '') ? 
 			{status: 303, headers: {location: '/'}} :
@@ -53,5 +53,5 @@ export const handleError: HandleServerError = ({error})=> {
 	if(!codes[code]) {
 		console.error(error);
 	}
-	return {message: t(codes[code] || 'err.internal'), code};
+	return {message: i(codes[code] || 'err.internal'), code};
 }

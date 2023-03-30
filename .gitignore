@@ -9,3 +9,5 @@ node_modules
 .output
 /src/svemantic
 /static/dist
+/static/modules
+/raw

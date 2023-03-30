@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Code from '$sitb/components/form/Code.svelte';
+	import Code from '$sitb/components/form/Froala.svelte';
 	import Editor from './Editor.svelte'
 	import { getClmnCtx } from '../contexts'
 	import type { TextType } from '$sitb/constants';

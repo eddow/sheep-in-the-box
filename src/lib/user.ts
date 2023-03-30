@@ -1,10 +1,11 @@
 import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
-import type { Role, Roles, User } from "./constants";
+import { roles, type Role, type Roles, type User } from "./constants";
 import { jsonCookies } from "./cookies";
 import { ajax } from "./globals";
 import { privateStore } from "./privateStore";
 import { setPrefOperations, Side } from "./preferences";
+import { redirect } from "@sveltejs/kit";
 
 export function allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	const rv = [];
@@ -73,13 +74,12 @@ const userPrefs = (preferences: Record<PropertyKey, any>)=> ({
 	});
 
 function analyseRoles(str?: string) {
-	const rv = {adm: false, trad: false, sell: false, dev: false, lgdn: false};
+	const rv: Roles = roles.reduce((p, c)=> ({...p, [c]:false}), <Roles>{});
 	if(typeof str === 'string') {
 		rv.lgdn = true;
 		if(str)
 			for(const r of str.split(' '))
-				if(r in rv)
-					rv[<Role>r] = true;
+				rv[<Role>r] = true;
 	}
 	return rv;
 }
@@ -119,6 +119,8 @@ export function setGlobalUser(userSpec: any, routeId: string | null) {
 			}
 		}, localVolatile);
 	}
-	if(routeId && !accessible(routeId))
-		goto('/');
+	if(routeId && !accessible(routeId)) {
+		if(browser) goto('/');
+		else throw redirect(302, '/');
+	}
 }

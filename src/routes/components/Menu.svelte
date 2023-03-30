@@ -11,7 +11,7 @@
 		setLanguage(<Language>e.detail);
 	}
 	let toolbox: boolean;
-	$: toolbox = $user && ['adm', 'dev', 'trad'].some((r: string)=> $user.roles[<Role>r]);
+	$: toolbox = $user && ['adm', 'dev', 'trad', 'cms'].some((r: string)=> $user.roles[<Role>r]);
 </script>
 
 <nav class="ui top fixed menu">
@@ -28,6 +28,9 @@
 						{/if}
 						{#if $user?.roles.trad}
 							<LinkItem icon="language" href="/translations">{$I('ttl.translations')}</LinkItem>
+						{/if}
+						{#if $user?.roles.cms}
+							<LinkItem icon="edit" href="/edit">{$I('ttl.content.edit')}</LinkItem>
 						{/if}
 						{#if $user?.roles.dev}
 							<div class="ui horizontal divider header"><Icon icon="code" /></div>

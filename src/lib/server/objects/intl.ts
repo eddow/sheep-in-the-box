@@ -1,5 +1,5 @@
 import { prop } from '@typegoose/typegoose';
-import { languages, textTypes, type Language, type TextType } from '../../constants';
+import { languages, textTypes, type Language, type TextType } from '$sitb/constants';
 import { map } from '../db';
 export { languages, textTypes, Language, TextType }
 
@@ -12,9 +12,6 @@ export default class Intl {
 
 	@prop({type: String, trim: true})
 	text!: string;
-
-	@prop({type: String, trim: true})
-	role!: string;
 
 	@prop({type: Number})
 	ts!: number;

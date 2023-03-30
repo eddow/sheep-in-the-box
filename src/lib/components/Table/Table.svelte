@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { Table } from 'svemantic';
 	import TableRow from './TableRow.svelte'
-	import { specialRow, setTblCtx } from './contexts'
+	import { specialRows, setTblCtx } from './contexts'
 	import { privateStore } from '$sitb/privateStore';
 	import type { ComponentProps, ComponentType } from 'svelte';
 	// ? https://www.npmjs.com/package/svelte-tiny-virtual-list
 
 	type T = $$Generic;
 	type keyT = keyof T & string;
-	const TableT = Table<T>;
+	const TableT = Table<T>,
+		specialRow = specialRows<T>();
 
 	interface $$Props extends ComponentProps<Table<T>> {
 		data: T[];

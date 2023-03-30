@@ -1,7 +1,7 @@
 import { assertNnull } from '$sitb/utils';
 import { setContext, getContext } from 'svelte';
 import type { Readable } from 'svelte/store';
-import type { FieldContext } from "svemantic";
+import type { FieldContext } from 'svemantic';
 
 const tableContextKey = Symbol('tableContext');
 const rowContextKey = Symbol('rowContext');
@@ -18,11 +18,17 @@ export function setCellCtx<T extends Partial<CellContext> = CellContext>(c: T) {
 export function getCellCtx<T extends Partial<CellContext> = CellContext>() { return assertNnull(getContext<T>(cellContextKey), 'Element in a cell'); }
 
 // Just unique objects
-export const specialRow  = {
-	header: <any>{},
-	filter: <any>{},
-	footer: <any>{}
+const specialRow  = {
+	header: {},
+	filter: {},
+	footer: {}
 }
+
+export const specialRows = <T=any>()=> ({
+	header: <T>specialRow.header,
+	filter: <T>specialRow.filter,
+	footer: <T>specialRow.footer,
+})
 
 export interface TableContext<T=any> {
 	data: Readable<T[]>;

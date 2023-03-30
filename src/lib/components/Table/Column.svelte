@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { privateStore } from '$sitb/privateStore';
-	import { specialRow, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext, setCellCtx, getCellCtx } from './contexts'
+	import { specialRows, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext, setCellCtx, getCellCtx } from './contexts'
 	import { I } from '$sitb/globals';
 	import { Cell } from 'svemantic';
 	import CellDisplay from './CellDisplay.svelte';
@@ -8,7 +8,9 @@
 	type T = $$Generic;
 	type keyT = keyof T & string;
 
-	const ungivenValue = {};	// unique constant
+	const
+		ungivenValue = {},	// unique constant
+		specialRow = specialRows<T>();
 
 	export let
 		name: keyT|undefined = undefined,

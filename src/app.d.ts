@@ -5,7 +5,7 @@ import type { Language, User } from "./lib/constants";
 declare global {
 	namespace App {
 		interface Locals {
-			user?: User;
+			user?: UserSys;
 			language: Language;
 			dictionary: Record<string, string>;
 			preferences: Record<string, unknown>;

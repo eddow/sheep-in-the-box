@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { ErrorNotSaved } from 'svemantic';
+	import { NotSaved } from 'svemantic';
 	import type { DictionaryEntry } from './DictionaryEntry';
 	import { Button, Th, Td, Popup } from 'svemantic';
 	import { cellEditTable } from "$sitb/components/table/collections";
@@ -10,6 +10,7 @@
 	//import Zoom from "./zoom.svelte";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import type { Language } from '$sitb/constants';
+	import MgtPage from '$sitb/components/MgtPage.svelte';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;
@@ -31,7 +32,7 @@
 
 	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
 		const rv = await ajax.patch({key: old.key, diff});
-		if(!rv.ok) throw new ErrorNotSaved(await rv.text());
+		if(!rv.ok) throw new NotSaved(await rv.text());
 	}
 
 	let modaled: DictionaryEntry|undefined = undefined;
@@ -48,38 +49,39 @@
 		modaled = undefined;
 	}
 </script>
-<h1 class="ui top attached centered block header">
-	{$I('ttl.translations')}
-	<Button circular icon="cog" />
-	<Popup on="click" wide="very">
-		<LngConfig {config} />
-	</Popup>
-</h1>
-<Table class="attached" compact="very" {saveCB} singleLine striped selectable key="key" data={dictionary} columnFilters>
-	{#each reference as lng (lng.id)}
-		<RoColumn name={lng.id} title="">
-			<Th collapsing class="prefix-icon" slot="header">
-				<i class={lng.icon}></i>{lng.text}
-			</Th>
-			<StringContent slot="filter" />
+<MgtPage title="ttl.translations">
+	<svelte:fragment slot="config">
+		<Button circular icon="cog" />
+		<Popup on="click" wide="very">
+			<LngConfig {config} />
+		</Popup>
+	</svelte:fragment>
+	<Table class="attached" compact="very" {saveCB} singleLine striped selectable key="key" data={dictionary} columnFilters>
+		{#each reference as lng (lng.id)}
+			<RoColumn name={lng.id} title="">
+				<Th collapsing class="prefix-icon" slot="header">
+					<i class={lng.icon}></i>{lng.text}
+				</Th>
+				<StringContent slot="filter" />
+			</RoColumn>
+		{/each}
+		{#each work as lng (lng.id)}
+			<Column name={lng.id} {html} {getDisplay}>
+				<Th class="prefix-icon" slot="header">
+					<i class={lng.icon}></i>{lng.text}
+				</Th>
+				<StringContent slot="filter" />
+				<Text placeholder="" />
+			</Column>
+		{/each}
+	<!--
+		<RoColumn>
+			<th class="collapsing" slot="header" />
+			<Td>
+				<Button tiny on:click={()=> modaled = model} primary={!!model.type} icon="external alternate" />
+			</Td>
 		</RoColumn>
-	{/each}
-	{#each work as lng (lng.id)}
-		<Column name={lng.id} {html} {getDisplay}>
-			<Th class="prefix-icon" slot="header">
-				<i class={lng.icon}></i>{lng.text}
-			</Th>
-			<StringContent slot="filter" />
-			<Text placeholder="" />
-		</Column>
-	{/each}
-<!--
-	<RoColumn>
-		<th class="collapsing" slot="header" />
-		<Td>
-			<Button tiny on:click={()=> modaled = model} primary={!!model.type} icon="external alternate" />
-		</Td>
-	</RoColumn>
--->
-</Table>
-<!--Zoom model={modaled} save={saveModal} {reference} {work} /-->
+	-->
+	</Table>
+	<!--Zoom model={modaled} save={saveModal} {reference} {work} /-->
+</MgtPage>

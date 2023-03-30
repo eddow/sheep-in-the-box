@@ -1,8 +1,9 @@
 import { readable } from "svelte/store";
 import { ajax } from "./ajax";
-import type { Language, Role } from "./constants";
+import type { Language, Role, TextType } from "./constants";
 import { privateStore } from "./privateStore";
 import { i18n, i18nField } from 'svemantic';
+import { addTree, camel2dot } from "./utils";
 
 interface Dictionary {
 	hash: any;
@@ -33,31 +34,18 @@ language.subscribe((lng: Language)=> {
 	}
 });
 
-function addTree(dst: any, src: any, prefix?: string) {
-	for(const sk in src) {
-		if(!sk) dst[prefix||''] = src[sk];
-		else {
-			const key = prefix? prefix+'.'+sk : sk;
-			if(typeof src[sk] === 'string') dst[key] = src[sk];
-			else addTree(dst, src[sk], key);
-		}
-	}
-}
-
 export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 	dictionary.roles.push(...roles);
+	i18n.set({
+		dropdown: tree.dropdown,
+		table: tree.table,
+		form: tree.form,
+		button: tree.cmd,
+	});
 	addTree(dictionary.hash, tree);
 	// TODO Whole tree => .set
 	i18n.update(old => Object.assign({}, old, {fld: tree.fld}))
 	updateTexts();
-}
-
-function camel2dot(str: string) {
-	const rex = /[A-Z]/;
-	let match: RegExpExecArray | null;
-	while(match = rex.exec(str))
-		str = str.substring(0, match.index) + '.' + match[0].toLowerCase() + str.substring(match.index+1);
-	return str;
 }
 
 export function parmed(str: string, parms?: any): string {
@@ -80,7 +68,7 @@ export function parmed(str: string, parms?: any): string {
 
 let updateTexts = ()=> {}
 type translationFunction = (key: string, parms?: any)=> string;
-export const I = readable<translationFunction>(x=> `[${x}]`, (set: (t: translationFunction)=> void)=> {
+export const I = readable<translationFunction>(x=> `[${x}]`, (set: (i: translationFunction)=> void)=> {
 	updateTexts = ()=> {
 		const hash = dictionary.hash;
 		function entry(key: string, parms?: any): string {

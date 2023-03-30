@@ -8,6 +8,7 @@
 	import { roles, type UserSys } from "$sitb/constants";
 	import type { DropdownOption } from "svemantic";
 	import { rowEditTable } from "$sitb/components/table/collections";
+	import MgtPage from "$sitb/components/MgtPage.svelte";
 
 	const { Table, Column } = rowEditTable<UserSys>()
 
@@ -20,16 +21,15 @@ $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 		await ajax.patch({...diff, _id: old._id});
 	}
 </script>
-<h1 class="ui top attached centered block header">
-	{$I('ttl.users')}
-</h1>
-<Table key="_id" data={users} columnFilters {saveCB}>
-	<Column name="email" title={$I('fld.email')}>
-		<StringContent slot="filter" />
-		<Text />
-	</Column>
-	<Column name="roles" title={$I('fld.role')}>
-		<Select multiple {options} delimiter=" " />
-	</Column>
-	<Edition edition="row" />
-</Table>
+<MgtPage title="ttl.users">
+	<Table key="_id" data={users} columnFilters {saveCB}>
+		<Column name="email" title={$I('fld.email')}>
+			<StringContent slot="filter" />
+			<Text />
+		</Column>
+		<Column name="roles" title={$I('fld.role')}>
+			<Select multiple {options} delimiter=" " />
+		</Column>
+		<Edition edition="row" />
+	</Table>
+</MgtPage>

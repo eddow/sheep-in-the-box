@@ -1,5 +1,5 @@
-import Intl, { IntlKey, type Language, type TextType } from "$sitb/server/objects/intl";
-import { map, stringIds } from "./db";
+import Intl, { IntlKey, type Language, type TextType } from "./objects/intl";
+import { map } from "./db";
 import type { Role } from "./objects/user";
 
 const dictionary = map(Intl);
@@ -7,7 +7,7 @@ const keys = map(IntlKey);
 
 // TODO - later - Cache the dictionary in RAM and reload on trad's `refresh` command or regularly
 let thisFlat: Record<string, string> = {};
-export function t(key: string) {
+export function i(key: string) {
 	return key in thisFlat ? thisFlat[key] : `[${key}]`;
 }
 /* Keys:
@@ -56,11 +56,11 @@ export function tree(flat: Record<string, string>) {
 }
 
 export async function getDevDictionary(lng: Language) {
-	return stringIds(await dictionary.aggregate([
+	return await dictionary.aggregate([
 		{$match: {lng}},
 		{$lookup: {from: 'intlkeys', localField: 'key', foreignField: 'key', as: 'keyDesc'}},
-		{$project: {key: 1, text: 1, role: {$first: '$keyDesc.role'}, type: {$first: '$keyDesc.type'}}}
-	]));
+		{$project: {_id: 0, key: 1, text: 1, role: {$first: '$keyDesc.role'}, type: {$first: '$keyDesc.type'}}}
+	]);
 }
 
 export async function getTradDictionaries(/*lngs: Language[]*/) {

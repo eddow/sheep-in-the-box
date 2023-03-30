@@ -11,11 +11,11 @@
 	import { preference, Side } from "$sitb/preferences";
 	import { user } from "$sitb/user";
 	import type { Writable } from "svelte/store";
-	import { Button, ErrorNotSaved, Modal, toast, type DropdownOption } from "svemantic";
+	import { Button, NotSaved, Modal, toast, type DropdownOption } from "svemantic";
 	import { rowEditTable } from "$sitb/components/table/collections";
+	import MgtPage from "$sitb/components/MgtPage.svelte";
 	
 	interface DictionaryEntry {
-		_id?: string
 		key: string;
 		text: string;
 		role : Role|'srv'|'';
@@ -26,26 +26,22 @@
 
 	export let data: PageData;
 	let textRoles: DropdownOption[];
-$:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
+	$: textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
 	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $user.language);
 	let dictionaries = {[$kLang || $user.language]: data.dictionary},
 		dictionary = data.dictionary;
 	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
 		const key = diff.key || old.key;
-		if(!(diff.key || old.key)) {	// Should not happen with validation
-			toast({message: $I('err.key.no'), class: 'error'});
-			return false;
-		}
+		if(!(diff.key || old.key)) throw new Error('No key given for text');
 		if(diff.key && old.key) {
 			const rv = await ajax.put({oldK: old.key, newK: diff.key});
-			if(!rv.ok) throw new ErrorNotSaved('Cannot change key');
+			if(!rv.ok) throw new NotSaved('Cannot change key');
 		}
 		const chg: Partial<DictionaryEntry> = {};
 		for(const k of <(keyof DictionaryEntry)[]>['text', 'role', 'type']) if(k in diff) chg[k] = <any>diff[k];
 		if(Object.keys(chg).length) {
 			const rv = await ajax[old.key?'patch':'post']({key, language: $kLang, ...chg});
-			if(!rv.ok) throw new ErrorNotSaved('Cannot set infos');
-			return await rv.json();
+			if(!rv.ok) throw new NotSaved('Cannot set infos');
 		}
 	}
 	async function deleteCB(row: DictionaryEntry) {
@@ -61,34 +57,33 @@ $:	textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('r
 	}
 	let textTypeOptions: DropdownOption[] = textTypes.map(ttp=> ({value: ttp, text: $I('ttp.'+(ttp || 'none'))}))
 </script>
-<h1 class="ui top attached centered block header">
-	{$I('ttl.text-keys')}
-	<Languages bind:language={$kLang} on:set-language={reloadKeys} />
-</h1>
-<Table class="attached" compact="very" singleLine striped selectable key="_id" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
-	<Column name="key" title={$I('fld.key')}>
-		<StringContent slot="filter" />
-		<Text required />
-	</Column>
-	<Column name="text" title={$I('fld.text')}>
-		<StringContent slot="filter" />
-		<Text type="area" />
-	</Column>
-	<Column name="role" title={$I('fld.role')}>
-		<Select options={textRoles} />
-	</Column>
-	<Column name="type" title={$I('fld.type')}>
-		<Select options={textTypeOptions} />
-	</Column>
-	<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
-		<svelte:fragment slot="row">
-			{#if model?.type}<Button tiny color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" ></Button>{/if}
-		</svelte:fragment>
-		<svelte:fragment slot="dialog">
-			{#if model?.type}<Button color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" >{$I('cmd.preview')}</Button>{/if}
-		</svelte:fragment>
-	</Edition>
-</Table>
+<MgtPage title="ttl.text-keys">
+	<Languages slot="config" bind:language={$kLang} on:set-language={reloadKeys} />
+	<Table class="attached" compact="very" singleLine striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
+		<Column name="key" title={$I('fld.key')}>
+			<StringContent slot="filter" />
+			<Text required />
+		</Column>
+		<Column name="text" title={$I('fld.text')}>
+			<StringContent slot="filter" />
+			<Text type="area" />
+		</Column>
+		<Column name="role" title={$I('fld.role')}>
+			<Select options={textRoles} />
+		</Column>
+		<Column name="type" title={$I('fld.type')}>
+			<Select options={textTypeOptions} />
+		</Column>
+		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
+			<svelte:fragment slot="row">
+				{#if model?.type}<Button tiny color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" ></Button>{/if}
+			</svelte:fragment>
+			<svelte:fragment slot="dialog">
+				{#if model?.type}<Button color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" >{$I('cmd.preview')}</Button>{/if}
+			</svelte:fragment>
+		</Edition>
+	</Table>
+</MgtPage>
 <Modal allowMultiple huge opened={!!previewed} on:hidden={()=> previewed = undefined}>
 	<svelte:fragment slot="header">{$I('ttl.preview')}</svelte:fragment>
 	{#if previewed}<Preview text={previewed.text} type={previewed.type} />{/if}
