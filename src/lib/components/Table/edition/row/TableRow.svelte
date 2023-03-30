@@ -11,26 +11,32 @@
 		context: any = {};
 	const editionContext = getTblCtx<AddableEditionContext<T>>(),
 		{ save, deleteRow, added, endEdit } = editionContext;
-	const editing = privateStore<Editing>($added.includes(model));
+		let t = 0;
+	const	// Weird but need 2 `const` declaration
+		editingPrv = privateStore<Editing>($added.includes(model)),
+		editing = editingPrv.store;
+		
 	let adding: boolean;
-	$: adding = $added.includes(model);
+	$: {
+		adding = $added.includes(model);
+	}
 
 	async function saveRow({detail: {values}}: CustomEvent<{values: T}>) {
 		const diff = adding ? values : compare(values, model);
-		editing.value = 'working';
+		editingPrv.value = 'working';
 		try {
+			endEdit(model, true);	// endEdit b4 save !important : remove from `added` before adding to `data`
 			await save(model, diff);
-			editing.value = false;
-			endEdit(model, true);
+			editingPrv.value = false;
 			// TODO: Ne stoppe pas l'éditopn
 		} catch(x) {
-			editing.value = true;
+			editingPrv.value = true;
 			throw x;
 		}
 	}
 	
 	function cancelRowEdit() {
-		editing.value = false;
+		editingPrv.value = false;
 		endEdit(model, false);
 	}
 
@@ -39,21 +45,21 @@
 	setRowCtx({model: modelPrv.store, ...context});
 	setEdtnCtx<RowEditionContext>({
 		dialog: false,
-		editing: editing.store,
+		editing,
 		startEdit() {
-			editing.value = true;
+			editingPrv.value = true;
 		},
 		async deleteRow() {
-			let exEditing = editing.value;
-			editing.value = 'working';
+			let exEditing = editingPrv.value;
+			editingPrv.value = 'working';
 			try { await deleteRow!(model); }
-			finally { editing.value = exEditing; }
+			finally { editingPrv.value = exEditing; }
 		}
 	});
 </script>
-{#if editing.value}
+{#if $editing || adding}
 	<Form tabular
-		primary={editing.value && !adding} positive={adding} class="edition"
+		primary={!adding} positive={adding} class="edition"
 		{...$$restProps} on:submit={saveRow} on:cancel={cancelRowEdit}
 	>
 		<slot {model} />

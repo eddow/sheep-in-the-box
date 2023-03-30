@@ -1,19 +1,16 @@
-<script lang="ts" context="module">
-	export const pageTitle = writable<string>('');
-</script>
 <script lang="ts">
-	import "svemantic";
+
+	import 'svemantic';
 	import { accessible, setGlobalUser } from "$sitb/user";
 	import Menu from './components/Menu.svelte';
 	import './styles.scss';		// TODO The CSS is cached, but something is reaallllyyy slow
 	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
 	import { beforeNavigate } from "$app/navigation";
-	import { dev } from "$app/environment";
 	import { writable } from "svelte/store";
+	import { pageTitle, styles, scripts, scriptLoaded } from '$sitb/globals';
 
 	export let data: LayoutData;
-	const min = dev? '' : '.min';
 	setGlobalUser(data.user, $page.route.id);
 	beforeNavigate(async ({to, cancel})=> {
 		if(to?.route.id && !accessible(to.route.id))
@@ -26,9 +23,12 @@
 	$: title = $pageTitle ? `${ttlHead} - ${$pageTitle}` : ttlHead;
 </script>
 <svelte:head>
-	<script src="/modules/jquery{min}.js"></script>
-	<script src="/dist/semantic{min}.js"></script>
-	<link rel="stylesheet" href="/dist/semantic{min}.css" />
+	{#each scripts as ss (ss)}
+		<script src={ss} on:load={()=> scriptLoaded(ss)}></script>
+	{/each}
+	{#each styles as style (style)}
+		<link rel="stylesheet" href={style} />
+	{/each}
 	<title>{title}</title>
 </svelte:head>
 <div class="app">

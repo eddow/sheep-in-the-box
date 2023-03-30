@@ -5,6 +5,12 @@
 	import type { LayoutData } from "./$types";
 	export let data: LayoutData;
 	
+	const slugify = (str: string) => str
+		.toLowerCase()
+		.trim()
+		.replace(/[^\w\s-]/g, '')
+		.replace(/[\s_-]+/g, '-')
+		.replace(/^-+|-+$/g, '');
 	interface Article {
 		name: string,
 		title: string,

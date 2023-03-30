@@ -44,7 +44,7 @@
 	setClmnCtx(context);
 	$: field.value = {name, text: $I(`fld.${name||'unnamed'}`)};
 	$: titlePrv.value = title === true ? field.value.text : title;
-	$: valuePrv.value = value === ungivenValue ? name !== undefined ? $model[name] : undefined : value;
+	$: valuePrv.value = value === ungivenValue ? name !== undefined ? $model?.[name] : undefined : value;
 	setCellCtx({ value: valuePrv.store, ...cellContext });
 </script>
 {#if !rowCtx}
@@ -59,7 +59,7 @@
 	</slot>
 {:else if $model === specialRow.footer}
 	<slot name="footer"><th scope="col" /></slot>
-{:else}
+{:else if $model}
 	<slot model={$model} value={value === undefined ? name && $model[name] : value} title={titlePrv.value}>
 		<Cell {header} scope="row" {collapsing}>
 			<CellDisplay />

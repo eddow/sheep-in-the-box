@@ -1,6 +1,7 @@
-import gulp from "gulp";
+import gulp from 'gulp';
+import rename from 'gulp-rename';
 
-const { src, dest, symlink } = gulp;
+const { src, dest } = gulp;
 
 export default function defaultTask(cb) {
 	console.log('loggin');
@@ -8,10 +9,15 @@ export default function defaultTask(cb) {
 }
 
 export function postinstall(cb) {
-
 	src([
 		'./node_modules/jquery/dist/jquery*.js',
-	]).pipe(dest('./static/modules'));
+		'./node_modules/file-upload-with-preview/dist/style.css'
+	])
+		.pipe(rename(path=> {
+			if(path.basename === 'style')
+				path.basename = 'file-upload-with-preview';
+		}))
+		.pipe(dest('./static/modules'));
 	cb();
 }
 

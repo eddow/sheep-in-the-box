@@ -1,42 +1,52 @@
-<script lang="ts">
-	import { onDestroy, onMount } from 'svelte';
-	import Quill from 'quill';
-
-	export let name: string;
-	const toolbarOptions = [
-		['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-		['blockquote', 'code-block'],
-
-		[{ 'header': 1 }, { 'header': 2 }],               // custom button values
-		[{ 'list': 'ordered'}, { 'list': 'bullet' }],
-		[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-		[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-		[{ 'direction': 'rtl' }],                         // text direction
-
-		[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-		[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-		[ 'link', 'image', 'video', 'formula' ],          // add's image support
-		[{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-		[{ 'font': [] }],
-		[{ 'align': [] }],
-
-		['clean']                                         // remove formatting button
-	];
-	let target: HTMLElement, container: HTMLElement, editor: any, config = {
-		modules: {
-			'toolbar': toolbarOptions
-		},
-		theme: 'snow'
-	};
-	onMount(()=> {
-		editor = new Quill(target, config);
-	});
-	onDestroy(()=> {
-		if(editor) editor.destroy();
-	});
+<script lang="ts" context="module">
+	addStyleSheet('/node_modules/summernote/dist/summernote-lite.css');
+	const scriptLoad = addScript('/node_modules/summernote/dist/summernote-lite.js');
 </script>
-<svelte:head>
-<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet">
-</svelte:head>
-<div bind:this={container}></div>
-<div bind:this={target}></div>
+<script lang="ts">
+	import { Module } from 'svemantic';
+	import 'summernote/dist/summernote-lite.css';
+	import 'summernote/dist/summernote-lite.js';
+	import { addScript, addStyleSheet } from '$sitb/globals';
+
+	// TODO: translate summernote
+	export let
+		name: string,
+		value: string = '';
+	const {module, forward} = Module('summernote'),
+		config: Summernote.Options = {
+			lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
+			toolbar: [
+				['style', ['style']],
+				['font', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+				['fontname', ['fontname', 'fontsize']],
+				['color', ['color']],
+				['para', ['ul', 'ol', 'paragraph']],
+				['insert', ['link', 'picture', 'video', 'hr', 'table']],
+				['view', ['codeview', 'help']],
+			], popover: {
+				air: <Summernote.popoverAirDef><unknown>[	// Version difference between typings and library
+					['color', ['color']],
+					['font', ['bold', 'underline', 'clear']],
+					['para', ['ul', 'paragraph']],
+					['table', ['table']],
+					['insert', ['link', 'picture']]
+				],
+				image: <Summernote.popoverImageDef><unknown>[	// Version difference between typings and library
+					['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
+					['float', ['floatLeft', 'floatRight', 'floatNone']],
+					['remove', ['removeMedia']]
+				],
+				link: [
+					['link', ['linkDialogShow', 'unlink']]
+				],
+			},
+			callbacks: {
+				onChange(contents, editable) {
+					value = contents;
+				},
+			}
+		};
+</script>
+{#await scriptLoad}
+	<textarea style="display: none;" use:module={config} {name} {value}></textarea>
+{/await}

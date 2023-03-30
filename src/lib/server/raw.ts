@@ -20,5 +20,5 @@ export async function load(hash: string) {
 		fs.readFile(join(RAW_FILES, hash)),
 		raw.findOne({hash})
 	]);
-	return {file, type: desc.type};
+	return {file, type: desc.type, hash};
 }

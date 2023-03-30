@@ -8,7 +8,10 @@ export async function GET(event: RequestEvent) {
 	return json({ok: true})
 }
 
-export async function PATCH(event: RequestEvent) {	// modify
-	/*const {key, diff} = await event.request.json();
-	return json(await setTexts(key, diff).then(x=> { if(!x) throw error(500, 'Key does not exists'); }));*/
+export async function PATCH(e: RequestEvent) {	// modify
+	const
+		{params: {article: name}} = e,
+		{lng, diff} = await e.request.json();
+	await setText(name, lng, diff);
+	return json({ok: true});
 }

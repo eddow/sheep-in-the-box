@@ -17,9 +17,11 @@ export default class Intl {
 	ts!: number;
 }
 
-let col = map(Intl).db.collections.intls;
-col.createIndex({ key: 1, lng: 1 }, { unique: true });
-col.createIndex({ lng: 1 });
+const col = map(Intl).db.collections.intls;
+if(col) {
+	col.createIndex({ key: 1, lng: 1 }, { unique: true });
+	col.createIndex({ lng: 1 });
+}
 
 export class IntlKey {
 	@prop({type: String, required: true, unique: true, trim: true})

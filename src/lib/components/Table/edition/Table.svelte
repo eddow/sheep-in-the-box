@@ -6,7 +6,7 @@
 	import Table from "../Table.svelte";
 	import ModalEdit from "./modal/ModalEdit.svelte";
 	import type { TableEditionContext } from "./contexts";
-	import type { ComponentProps } from "svelte";
+	import { createEventDispatcher, type ComponentProps } from "svelte";
 
 	type T = $$Generic;
 	type keyT = string & keyof T;
@@ -25,8 +25,8 @@
 		context = {};
 	let modalModel: Partial<T>|undefined = undefined;
 	const
+		dispatch = createEventDispatcher(),
 		edtnContext: Partial<TableEditionContext<T>> = {
-			...context,
 			deletable: !!deleteCB,
 			async save(old: T, diff: Partial<T>) {
 				const rv = await saveCB(old, diff),
@@ -35,6 +35,7 @@
 				const ndxData = data.indexOf(old);
 				if(~ndxData) data[ndxData] = row;
 				else data = [row, ...data];
+				dispatch('saved', row);
 			},
 			async deleteRow(row: T) {
 				console.assert(!!deleteCB, 'Delete called on non-deletable');
@@ -43,10 +44,12 @@
 				const ndx = data.indexOf(row);
 				if(~ndx)
 					data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
+				dispatch('deleted', row);
 			},
 			editModal(row: Partial<T>) {
 				modalModel = row;
-			}
+			},
+			...context
 		};
 </script>
 <TableT {...$$props} {data} {key} context={edtnContext} let:model>

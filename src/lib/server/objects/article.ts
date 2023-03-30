@@ -20,10 +20,12 @@ export default class Article {
 	ts!: number;
 }
 
-let art = map(Article).db.collections.articles;
-art.createIndex({ name: 1, lng: 1 }, { unique: true });
-art.createIndex({ lng: 1 });
+const art = map(Article).db.collections.articles;
+if(art) {
+	art.createIndex({ name: 1, lng: 1 }, { unique: true });
+	art.createIndex({ lng: 1 });
 
+}
 export class ArticleKey {
 	@prop({type: String, required: true, unique: true, trim: true})
 	name!: string;
@@ -42,9 +44,12 @@ export class ArticleImage {
 	@prop({type: String, required: true, trim: true})
 	name!: string;
 
-	@prop({type: String, enum: Object.keys(articleTypes)})
-	md5!: string;
+	@prop({type: String, required: true, enum: Object.keys(articleTypes)})
+	hash!: string;
+
+	@prop({type: Number})
+	ts!: number;
 }
 
-/*let img = map(Article).db.collections.articleimages;
-img.createIndex({ article: 1, name: 1 }, { unique: true });*/
+const img = map(Article).db.collections.articleimages;
+if(img) img.createIndex({ article: 1, name: 1 }, { unique: true });

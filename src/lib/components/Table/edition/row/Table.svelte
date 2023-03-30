@@ -3,6 +3,7 @@
 	import Table, { type SaveCallback } from "../Table.svelte";
 	import type { AddableEditionContext } from "./contexts";
 	import { privateStore } from "$sitb/privateStore";
+	import { model } from "mongoose";
 
 	type T = $$Generic;//<{}>;
 	type keyT = string & keyof T;
@@ -31,11 +32,17 @@
 				}
 			}
 		};
-
+	function rowDeleted(e: CustomEvent<T>) {
+		const ndx = data.indexOf(e.detail);
+		debugger;
+		if(~ndx)
+			data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
+	}
 	const castry = (x: Partial<T>[])=> <T[]>x;
 </script>
 <TableT {saveCB} key={key} {...$$props} data={castry([...addedPrv.value, ...data])}
-	rowType={TableRow} unfiltered={castry(addedPrv.value)} context={edtnContext} let:model
+	rowType={TableRow} unfiltered={castry(addedPrv.value)} context={edtnContext}
+	let:model on:deleted={rowDeleted}
 >
 	<slot {model} />
 	<slot name="header" slot="header" />

@@ -51,8 +51,8 @@
 			dialog: false,
 			actions: CellAction
 		};
-	$: empty = $model[name!] === undefined;
-	$: value = $model[name!];
+	$: empty = $model?.[name!] === undefined;
+	$: value = $model?.[name!];
 	$: uniqued = <Partial<T>>{[name!]: value};
 	let form: ((...parms: any[])=> any)|undefined;
 	$: context.form = form;
