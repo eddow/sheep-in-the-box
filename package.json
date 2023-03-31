@@ -42,6 +42,7 @@
 		"vitest": "^0.25.3"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-vercel": "^2.4.1",
 		"@typegoose/typegoose": "^9.12.1",
 		"file-upload-with-preview": "^6.0.2",
 		"fomantic-ui": "^2.9.2",
