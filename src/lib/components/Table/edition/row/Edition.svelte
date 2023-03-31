@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Column from '../../Column.svelte'
 	import { getRowCtx, getTblCtx } from '../../contexts';
-	import { type Dialog, type Editing, getEdtnCtx, type RowContext } from '../contexts';
+	import { getEdtnCtx, type RowContext } from '../contexts';
 	import { I } from '$sitb/intl';;
 	import { Popup, Button, toast, Loader } from 'svemantic';
 	import type { AddableEditionContext, RowEditionContext } from './contexts';

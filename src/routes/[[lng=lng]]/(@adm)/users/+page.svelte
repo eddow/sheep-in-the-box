@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import { ajax, I } from "$sitb/globals";
@@ -10,7 +9,7 @@
 	import { rowEditTable } from "$sitb/components/table/collections";
 	import MgtPage from "$sitb/components/MgtPage.svelte";
 
-	const { Table, Column } = rowEditTable<UserSys>()
+	const { Table, Column, Edition } = rowEditTable<UserSys>()
 
 	export let data: PageData;
 	let users = data.users;

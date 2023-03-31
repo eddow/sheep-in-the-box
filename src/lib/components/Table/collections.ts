@@ -4,6 +4,7 @@ import ReTable from "./edition/row/Table.svelte";
 import CeColumn from "./edition/cell/Column.svelte";
 import RoColumn from "./Column.svelte";
 import ReColumn from "./edition/row/Column.svelte";
+import Edition from "./edition/row/Edition.svelte";
 
 export const displayTable = <T>()=> ({
 	Table: RoTable<T>,
@@ -15,5 +16,6 @@ export const displayTable = <T>()=> ({
 }),  rowEditTable = <T>()=> ({
 	Table: ReTable<T>,
 	Column: ReColumn<T>,
-	RoColumn: RoColumn<T>
+	RoColumn: RoColumn<T>,
+	Edition: Edition<T>
 });
