@@ -9,7 +9,7 @@
 	import type { PageData } from "./$types";
 	import { page } from '$app/stores';
 	import { compare } from '$sitb/utils';
-	import Loader from '$svemantic/elements/Loader.svelte';
+	import { Loader } from 'svemantic';
 	export let data: PageData;
 	
 	interface Translation {

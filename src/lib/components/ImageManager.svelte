@@ -3,13 +3,11 @@
 	function getUniqueId() { return 'upl'+(++count); }
 </script>
 <script lang="ts">
-	import { Grid, Col, Button, ModalForm, Loader, Popup, NotSaved } from 'svemantic';
+	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved } from 'svemantic';
 	import { FileUploadWithPreview, Events } from 'file-upload-with-preview';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { ajax } from '$sitb/ajax';
 	import { browser } from '$app/environment';
-	import Field from '$svemantic/modules/form/Field.svelte';
-	import Input from '$svemantic/elements/input/Input.svelte';
 	import { I } from '$sitb/intl';
 	import { slugify } from '$sitb/utils';
 

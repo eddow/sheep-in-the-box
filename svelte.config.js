@@ -17,8 +17,8 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			$svemantic: './src/svemantic',
-			svemantic: './src/svemantic',
+			//$svemantic: './src/svemantic',
+			//svemantic: './src/svemantic',
 			$sitb: './src/lib'
 		}
 	}

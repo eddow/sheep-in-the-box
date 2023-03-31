@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { type ArticleType, type Language, articleTypes } from "$sitb/constants";
-	import Icon from "$svemantic/elements/Icon.svelte";
 	import { LinkItem, Menu } from "svemantic";
 	import type { LayoutData } from "./$types";
 	export let data: LayoutData;
