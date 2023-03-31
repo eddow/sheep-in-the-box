@@ -71,7 +71,7 @@
 					<i class={lng.icon}></i>{lng.text}
 				</Th>
 				<StringContent slot="filter" />
-				<Text placeholder="" />
+				<Text type="area" placeholder="" />
 			</Column>
 		{/each}
 	<!--

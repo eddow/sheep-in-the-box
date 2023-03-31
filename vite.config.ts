@@ -9,7 +9,7 @@ const config: UserConfig = {
 	},
 	server: {
 		fs: {
-			allow: ['./dist', '../svemantic']
+			allow: ['./dist', '../svemantic', './node_modules']
 		}
 	}
 };

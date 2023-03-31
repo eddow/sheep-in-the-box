@@ -28,7 +28,7 @@
 				editing.value = true;
 				throw x;
 			}
-		}
+		} else editing.value = false;
 	}
 
 	interface $$Props extends ComponentProps<Column<T>> {}
@@ -52,7 +52,9 @@
 			actions: CellAction
 		};
 	$: empty = $model?.[name!] === undefined;
-	$: value = $model?.[name!];
+	$: {
+		value = $model?.[name!];
+	}
 	$: uniqued = <Partial<T>>{[name!]: value};
 	let form: ((...parms: any[])=> any)|undefined;
 	$: context.form = form;

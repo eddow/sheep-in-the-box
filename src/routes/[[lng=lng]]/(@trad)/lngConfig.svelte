@@ -5,7 +5,7 @@
 		icon: string;
 		text: string;
 	}
-	const { Table, Column } = displayTable<null>();
+	const { Table, Column } = displayTable<true>();
 </script>
 <script lang="ts">
 	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
@@ -49,7 +49,7 @@ $:	allItems[0].text = $I('fld.key');
 		groups[2].noDrop = id === 'key';
 	}
 </script>
-<Table data={[null]}>
+<Table data={[true]}>
 	{#each groups as group(group.id)}
 		<Column>
 			<th slot="header" class="flags">{$I('fld.trad.grp.'+group.id)}</th>

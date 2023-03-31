@@ -30,6 +30,6 @@
 td.editor .ui.input textarea {
 	min-height: 2.6em;
 	border: 0;
-	overflow-y: hidden;
+	overflow-y: auto;
 }
 </style>
