@@ -14,10 +14,6 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			$sitb: 'src/lib'
-		},
-		files: {
-			assets: 'static',
-			node_modules: true
 		}
 	}
 };
