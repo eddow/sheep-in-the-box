@@ -20,6 +20,11 @@ const config = {
 			//$svemantic: './src/svemantic',
 			//svemantic: './src/svemantic',
 			$sitb: 'src/lib'
+		},
+		server: {
+			fs: {
+				allow: ['./dist', '../svemantic', './node_modules']
+			}
 		}
 	}
 };
