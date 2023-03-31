@@ -54,6 +54,6 @@
 		"resize-img": "^2.0.0",
 		"summernote": "^0.8.20",
 		"svelte-dnd-action": "^0.9.22",
-		"svemantic": "^0.0.1"
+		"svemantic": "^0.0.2"
 	}
 }
