@@ -5,7 +5,7 @@ const config: UserConfig = {
 	plugins: [sveltekit()],
 	server: {
 		fs: {
-			allow: ['./dist', '../svemantic']
+			allow: ['./dist']
 		}
 	}
 };
