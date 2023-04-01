@@ -20,10 +20,6 @@ const config = {
 			//$svemantic: './src/svemantic',
 			//svemantic: './src/svemantic',
 			$sitb: 'src/lib'
-		},
-		files: {
-			assets: 'static',
-			node_modules: true
 		}
 	}
 };
