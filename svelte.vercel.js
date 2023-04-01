@@ -1,6 +1,7 @@
 import adapter from '@sveltejs/adapter-auto';
 import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/kit/vite';
+import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -10,6 +11,9 @@ const config = {
 	compilerOptions: {
 		enableSourcemap: true,
 	},
+	plugins: [
+		nodeLoaderPlugin()
+	],
 	kit: {
 		adapter: adapter(),
 		alias: {
