@@ -3,8 +3,6 @@ import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
 
-console.dir(process.env);
-
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	// Consult https://github.com/sveltejs/svelte-preprocess
@@ -18,7 +16,7 @@ const config = {
 	],
 	kit: {
 		adapter: adapter(),
-		alias: process.env.server === 'vercel' ? {
+		alias: process.env.VERCEL ? {
 				$sitb: './src/lib'
 			} : {
 				$svemantic: './src/svemantic',
