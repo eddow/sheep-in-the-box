@@ -12,11 +12,11 @@
 
 	export let data: LayoutData;
 	setGlobalUser(data.user, $page.route.id);
-	beforeNavigate(async ({to, cancel})=> {
+	/*beforeNavigate(async ({to, cancel})=> {
 		if(to?.route.id && !accessible(to.route.id))
 			cancel();
 		else pageTitle.set('');
-	});
+	});*/
 
 	const ttlHead = 'SitB';
 	let title: string;

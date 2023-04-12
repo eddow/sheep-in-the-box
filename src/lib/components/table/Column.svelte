@@ -22,9 +22,11 @@
 		getDisplay = (x: any, row: any)=> x?.toString() || '',
 		value: any = ungivenValue,
 		cellContext: any = {};
-	let field = privateStore({name});
-	const tblSetFilter = getTblCtx().setFilter,
+	const
+		tblSetFilter = getTblCtx().setFilter,
 		titlePrv = privateStore<string>(),
+		textPrv = privateStore<string>(),
+		field = name === undefined ? undefined : {name, text: textPrv.store},
 		valuePrv = privateStore<any>(),
 		rowCtx = getRowCtx<RowContext<T>>(),
 		model = rowCtx?.model,
@@ -38,12 +40,12 @@
 			html,
 			getDisplay,
 			header,
-			field: field.store,
+			field,
 			title: titlePrv.store
 		};
 	setClmnCtx(context);
-	$: field.value = {name, text: $I(`fld.${name||'unnamed'}`)};
-	$: titlePrv.value = title === true ? field.value.text : title;
+	$: textPrv.value = $I(`fld.${name||'unnamed'}`);
+	$: titlePrv.value = title === true ? textPrv.value : title;
 	$: valuePrv.value = value === ungivenValue ? name !== undefined ? $model?.[name] : undefined : value;
 	setCellCtx({ value: valuePrv.store, ...cellContext });
 </script>

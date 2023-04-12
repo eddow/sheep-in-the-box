@@ -1,21 +1,26 @@
 <script lang="ts">
-	import { NotSaved } from 'svemantic';
+	import ModalEdit from '$sitb/components/table/edition/modal/ModalEdit.svelte';
+	import { Accordion, Flag, NotSaved, Page, Button, Buttons, Th, Td, Popup } from 'svemantic';
 	import type { DictionaryEntry } from './DictionaryEntry';
-	import { Button, Th, Td, Popup } from 'svemantic';
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
-	import { ajax, I } from "$sitb/globals";
+	import { ajax } from "$sitb/globals";
 	import type { PageData } from "./$types";
-	//import Zoom from "./zoom.svelte";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
-	import type { Language } from '$sitb/constants';
 	import MgtPage from '$sitb/components/MgtPage.svelte';
+	import Field from '$svemantic/modules/form/Field.svelte';
+	import Input from '$svemantic/elements/input/Input.svelte';
+	import Wysiwyg from '$sitb/components/form/Wysiwyg.svelte';
+	import { compare } from '$sitb/utils';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;
 	const { Table, Column, RoColumn } = cellEditTable<DictionaryEntry>()
-	let reference: LangItem[], work: LangItem[];
+	let reference: LangItem[],
+		work: LangItem[];
+	function nonKey(ref: LangItem[]): LangItem[]
+	{ return ref.filter(r=> r.id !== 'key'); }
 	function config(cnf: {reference: LangItem[], work: LangItem[]}) {
 		reference = cnf.reference;
 		work = cnf.work;
@@ -36,18 +41,9 @@
 	}
 
 	let modaled: DictionaryEntry|undefined = undefined;
-	async function saveModal(values: DictionaryEntry) {
-		const diff: Record<string, string> = {};
-		for(const lng in values)
-			if(values[<Language>lng] !== modaled![<Language>lng])
-				diff[lng] = values[<Language>lng];
-		if(Object.keys(diff).length) {
-			await ajax.patch({key: modaled!.key, diff});
-			Object.assign(modaled!, diff);
-			dictionary = dictionary;
-		}
-		modaled = undefined;
-	}
+	/*
+	- save
+	*/
 </script>
 <MgtPage title="ttl.translations">
 	<svelte:fragment slot="config">
@@ -56,7 +52,7 @@
 			<LngConfig {config} />
 		</Popup>
 	</svelte:fragment>
-	<Table class="attached" compact="very" {saveCB} singleLine striped selectable key="key" data={dictionary} columnFilters>
+	<Table class="attached" compact="very" {saveCB} celled striped selectable key="key" data={dictionary} columnFilters let:model>
 		{#each reference as lng (lng.id)}
 			<RoColumn name={lng.id} title="">
 				<Th collapsing class="prefix-icon" slot="header">
@@ -74,14 +70,47 @@
 				<Text type="area" placeholder="" />
 			</Column>
 		{/each}
-	<!--
 		<RoColumn>
 			<th class="collapsing" slot="header" />
 			<Td>
-				<Button tiny on:click={()=> modaled = model} primary={!!model.type} icon="external alternate" />
+				<Button tiny on:click={()=> modaled = model} primary={model?.type === 'html'} icon="external alternate" />
 			</Td>
 		</RoColumn>
-	-->
+		<ModalEdit slot="modal" bind:model={modaled}>
+			<h1 slot="header">
+				{modaled?.key}
+			</h1>
+			<Accordion exclusive={false}>
+				{#each nonKey(reference) as lng (lng.id)}
+					<Page key={lng.id}>
+						<svelte:fragment slot="header">
+							<Flag code={lng.icon} /> {lng.text}
+						</svelte:fragment>
+						{#if modaled?.type === 'html'}
+							{@html modaled?.[lng.id]}
+							<input type="hidden" name={lng.id} />
+						{:else}
+							<Field name={lng.id}><Input readonly type="area" placeholder="" /></Field>
+						{/if}
+					</Page>
+				{/each}
+				{#each work as lng (lng.id)}
+					<Page active key={lng.id}>
+						<svelte:fragment slot="header">
+							<Flag code={lng.icon} /> {lng.text}
+						</svelte:fragment>
+						{#if modaled?.type === 'html'}
+							<Wysiwyg name={lng.id} value={modaled?.[lng.id]} />
+						{:else}
+							<Field name={lng.id}><Input type="area" placeholder="" /></Field>
+						{/if}
+					</Page>
+				{/each}
+			</Accordion>
+			<Buttons slot="actions">
+				<Button tiny submit primary icon="save" />
+				<Button tiny cancel color="yellow" icon="times" />
+			</Buttons>
+		</ModalEdit>
 	</Table>
-	<!--Zoom model={modaled} save={saveModal} {reference} {work} /-->
 </MgtPage>

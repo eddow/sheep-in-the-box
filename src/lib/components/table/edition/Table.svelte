@@ -30,12 +30,12 @@
 			deletable: !!deleteCB,
 			async save(old: T, diff: Partial<T>) {
 				const rv = await saveCB(old, diff),
-					row = <T>Object.assign(<Partial<T>>old, diff);
-				if(rv !== undefined && key) row[key!] = rv;
-				const ndxData = data.indexOf(old);
-				if(~ndxData) data[ndxData] = row;
-				else data = [row, ...data];
-				dispatch('saved', row);
+					model = <T>Object.assign(<Partial<T>>old, diff);
+				if(rv !== undefined && key) model[key] = rv;
+				const ndx = data.indexOf(old);
+				if(~ndx) data[ndx] = model;
+				else data = [model, ...data];
+				dispatch('saved', {model, old});
 			},
 			async deleteRow(row: T) {
 				console.assert(!!deleteCB, 'Delete called on non-deletable');
@@ -52,7 +52,7 @@
 			...context
 		};
 </script>
-<TableT {...$$props} {data} {key} context={edtnContext} let:model>
+<TableT {...$$props} bind:data {key} context={edtnContext} let:model>
 	<slot {model} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />

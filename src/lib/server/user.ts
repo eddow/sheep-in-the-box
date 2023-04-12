@@ -143,7 +143,7 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 		parms = {'code-url': `${event.url.origin}/${event.locals.language}/user/${code}`},
 		[subject, html, text] = await Promise.all([
 			getText(`mail.${mailType}.topic`, event.locals.language),
-			getText(`mail.${mailType}.md`, event.locals.language).then(c=> markdown.toHTML(parmed(c, parms))),
+			getText(`mail.${mailType}.html`, event.locals.language).then(c=> /*markdown.toHTML(*/parmed(c, parms)/*)*/),
 			getText(`mail.${mailType}.txt`, event.locals.language).then(c=> parmed(c, parms))
 		]), mailOptions = {
 			from: SMTP_SENDER,

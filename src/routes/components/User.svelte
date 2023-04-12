@@ -56,7 +56,7 @@
 				<Header slot="header">{$I('cmd.login')}</Header>
 				<Form on:submit={login}>
 					<Field required label name="email" validate="email">
-						<Input left-icon="at" name="email" />
+						<Input type="email" left-icon="at" name="email" />
 					</Field>
 					<Field required label name="pass">
 						<Input type="password" left-icon="key" />
@@ -68,7 +68,7 @@
 				<Header slot="header">{$I('cmd.register')}</Header>
 				<Form on:submit={register}>
 					<Field label name="email" required validate="email">
-						<Input left-icon="at" name="email" />
+						<Input type="email" left-icon="at" name="email" />
 					</Field>
 					<Button primary fluid submit icon={['user', 'corner green add']}>{$I('cmd.register')}</Button>
 				</Form>

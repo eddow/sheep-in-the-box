@@ -6,10 +6,11 @@
 		{ field, html, getDisplay: clmnDisplay } = getClmnCtx(),
 		modelCtx = getRowCtx<RowContext<T>>(),
 		model = modelCtx?.model;
+	console.assert(field, 'Automatic display requires field name');
 	export let getDisplay: (x: any, row: T)=> string = x=>x;
 	let display: string, value: any;
 	$: {
-		value = $model[<keyof T>($field.name)];
+		value = $model[<keyof T>(field!.name)];
 		display = clmnDisplay(getDisplay(value, $model), $model);
 	}
 </script>

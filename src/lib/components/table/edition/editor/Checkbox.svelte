@@ -6,13 +6,11 @@
 	const { dialog } = getEdtnCtx();
 	const { field } = getClmnCtx();
 	export let value: boolean;
-	let name: string, title: string;
-$:	name = <string>$field.name;
-$:	title = <string>$field.text;
+	const {name, text: title} = field;
 // TODO always editable in cell-edit ?
 // TODO Not even tested
 </script>
 <Editor {...$$restProps}>
 	<Icon slot="display" icon={value?'check':'times'} />
-	<Checkbox bind:value name={name} label={dialog?title:''} />
+	<Checkbox bind:value name={name} label={dialog?$title:''} />
 </Editor>

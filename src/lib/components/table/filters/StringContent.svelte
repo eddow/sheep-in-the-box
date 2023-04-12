@@ -9,6 +9,11 @@ $:	setFilter(value ?
 		((v: any)=> RegExp((beginsWith?'^':'')+<string>value, caseSensitive?'':'i').test(v||'')) :
 		undefined);
 </script>
-<Th scope="col">
+<th class="string-filter" scope="col">
 	<Input fluid type="search" bind:value left-icon="search" />
-</Th>
+</th>
+<style lang="scss" global>
+	th.string-filter {
+		min-width: 9em;	// Filtering can return an empty row who makes filters unusable as they collapse without width
+	}
+</style>

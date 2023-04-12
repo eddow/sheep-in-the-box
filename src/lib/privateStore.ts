@@ -15,10 +15,7 @@ export function privateStore<T=any>(value?: any) {
 		get store() { return store; },
 		get value() { return value; },
 		set value(nv: T) {
-			if(value !== nv) {
-				value = nv;
-				set(nv);
-			}
+			set(value = nv);
 		}
 	};
 	return rv;

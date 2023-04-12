@@ -44,7 +44,7 @@ export interface ColumnContext<T=any, F=any> {
 	controls?: ConstructorOfATypedSvelteComponent
 	/** Header column, like edition/selection/... */
 	header?: boolean
-	field: FieldContext;
+	field?: FieldContext;
 	title: Readable<string>;
 	setFilter(filter?: (value: F)=> boolean): void;
 	html: ((x: F, model: T)=> boolean)|boolean;

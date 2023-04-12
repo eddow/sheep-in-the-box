@@ -59,7 +59,7 @@
 </script>
 <MgtPage title="ttl.text-keys">
 	<Languages slot="config" bind:language={$kLang} on:set-language={reloadKeys} />
-	<Table class="attached" compact="very" singleLine striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
+	<Table class="attached" compact="very" single-line striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
 		<Column name="key" title={$I('fld.key')}>
 			<StringContent slot="filter" />
 			<Text required />

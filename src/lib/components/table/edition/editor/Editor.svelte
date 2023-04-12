@@ -1,13 +1,17 @@
 <script lang="ts">
-	import { Field, Input, type RulesSpec } from 'svemantic';
+	import type { Readable } from 'svelte/store';
+
+	import { Field, Input, type FieldContext, type RulesSpec } from 'svemantic';
 	import CellDisplay from '../../CellDisplay.svelte';
 	import { getClmnCtx, getEdtnCtx } from '../contexts'
 
 	type T = $$Generic;
+
 	const
 		edtnCtx = getEdtnCtx(),
 		{ dialog, editing, actions } = edtnCtx,
-		{ field, title } = getClmnCtx();
+		{ field, title } = <{field: FieldContext, title: Readable<string>}>getClmnCtx();
+	console.assert(field, 'Automatic edition requires field name');
 	export let
 		getDisplay: (x: any, row: T)=> string = x=>x,
 		required: boolean = false,
@@ -15,7 +19,7 @@
 	let cs: string = actions ? 'left action' : '';
 </script>
 {#if $editing && dialog !== 'actions'}
-	<Field {required} {validate} name={$field.name} label={dialog && $title}>
+	<Field {required} {validate} name={field.name} label={dialog && $title}>
 		<Input class={cs} fluid={!dialog} form={edtnCtx.form}>
 			<svelte:component this={actions} />
 			<slot />

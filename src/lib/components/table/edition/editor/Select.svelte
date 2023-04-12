@@ -1,7 +1,9 @@
 <script lang="ts">
 	import Editor from './Editor.svelte'
-	import { Field, Input, Select, type DropdownOption, type RulesSpec } from 'svemantic';
+	import { Select, type DropdownOption, type RulesSpec, type FieldContext } from 'svemantic';
 	import { getCellCtx, getClmnCtx, getEdtnCtx, getRowCtx, type RowContext } from '../contexts';
+
+	type T = $$Generic;
 
 // TODO: multiple
 	function itmDisplay(value: string) {
@@ -14,9 +16,11 @@
 		return value.map(itmDisplay).join(textDelimiter);
 	}
 
-	const { field } = getClmnCtx(),
+	const
+		field = <FieldContext<T>>getClmnCtx().field,
 		{ value } = getCellCtx();
 		
+	console.assert(field, 'Automatic edition requires field name');
 	export let
 		multiple: boolean = false,
 		options: DropdownOption[],
@@ -25,5 +29,5 @@
 		placeholder: string | undefined = undefined;
 </script>
 <Editor {...$$restProps} {getDisplay}>
-	<Select class="collapsing" {placeholder} fluid {options} {multiple} name={$field.name} {delimiter} value={$value} />
+	<Select class="collapsing" {placeholder} fluid {options} {multiple} name={field.name} {delimiter} value={$value} />
 </Editor>

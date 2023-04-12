@@ -6,6 +6,8 @@
 
 	type T = $$Generic;
 
+	const FormT = Form<T>;
+
 	export let
 		model: T,
 		context: any = {};
@@ -28,7 +30,6 @@
 			endEdit(model, true);	// endEdit b4 save !important : remove from `added` before adding to `data`
 			await save(model, diff);
 			editingPrv.value = false;
-			// TODO: Ne stoppe pas l'éditopn
 		} catch(x) {
 			editingPrv.value = true;
 			throw x;
@@ -58,12 +59,13 @@
 	});
 </script>
 {#if $editing || adding}
-	<Form tabular
-		primary={!adding} positive={adding} class="edition"
+	<FormT tabular
+		positive={adding} class="edition"
 		{...$$restProps} on:submit={saveRow} on:cancel={cancelRowEdit}
+		{model}
 	>
 		<slot {model} />
-	</Form>
+	</FormT>
 {:else}
 	<tr {...$$restProps}>
 		<slot {model} />

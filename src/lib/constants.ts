@@ -27,33 +27,33 @@ export interface UserSys {
 	language: Language;
 	preferences: any;
 }
-export const textTypes = ['', 'tpl', 'html', 'md'];
-export type TextType = '' | 'tpl' | 'html' | 'md';
+export const textTypes = ['', 'tpl', 'html'];
+export type TextType = '' | 'tpl' | 'html';
 
 export interface ArticleTypeDesc {
 	icon: string,
 	color: string
 }
 export const articleTypes: Record<ArticleType, ArticleTypeDesc>  = {
-	rsrvd: {
-		icon: 'lock',
-		color: '#f00'
-	},
 	blog: {
 		icon: 'rss',
 		color: '#4ad'
 	},
-	sys: {
+	sys: {	//system
 		icon: 'cog',
 		color: '#ccc'
 	},
-	rcpt: {
+	rcp: {	// receipy
 		icon: 'book',
 		color: '#c58'
 	},
-	pres: {
+	pres: {	// presentation
 		icon: 'file image',
 		color: '#dd8'
+	},
+	ctlg: {	// catalog
+		icon: 'money bill',
+		color: '#afb'
 	}
 };
-export type ArticleType = 'rsrvd'|'blog'|'sys'|'rcpt'|'pres';
+export type ArticleType = 'blog'|'sys'|'rcp'|'pres'|'ctlg';

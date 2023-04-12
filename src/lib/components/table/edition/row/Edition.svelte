@@ -36,7 +36,7 @@
 {:else if !dialog}
 	<Column>
 		<th scope="col" slot="header">
-			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> add(creation())} color="green" icon="add" />{/if}
+			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> add(creation())} positive icon="add" />{/if}
 			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} icon={['external alternate', 'green corner add']} />{/if}
 			<slot name="header" />
 		</th>
@@ -45,7 +45,7 @@
 			{#if $editing}
 				<Button tiny submit primary icon="save" />
 				<Button tiny cancel color="yellow" icon="times" />
-				<slot name="row" editing={true} row={$editing} />
+				<slot name="row" editing={true} model={$editing} />
 				<slot name="edit-row" model={$editing} />
 			{:else}
 				{#if hasSpec(edition, 'row')}<Button tiny on:click={startEdit} icon="edit outline" />{/if}
