@@ -79,12 +79,12 @@ export async function renameImage(article: string, name: string, newName: string
 	await imgs.updateMany({article, name}, {$set: {name: newName}});
 }
 
-export async function loadFile(article: string, name: string, cachedHash: string) {
+export async function loadFile(article: string, name: string, cachedHash: string, trf?: [number, number?]) {
 	// TODO check access
 	const img = await imgs.findOne({article, name});
 	if(!img) return null;
 	if(img.hash === cachedHash) return true;
-	return load(img.hash)
+	return load(img.hash, trf);
 }
 
 export async function listFiles(article: string) {

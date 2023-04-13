@@ -22,7 +22,6 @@
 		props = {
 			proudlyDisplayPoweredByUppy : false
 		}, plugins = ["Webcam", "ImageEditor", "XHR"]
-	debugger;
 
 	const dispatch = createEventDispatcher();
 
@@ -44,7 +43,7 @@
 	onMount(async ()=> {
 		// TODO https://uppy.io/docs/locales/
 		uppy = new Uppy({
-			locale: await import('@uppy/locales/lib'+locales[$language])
+			//locale: await import('@uppy/locales/lib'+locales[$language])
 		}).use(Webcam).use(ImageEditor, {}).use(XHR, {endpoint: '/raw/'+article});
 		uppy.on('upload-success', uploadSuccess);
 		//uppy.on('upload-error', uploadError);

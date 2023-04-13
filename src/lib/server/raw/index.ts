@@ -1,9 +1,20 @@
 import md5 from 'md5';
-import { RAW_FILES }  from '$env/static/private';
+import {
+	RAW_FILES,
+	IMAGEKIT_PUBLIC, IMAGEKIT_PRIVATE, IMAGEKIT_ENDPOINT
+}  from '$env/static/private';
 
-import fsRaw from './fs';
+import fsAccess from './fs';
+import ikAccess from './imagekit';
 
-const raw: Raw.Access | undefined = RAW_FILES ? fsRaw(RAW_FILES) : undefined;
+const raw: raw.Access | undefined =
+	RAW_FILES ? fsAccess(RAW_FILES) :
+	IMAGEKIT_PUBLIC ? ikAccess({
+		publicKey: IMAGEKIT_PUBLIC,
+		privateKey: IMAGEKIT_PRIVATE,
+		urlEndpoint: IMAGEKIT_ENDPOINT
+	}) :
+	undefined;
 console.assert(raw, 'Raw file access configured');
 
 export async function save(type: string, content: Uint8Array) {
@@ -11,9 +22,7 @@ export async function save(type: string, content: Uint8Array) {
 	await raw!.save(hash, {type, content});
 	return hash;
 }
-export async function load(hash: string) {
-	const rv = await raw!.load(hash);
-	if(typeof rv === 'string') {
-		// TODO? string = redirect
-	} else return {hash, ...rv};
+export async function load(hash: string, trf?: [number, number?]) {
+	const rv = await raw!.load(hash, trf);
+	return (typeof rv === 'string')  ? rv :  {hash, ...rv};
 }
