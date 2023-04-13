@@ -5,9 +5,9 @@ import { saveFile, renameImage, deleteImg } from '$sitb/server/article';
 export async function POST(event: RequestEvent) {
 	const
 		{params: {article}} = event,
-		{name, type, content} = await event.request.json();
-	let finalName = await saveFile(article, name, type, content);
-	return json({name: finalName});
+		fd = await event.request.formData(),
+		file = fd.get('file');
+	return json({name: await saveFile(article, file.name, file.type, new Uint8Array(await file.arrayBuffer()))});
 }
 
 export async function PATCH(event: RequestEvent) {

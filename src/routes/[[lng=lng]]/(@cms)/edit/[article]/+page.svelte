@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { text } from '@sveltejs/kit';
 	import { beforeNavigate } from "$app/navigation";
-	import Wysiwyg from "$sitb/components/form/Wysiwyg.svelte";
+	import Wysiwyg from "$sitb/components/Wysiwyg.svelte";
 	import ImageManager from "$sitb/components/ImageManager.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
 	import { ajax, I, language } from "$sitb/globals";

@@ -63,10 +63,13 @@ async function availName(article, name) {
 	return name+'-'+adder;
 }
 
-export async function saveFile(article: string, name: string, type: string, content: string) {
-	const hash = await save(type, content);
-	const ts = Date.now();
-	name = await availName(article, name);
+export async function saveFile(article: string, name: string, type: string, content: Uint8Array) {
+	const
+		hash = await save(type, content),
+		ts = Date.now(),
+		names = name.split('.');
+	if(names.length > 1) names.pop();	// remove extension
+	name = await availName(article, names.join('.'));
 	await imgs.updateMany({article, name}, {$set: {hash, ts}}, {upsert: true});
 	return name;
 }

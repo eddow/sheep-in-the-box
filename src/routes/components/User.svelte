@@ -2,7 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { I, dictionary, gotTree, languageStore } from '$sitb/intl';
 	import { ajax, user } from '$sitb/globals';
-	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast } from "svemantic";
+	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 
 	const dispatch = createEventDispatcher();
 	let doneLogingIn: ()=> void;
@@ -38,6 +38,7 @@
 		if(cnt) languageStore.value = cnt;
 		dispatch('set-user', null);
 	}
+	let ppp: PopupSettings;
 </script>
 {#if $user}
 	<Dropdown class="icon button" icon="colored blue user">
@@ -49,8 +50,7 @@
 		</Menu>
 	</Dropdown>
 {:else}
-	<Button icon="user" />
-	<Popup on="click" bind:hide={doneLogingIn}>
+	<Popup bind:config={ppp} on="click" bind:hide={doneLogingIn} lastResort="bottom right">
 		<Tabs active="login" headerClass="two-items">
 			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>
@@ -75,6 +75,7 @@
 			</Page>
 		</Tabs>
 	</Popup>
+	<Button icon="user" popup={ppp} />
 {/if}
 <style lang="scss" global>
 .right-aligned {

@@ -9,7 +9,7 @@ export default function defaultTask(cb) {
 }
 
 export function postinstall(cb) {
-	src([
+	/*src([
 		'./node_modules/jquery/dist/jquery*.js',
 		'./node_modules/file-upload-with-preview/dist/style.css'
 	])
@@ -17,7 +17,7 @@ export function postinstall(cb) {
 			if(path.basename === 'style')
 				path.basename = 'file-upload-with-preview';
 		}))
-		.pipe(dest('./static/modules'));
+		.pipe(dest('./static/modules'));*/
 	cb();
 }
 

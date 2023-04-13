@@ -1,0 +1,2 @@
+
+declare module '@uppy/svelte';

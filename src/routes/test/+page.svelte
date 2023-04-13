@@ -3,13 +3,11 @@
 	 * Fine tune tables here
 	*/
 	import ModalEdit from '$sitb/components/table/edition/modal/ModalEdit.svelte';
-	import { Accordion, Button, Buttons, Th, Td, NotSaved } from 'svemantic';
+	import { Field, Input, Accordion, Button, Buttons, Th, Td, NotSaved } from 'svemantic';
 	import { cellEditTable, rowEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
-	import Field from '$svemantic/modules/form/Field.svelte';
-	import Input from '$svemantic/elements/input/Input.svelte';
 	import { browser } from '$app/environment';
 
 	interface Item {

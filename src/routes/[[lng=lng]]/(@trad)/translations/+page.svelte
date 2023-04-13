@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ModalEdit from '$sitb/components/table/edition/modal/ModalEdit.svelte';
-	import { Accordion, Flag, NotSaved, Page, Button, Buttons, Th, Td, Popup } from 'svemantic';
+	import { Input, Field, Accordion, Flag, NotSaved, Page, Button, Buttons, Th, Td, Popup } from 'svemantic';
 	import type { DictionaryEntry } from './DictionaryEntry';
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
@@ -9,10 +9,7 @@
 	import type { PageData } from "./$types";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
-	import Field from '$svemantic/modules/form/Field.svelte';
-	import Input from '$svemantic/elements/input/Input.svelte';
-	import Wysiwyg from '$sitb/components/form/Wysiwyg.svelte';
-	import { compare } from '$sitb/utils';
+	import Wysiwyg from '$sitb/components/Wysiwyg.svelte';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;

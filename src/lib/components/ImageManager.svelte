@@ -1,15 +1,28 @@
-<script lang="ts" context="module">
-	let count = 0;
-	function getUniqueId() { return 'upl'+(++count); }
-</script>
+..
 <script lang="ts">
 	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved } from 'svemantic';
-	import { FileUploadWithPreview, Events } from 'file-upload-with-preview';
 	import { createEventDispatcher, onMount } from 'svelte';
 	import { ajax } from '$sitb/ajax';
-	import { browser } from '$app/environment';
-	import { I } from '$sitb/intl';
+	import { I, language } from '$sitb/intl';
 	import { slugify } from '$sitb/utils';
+	
+    import { Dashboard } from '@uppy/svelte';
+    import Uppy, { type UppyFile } from '@uppy/core';
+    import Webcam from '@uppy/webcam';
+	import ImageEditor from '@uppy/image-editor';
+	import XHR from '@uppy/xhr-upload';
+    import '@uppy/core/dist/style.css';
+    import '@uppy/dashboard/dist/style.css';
+    import '@uppy/webcam/dist/style.css';
+	import '@uppy/image-editor/dist/style.min.css';
+    let uppy: Uppy|null = null;
+	const locales = {fr: 'fr_FR', en: 'en_US', ro: 'ro_RO'};
+
+	const
+		props = {
+			proudlyDisplayPoweredByUppy : false
+		}, plugins = ["Webcam", "ImageEditor", "XHR"]
+	debugger;
 
 	const dispatch = createEventDispatcher();
 
@@ -17,44 +30,25 @@
 		name: string;
 	}
 
-	const uid = getUniqueId();
-	let uploader: FileUploadWithPreview, editedPicture: ImgDesc|undefined = undefined, canAdd = false, adding = 0;
+	let editedPicture: ImgDesc|undefined = undefined;
 	export let article: string, list: string[];
-	onMount(()=> {
-		uploader = new FileUploadWithPreview(uid, {
-			multiple: true
-		});
-		// TODO: text { chooseFile: 'Choose file...', browse: 'Browse', label: 'Upload', selectedCount: 'files selected' }
+	function uploadSuccess(file: UppyFile|undefined, response: any) {
+		list = [...list, response.body.name];
 		
-	});
-	function checkAdd() { canAdd = !!uploader.cachedFileArray.length }
-	if(browser) {
-		window.addEventListener(Events.IMAGE_ADDED, checkAdd);
-		window.addEventListener(Events.IMAGE_DELETED, checkAdd);
-		window.addEventListener(Events.CLEAR_BUTTON_CLICKED, checkAdd);
-		window.addEventListener(Events.IMAGE_MULTI_ITEM_CLICKED, checkAdd);
 	}
-
-	function upload() {
-		adding = uploader.cachedFileArray.length;
-		for(const image of uploader.cachedFileArray) {
-			const body = {type: image.type, name: slugify(image.name.split('.')[0])};
-			const reader = new FileReader();
-			reader.readAsDataURL(image);
-			reader.onload = async (e) => {
-				const b64 = <string>e.target!.result, cNdx = b64.indexOf(',');
-				let rv = await ajax.post({
-					...body,
-					content: b64.substring(cNdx+1)
-				}, '/raw/'+article);
-				list = [...list, (await rv.json()).name];
-				--adding;
-			};
+	/* TODO? manage errors
+	function uploadError(file: UppyFile|undefined, error: any, response: any){
+		if (error.isNetworkError) {
 		}
-		uploader.resetPreviewPanel();
-		canAdd = false;
-	}
-	//let t: MouseEventHandler;
+	}*/
+	onMount(async ()=> {
+		// TODO https://uppy.io/docs/locales/
+		uppy = new Uppy({
+			locale: await import('@uppy/locales/lib'+locales[$language])
+		}).use(Webcam).use(ImageEditor, {}).use(XHR, {endpoint: '/raw/'+article});
+		uppy.on('upload-success', uploadSuccess);
+		//uppy.on('upload-error', uploadError);
+	});
 	function imgClick(e: MouseEvent) {
 		e.preventDefault();
 		const name = (<any>e.currentTarget).getAttribute('href').split('/').pop();
@@ -86,15 +80,9 @@
 	let newName: string, slugified: string;
 	$: slugified = newName && slugify(newName);
 </script>
-<svelte:head>
-	<link rel="stylesheet" href="/node_modules/file-upload-with-preview/dist/style.css" />
-</svelte:head>
 <Grid stackable doubling>
-	<Col eight>
-		<div class="custom-file-container" data-upload-id={uid}>
-			<Loader inverted loading={!!adding} />
-		</div>
-		<Button fluid primary on:click={upload} disabled={!canAdd} icon="add">Add</Button>
+	<Col eight class="unpopped-uppy">
+		{#if uppy}<Dashboard {uppy} {props} {plugins} />{/if}
 	</Col>
 	<Col eight>
 		TODO
@@ -129,18 +117,51 @@
 			<span slot="postfix" class="ui tag label">{slugified}</span>
 		</Input>
 	</Field>
-	<div class="image-preview">
+	<div class="imgr-image-preview">
 		{#if editedPicture}
 			<img src={`/${article}/${editedPicture?.name}`} alt={editedPicture?.name}>
 		{/if}
 	</div>
 </ModalForm>
-<style lang="scss">
-	.image-preview {
+<style lang="scss" global>
+	.imgr-image-preview {
 		overflow-y: auto;
 		max-height: 70vh;
 		img {
 			width: 100%;
+		}
+	}
+	.uppy-Informer,
+	.unpopped-uppy {
+		.uppy-Informer,
+		.uppy-Dashboard-AddFilesPanel,
+		.uppy-Dashboard-Item.is-ghost .uppy-Dashboard-Item-preview::before,
+		.uppy-Dashboard-FileCard,
+		.uppy-DashboardContent-panel {
+			z-index: 75;
+		}
+		.uppy-StatusBar-actions,
+		.uppy-Dashboard-serviceMsg,
+		.uppy-DashboardContent-bar {
+			z-index: 74;
+		}
+		.uppy-ProviderBrowser-viewType--grid .uppy-ProviderBrowserItem-checkbox,
+		.uppy-ProviderBrowser-viewType--unsplash .uppy-ProviderBrowserItem-checkbox,
+		.uppy-ProviderBrowser-searchFilterIcon,
+		.uppy-ProviderBrowser-searchFilterReset,
+		.uppy-Dashboard-Item-previewLink,
+		.uppy-Dashboard-Item-progress,
+		.uppy-size--md .uppy-Dashboard-Item-action--remove, .uppy-Dashboard--singleFile .uppy-Dashboard-Item-action--remove,
+		.uppy-StatusBar-content {
+			z-index: 72;
+		}
+		.uppy-ProviderBrowser-header,
+		.uppy-ProviderBrowser-headerBar,
+		.uppy-ProviderBrowser-searchFilterInput,
+		.uppy-StatusBar-progress,
+		.uppy-Dashboard-Item-previewInnerWrap::after,
+		.uppy-StatusBar {
+			z-index: 71;
 		}
 	}
 </style>

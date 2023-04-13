@@ -45,21 +45,21 @@
 		{/if}
 		<div class="item">
 			<Buttons class="user-mgt">
-				<User on:set-user />
 				<Languages language={$language} on:set-language={setLng} />
+				<User on:set-user />
 			</Buttons>
 		</div>
 	</div>
 </nav>
 <style lang="scss" global>
 .ui.buttons.user-mgt {
-	> .button:first-child {
-		border-top-left-radius: 1rem;
-		border-bottom-left-radius: 1rem;
+	> .button:first-child,
+	> .ui.dropdown.button:not(.pointing):not(.floating).active:first-child {
+		border-radius: 1em 0 0 1em;
 	}
-	> .button:last-child {
-		border-top-right-radius: 1rem;
-		border-bottom-right-radius: 1rem;
+	> .button:last-child,
+	.ui.dropdown.button:not(.pointing):not(.floating).active:last-child {
+		border-radius: 0 1em 1em 0;
 	}
 }
 </style>

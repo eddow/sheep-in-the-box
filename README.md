@@ -22,3 +22,9 @@ $ npx gulp build
 -> uninstall jquery
 
 mklink -J src\svemantic ..\svemantic\src\lib
+
+# TODO
+
+- summernote js CSR loading
+- semantic-ui & uppy z-index = 1000
+- DB gargage collection (sessions, pw recovery, ...)
