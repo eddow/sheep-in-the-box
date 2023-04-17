@@ -2,7 +2,7 @@ import md5 from 'md5';
 import {
 	RAW_FILES,
 	IMAGEKIT_PUBLIC, IMAGEKIT_PRIVATE, IMAGEKIT_ENDPOINT
-}  from '$env/static/private';
+} from '$env/static/private';
 
 import fsAccess from './fs';
 import ikAccess from './imagekit';

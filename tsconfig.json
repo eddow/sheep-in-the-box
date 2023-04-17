@@ -15,7 +15,7 @@
 			"node_modules/@types"
 		]
 	},
-	"include": ["./src/*", ".svelte-kit/ambient.d.ts", "exp-i18n.ts"],
+	"include": ["./src/*", ".svelte-kit/ambient.d.ts", "exp-svm-i18n.ts"],
 	"ts-node": {
 		"esm": true,
 		"experimentalSpecifierResolution": "node"

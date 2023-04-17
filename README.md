@@ -26,5 +26,5 @@ mklink -J src\svemantic ..\svemantic\src\lib
 # TODO
 
 - summernote js CSR loading
-- semantic-ui & uppy z-index = 1000
-- DB gargage collection (sessions, pw recovery, ...)
+- DB garbage collection (sessions, pw recovery, ...)
+- row-model -> property (not store in context) ?

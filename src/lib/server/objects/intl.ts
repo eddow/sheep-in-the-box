@@ -27,6 +27,7 @@ export class IntlKey {
 	@prop({type: String, required: true, unique: true, trim: true})
 	key!: string;
 	
+	// TODO several roles
 	@prop({type: String, trim: true})
 	role!: string;
 

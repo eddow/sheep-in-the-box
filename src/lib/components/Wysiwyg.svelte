@@ -7,7 +7,7 @@
 	const scriptLoad = addScript('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.js');
 </script>
 <script lang="ts">
-	import { Module } from 'svemantic';/*
+	import { module } from 'svemantic';/*
 	import 'summernote/dist/summernote-lite.css';
 	import 'summernote/dist/summernote-lite.js';*//*
 	import 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css';
@@ -18,7 +18,7 @@
 	export let
 		name: string,
 		value: string = '';
-	const {module, forward} = Module('summernote'),
+	const summernote = module('summernote'),
 		config: Summernote.Options = {
 			dialogsInBody: true,
 			lineHeights: ['0.2', '0.3', '0.4', '0.5', '0.6', '0.8', '1.0', '1.2', '1.4', '1.5', '2.0', '3.0'],
@@ -55,5 +55,5 @@
 		};
 </script>
 {#await scriptLoad}
-	<textarea style="display: none;" use:module={config} {name} bind:value></textarea>
+	<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
 {/await}

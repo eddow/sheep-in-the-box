@@ -43,13 +43,27 @@ export function listTexts(name: string) {
 	])
 }
 
-export async function setArticle(name: string, type: ArticleType) {
+export async function createArticle(name: string, type: ArticleType) {
 	const ts = Date.now();
-	await keys.updateMany({name}, {$set: {type, ts}}, {upsert: true});
+	return (await keys.insertMany([{name, type, ts}]))[0]._id;
+}
+
+export async function deleteArticle(name: string) {
+	// TODO! delete images
+	return await Promise.all([
+		content.deleteMany({name}),
+		keys.deleteMany({name})
+	]);
+}
+
+export async function setArticle(name: string, diff: any) {
+	diff.ts = Date.now();
+	// TODO! change name in texts and images
+	await keys.findOneAndUpdate({name}, {$set: diff});
 }
 
 export async function setText(name: string, lng: Language, diff: Record<string, string>) {
-	await content.updateMany({name, lng}, {$set: diff}, {upsert: true});
+	await content.findOneAndUpdate({name, lng}, {$set: diff}, {upsert: true});
 }
 
 async function exists(article: string, name: string) {

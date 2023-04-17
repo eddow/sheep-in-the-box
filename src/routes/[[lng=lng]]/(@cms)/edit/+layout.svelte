@@ -4,6 +4,8 @@
 	import type { LayoutData } from "./$types";
 	import { I } from "$sitb/intl";
 	import { Keys, slugify } from "$sitb/utils";
+	import { ajax } from "$sitb/globals";
+	import { goto } from "$app/navigation";
 	export let data: LayoutData;
 	
 	interface Article {
@@ -15,6 +17,11 @@
 	const articles: Article[] = data.list;
 	let createModel: Partial<Article>|undefined = undefined;
 	function create() { createModel = {}; }
+	async function submit({detail: {values}}: CustomEvent) {
+		const name = slugify(values.name);
+		await ajax.post({type: values.type, name});
+		goto('/edit/'+name);	// TODO: False when another article is already selected
+	}
 	const types = Keys(articleTypes).map(k=> ({
 		value: k,
 		text: $I('artcl.type.'+k),	// TODO? reactive
@@ -25,7 +32,7 @@
 <div class="main-page toc">
 	<Menu vertical>
 		<Button on:click={create} fluid positive icon="add">{$I('cmd.artcl.new')}</Button>
-		<ModalForm model={createModel}>
+		<ModalForm model={createModel} on:submit={submit}>
 			<svelte:fragment slot="header">
 				{$I('ttl.new.elipsis')}
 				<Field required class="inline-block" name="type"><Select placeholder={$I('fld.artcl.type')} transparent options={types} /></Field>

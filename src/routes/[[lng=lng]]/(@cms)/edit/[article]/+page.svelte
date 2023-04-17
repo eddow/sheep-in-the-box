@@ -36,7 +36,7 @@
 		if(diff) {
 			loadings[values.lng] = true;
 			try {
-				ajax.patch({lng: values.lng, diff});
+				ajax.post({lng: values.lng, diff});
 			} finally {
 				loadings[values.lng] = false;
 			}

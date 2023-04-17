@@ -61,6 +61,7 @@
 		"mongoose": "~6.7.2",
 		"nodemailer": "^6.8.0",
 		"summernote": "^0.8.20",
-		"svelte-dnd-action": "^0.9.22"
+		"svelte-dnd-action": "^0.9.22",
+		"svemantic": "^0.0.3"
 	}
 }
