@@ -3,7 +3,7 @@ import type { IModelOptions } from '@typegoose/typegoose/lib/types';
 import { connect } from 'mongoose';
 //import { Collection, type Document } from "mongodb";
 import { MONGODB_URI }  from "$env/static/private";
-
+console.log(MONGODB_URI)
 await connect(MONGODB_URI!);
 /*
 export let db: Db;
