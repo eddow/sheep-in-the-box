@@ -49,10 +49,19 @@
 			},
 			callbacks: {
 				onChange(contents, editable) {
-					value = contents;
+					if(!settingCode)
+						value = contents;
 				},
 			}
 		};
+	let settingCode = false;
+	$: try {
+		settingCode = true;
+		summernote('reset');
+		summernote('code', value);
+	} finally {
+		settingCode = false;
+	}
 </script>
 {#await scriptLoad}
 	<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>

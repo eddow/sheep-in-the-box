@@ -20,6 +20,7 @@ export async function getArticle(name: string, lng: Language, sys: boolean = fal
 }
 
 export function listArticles(lng: Language) {
+	// TODO useless `title`
 	return keys.aggregate([
 		{$match: {type: {$ne: 'rsrvd'}}},
 		{$lookup: {from: 'articles', localField: 'name', foreignField: 'name', as: 'lngs'}},

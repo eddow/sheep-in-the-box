@@ -17,13 +17,16 @@
 		title?: string;
 		text?: string;
 	}
-	const texts = <Translation[]>data.texts;
-	let article: string;
-	article = $page.params.article;
+	let texts: Translation[],
+		article: string;
+	$: {
+		article = $page.params.article;
+		texts = <Translation[]>data.texts;
+		for(const lng in languages)
+			if(!texts.find((t: Translation)=> t.lng === lng))
+				texts.push({lng: <Language>lng});
+	}
 
-	for(const lng in languages)
-		if(!texts.find((t: Translation)=> t.lng === lng))
-			texts.push({lng: <Language>lng});
 	/* TODO Manage dirtiness
 	beforeNavigate(async ({to, cancel})=> {
 		toast(to === null ? 'null': 'not')

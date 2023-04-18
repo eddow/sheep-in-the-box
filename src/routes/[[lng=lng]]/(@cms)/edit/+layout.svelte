@@ -10,17 +10,20 @@
 	
 	interface Article {
 		name: string,
-		title: string,
 		lngs: Language[],
 		type: ArticleType
 	}
-	const articles: Article[] = data.list;
+	let articles: Article[];
+	$: articles = data.list;
 	let createModel: Partial<Article>|undefined = undefined;
 	function create() { createModel = {}; }
 	async function submit({detail: {values}}: CustomEvent) {
-		const name = slugify(values.name);
-		await ajax.post({type: values.type, name});
-		goto('/edit/'+name);	// TODO: False when another article is already selected
+		const name = slugify(values.name), article = {type: values.type, name};
+		const rv = await ajax.post(article, '/edit');
+		if(rv.status === 200) {
+			articles = [{lngs: [], ...article}, ...articles];
+			goto('/edit/'+name);
+		}
 	}
 	const types = Keys(articleTypes).map(k=> ({
 		value: k,

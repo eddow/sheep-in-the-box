@@ -1,4 +1,3 @@
-..
 <script lang="ts">
 	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved } from 'svemantic';
 	import { createEventDispatcher, onMount } from 'svelte';
