@@ -49,18 +49,13 @@
 			},
 			callbacks: {
 				onChange(contents, editable) {
-					if(!settingCode)
-						value = contents;
+					contentValue = value = contents;
 				},
 			}
 		};
-	let settingCode = false;
-	$: try {
-		settingCode = true;
-		summernote('reset');
-		summernote('code', value);
-	} finally {
-		settingCode = false;
+	let contentValue: string = value;
+	$: if(contentValue !== value) {
+		summernote('code', value || '');
 	}
 </script>
 {#await scriptLoad}

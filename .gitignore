@@ -12,3 +12,4 @@ node_modules
 /static/modules
 /raw
 .vercel
+.vscode/settings.json

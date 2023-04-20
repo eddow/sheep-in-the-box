@@ -51,7 +51,7 @@
 			</Buttons>
 		</ModalForm>
 		{#each articles as article}
-			<LinkItem href={'/edit/'+article.name} icon={articleTypes[article.type].icon}>{article.name}</LinkItem>
+			<LinkItem href={'/edit/'+article.name} icon={articleTypes[article.type].icon} text={article.name} />
 		{/each}
 	</Menu>
 </div>

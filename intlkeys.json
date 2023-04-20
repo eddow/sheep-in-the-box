@@ -1,0 +1,771 @@
+[{
+  "_id": {
+    "$oid": "642d817da59016a8893b1409"
+  },
+  "key": "cmd.register",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140a"
+  },
+  "key": "role.none",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140b"
+  },
+  "key": "role.dev",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140c"
+  },
+  "key": "role.adm",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140d"
+  },
+  "key": "role.lgdn",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140e"
+  },
+  "key": "role.trad",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b140f"
+  },
+  "key": "err.key.dup",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1410"
+  },
+  "key": "fld.key",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1411"
+  },
+  "key": "fld.text",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1412"
+  },
+  "key": "fld.role",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1413"
+  },
+  "key": "cmd.pw.new",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1414"
+  },
+  "key": "ttl.pw.new",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1415"
+  },
+  "key": "err.pw.conf",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1416"
+  },
+  "key": "msg.mail-sent",
+  "role": "",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1417"
+  },
+  "key": "err.pw.wrong",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1418"
+  },
+  "key": "msg.pw.changed",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1419"
+  },
+  "key": "cmd.configure",
+  "role": "lgdn",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141a"
+  },
+  "key": "cmd.logout",
+  "role": "lgdn",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141b"
+  },
+  "key": "cmd.login",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141c"
+  },
+  "key": "cmd.save",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141d"
+  },
+  "key": "cmd.preview",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141e"
+  },
+  "key": "err.login",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b141f"
+  },
+  "key": "err.internal",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1420"
+  },
+  "key": "msg.delete-key",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1421"
+  },
+  "key": "cmd.delete",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1422"
+  },
+  "key": "ttl.text-keys",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1423"
+  },
+  "key": "fld.template",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1424"
+  },
+  "key": "ttl.preview",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1425"
+  },
+  "key": "mail.register.html",
+  "role": "srv",
+  "type": "html"
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1426"
+  },
+  "key": "role.srv",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1427"
+  },
+  "key": "mail.chg-pw.html",
+  "role": "srv",
+  "type": "html"
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1428"
+  },
+  "key": "mail.register.txt",
+  "role": "srv",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1429"
+  },
+  "key": "mail.chg-pw.txt",
+  "role": "srv",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142a"
+  },
+  "key": "mail.register.topic",
+  "role": "srv",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142b"
+  },
+  "key": "mail.chg-pw.topic",
+  "role": "srv",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142c"
+  },
+  "key": "ttl.pw.set",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142d"
+  },
+  "key": "fld.pass",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142e"
+  },
+  "key": "fld.pass.new",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b142f"
+  },
+  "key": "fld.pass.cur",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1430"
+  },
+  "key": "fld.pass.cnf",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1431"
+  },
+  "key": "err.pw.code",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1432"
+  },
+  "key": "msg.pw.code",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1433"
+  },
+  "key": "cmd.pw",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1434"
+  },
+  "key": "fld.type",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1435"
+  },
+  "key": "fld.email",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1436"
+  },
+  "key": "mnu.db-dld",
+  "role": "dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1437"
+  },
+  "key": "ttl.translations",
+  "role": "trad",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1438"
+  },
+  "key": "fld.trad.grp.unused",
+  "role": "trad",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1439"
+  },
+  "key": "fld.trad.grp.ref",
+  "role": "trad",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143a"
+  },
+  "key": "fld.trad.grp.work",
+  "role": "trad",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143b"
+  },
+  "key": "ttl.config",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143c"
+  },
+  "key": "ttl.users",
+  "role": "adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143d"
+  },
+  "key": "dropdown.addResult",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143e"
+  },
+  "key": "dropdown.count",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b143f"
+  },
+  "key": "dropdown.maxSelections",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1440"
+  },
+  "key": "dropdown.noResults",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1441"
+  },
+  "key": "table.empty",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1442"
+  },
+  "key": "form.text.and",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1443"
+  },
+  "key": "form.text.unspecifiedRule",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1444"
+  },
+  "key": "form.text.unspecifiedField",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1445"
+  },
+  "key": "form.text.leavingMessage",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1446"
+  },
+  "key": "form.prompt.range",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1447"
+  },
+  "key": "form.prompt.maxValue",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1448"
+  },
+  "key": "form.prompt.minValue",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1449"
+  },
+  "key": "form.prompt.empty",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144a"
+  },
+  "key": "form.prompt.checked",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144b"
+  },
+  "key": "form.prompt.email",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144c"
+  },
+  "key": "form.prompt.url",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144d"
+  },
+  "key": "form.prompt.regExp",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144e"
+  },
+  "key": "form.prompt.integer",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b144f"
+  },
+  "key": "form.prompt.decimal",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1450"
+  },
+  "key": "form.prompt.number",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1451"
+  },
+  "key": "form.prompt.is",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1452"
+  },
+  "key": "form.prompt.isExactly",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1453"
+  },
+  "key": "form.prompt.not",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1454"
+  },
+  "key": "form.prompt.notExactly",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1455"
+  },
+  "key": "form.prompt.contain",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1456"
+  },
+  "key": "form.prompt.containExactly",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1457"
+  },
+  "key": "form.prompt.doesntContain",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1458"
+  },
+  "key": "form.prompt.doesntContainExactly",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1459"
+  },
+  "key": "form.prompt.minLength",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145a"
+  },
+  "key": "form.prompt.exactLength",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145b"
+  },
+  "key": "form.prompt.maxLength",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145c"
+  },
+  "key": "form.prompt.size",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145d"
+  },
+  "key": "form.prompt.match",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145e"
+  },
+  "key": "form.prompt.different",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b145f"
+  },
+  "key": "form.prompt.creditCard",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1460"
+  },
+  "key": "form.prompt.minCount",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1461"
+  },
+  "key": "form.prompt.exactCount",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1462"
+  },
+  "key": "form.prompt.maxCount",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1463"
+  },
+  "key": "form.prompt.addErrors",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1464"
+  },
+  "key": "cmd.or",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1465"
+  },
+  "key": "cmd.ok",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1466"
+  },
+  "key": "cmd.cancel",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1467"
+  },
+  "key": "cmd.close",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1468"
+  },
+  "key": "fld.title",
+  "role": "cms",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b1469"
+  },
+  "key": "ttl.content.edit",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b146a"
+  },
+  "key": "err.already-name",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b146b"
+  },
+  "key": "cmd.rename",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "642d817da59016a8893b146c"
+  },
+  "key": "ttl.images",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d6e149bb3ad6ea4f49f24"
+  },
+  "key": "cmd.artcl.new",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d6e2c9bb3ad6ea4f49f2c"
+  },
+  "key": "ttl.new.elipsis",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d6e4d9bb3ad6ea4f49f34"
+  },
+  "key": "fld.artcl.type",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d6e689bb3ad6ea4f49f3c"
+  },
+  "key": "artcl.type.blog",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d702f9bb3ad6ea4f49f44"
+  },
+  "key": "artcl.type.rcp",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d70339bb3ad6ea4f49f4c"
+  },
+  "key": "artcl.type.sys",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d70599bb3ad6ea4f49f54"
+  },
+  "key": "artcl.type.pres",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d706f9bb3ad6ea4f49f5c"
+  },
+  "key": "artcl.type.ctlg",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d707b9bb3ad6ea4f49f64"
+  },
+  "key": "fld.name",
+  "role": "",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "643d70c59bb3ad6ea4f49f73"
+  },
+  "key": "cmd.create",
+  "role": "",
+  "type": ""
+}]
