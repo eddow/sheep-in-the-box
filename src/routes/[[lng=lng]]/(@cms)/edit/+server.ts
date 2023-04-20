@@ -3,7 +3,7 @@ import { createArticle } from '$sitb/server/article';
 import type { RequestEvent } from './$types';
 
 export async function POST(e: RequestEvent) {	// create
-	const {name, type} = await e.request.json();
-	await createArticle(name, type);
+	const {slug, type} = await e.request.json();
+	await createArticle(slug, type);
 	return json({ok: true});
 }

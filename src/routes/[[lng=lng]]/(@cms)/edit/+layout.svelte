@@ -9,7 +9,7 @@
 	export let data: LayoutData;
 	
 	interface Article {
-		name: string,
+		slug: string,
 		lngs: Language[],
 		type: ArticleType
 	}
@@ -18,11 +18,11 @@
 	let createModel: Partial<Article>|undefined = undefined;
 	function create() { createModel = {}; }
 	async function submit({detail: {values}}: CustomEvent) {
-		const name = slugify(values.name), article = {type: values.type, name};
+		const slug = slugify(values.name), article = {type: values.type, slug};
 		const rv = await ajax.post(article, '/edit');
 		if(rv.status === 200) {
 			articles = [{lngs: [], ...article}, ...articles];
-			goto('/edit/'+name);
+			goto('/edit/'+slug);
 		}
 	}
 	const types = Keys(articleTypes).map(k=> ({
@@ -51,7 +51,7 @@
 			</Buttons>
 		</ModalForm>
 		{#each articles as article}
-			<LinkItem href={'/edit/'+article.name} icon={articleTypes[article.type].icon} text={article.name} />
+			<LinkItem href={'/edit/'+article.slug} icon={articleTypes[article.type].icon} text={article.slug} />
 		{/each}
 	</Menu>
 </div>

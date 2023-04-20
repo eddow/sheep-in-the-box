@@ -1,6 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"compilerOptions": {
+		"declaration": true,
 		"esModuleInterop": true,
 		"experimentalDecorators": true,
 		"emitDecoratorMetadata": true,
@@ -13,9 +14,10 @@
 		"strict": true,
 		"typeRoots": [
 			"node_modules/@types"
-		]
+		],
+		"baseUrl": "."
 	},
-	"include": ["./src/*", ".svelte-kit/ambient.d.ts", "exp-svm-i18n.ts"],
+	"include": ["./src/*", ".svelte-kit/ambient.d.ts", "exp-svm-i18n.ts", "mikro-orm.config.ts"],
 	"ts-node": {
 		"esm": true,
 		"experimentalSpecifierResolution": "node"

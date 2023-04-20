@@ -16,7 +16,7 @@
 
 <nav class="ui top fixed menu">
 	<div class="item">
-		SitB
+		<a href="/">SitB</a>
 	</div>
 	<div class="right menu">
 		{#if toolbox}

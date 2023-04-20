@@ -22,7 +22,12 @@ export async function save(type: string, content: Uint8Array) {
 	await raw!.save(hash, {type, content});
 	return hash;
 }
+
 export async function load(hash: string, trf?: [number, number?]) {
 	const rv = await raw!.load(hash, trf);
 	return (typeof rv === 'string')  ? rv :  {hash, ...rv};
+}
+
+export async function remove(hash: string) {
+	return raw!.remove(hash);
 }

@@ -1,5 +1,6 @@
+import { error } from "@sveltejs/kit";
 import ImageKit from "imagekit";
-import { ImageKitOptions } from 'imagekit/dist/libs/interfaces';
+import type { ImageKitOptions } from 'imagekit/dist/libs/interfaces';
 
 const path = '/sitb/';
 export default function ikAccess(options: ImageKitOptions) : raw.Access {
@@ -21,6 +22,15 @@ export default function ikAccess(options: ImageKitOptions) : raw.Access {
 					...(trf[1] ? {height: trf[1]} : {})
 				} : {})
 			})
+		},
+		async remove(hashes: string[]) {
+			const files = await Promise.all(hashes.map(name=> imagekit.listFiles({path, name})));
+			const fileIds = files.map(f=> f[0]?.fileId).filter(f=> f);
+			// Split fileIds in chunks of 100
+			const chunks: string[][] = [];
+			for(let i=0; i<fileIds.length; i+=100)
+				chunks.push(fileIds.slice(i, i+100));
+			await Promise.all(chunks.map(ids=> imagekit.bulkDeleteFiles(ids)));
 		}
 	}
 }

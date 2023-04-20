@@ -11,5 +11,6 @@ node_modules
 /static/dist
 /static/modules
 /raw
+/temp
 .vercel
 .vscode/settings.json

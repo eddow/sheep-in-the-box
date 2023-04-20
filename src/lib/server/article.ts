@@ -1,74 +1,66 @@
-import Article, { ArticleKey, type Language, type ArticleType, ArticleImage } from "./objects/article";
-import { map } from "./db";
-import { save, load } from './raw';
+import { Article, ArticleText, ArticleImage } from "../entities/article";
+import type { Language, ArticleType } from '$sitb/constants';
+import em from "./db";
+import { save, load, remove } from './raw';
 import { error } from "@sveltejs/kit";
+import { PopulateHint, serialize, wrap } from "@mikro-orm/core";
 
-const content = map(Article);
-const keys = map(ArticleKey);
-const imgs = map(ArticleImage);
+const
+	articles = em.getRepository(Article),
+	texts = em.getRepository(ArticleText),
+	images = em.getRepository(ArticleImage);
 
-export async function getArticle(name: string, lng: Language, sys: boolean = false) {
-	const system = sys ? [] :
-		[{$lookup: {from: 'articlekeys', localField: 'name', foreignField: 'name', as: 'lngs', pipeline: [
-			{$match: {type: {$nin: ['rsrvd'/*, 'sys'*/]}}}
-		]}}];
-	return (await content.aggregate([
-		{$match: {name, lng}},
-		...system,
-		{$project: {_id: 0, title: 1, text: 1}}
-	]))[0];
+export async function listArticles(lng: Language) {
+	return serialize(await articles.findAll());
 }
 
-export function listArticles(lng: Language) {
-	// TODO useless `title`
-	return keys.aggregate([
-		{$match: {type: {$ne: 'rsrvd'}}},
-		{$lookup: {from: 'articles', localField: 'name', foreignField: 'name', as: 'lngs'}},
-		{$unwind:  {path: '$lngs', preserveNullAndEmptyArrays: true}},
-		{$project: {_id: 0, name: 1, type: 1, lng: '$lngs.lng'}},
-		{$group: {_id: '$name', type: {$min: '$type'}, lngs: {$push: '$lng'}}},
-		{$project: {_id: 0, name: '$_id', type: 1, lngs: 1}},
-		{$lookup: {
-			from: 'articles', localField: 'name', foreignField: 'name', as: 'titles',
-			pipeline: [{$match: {lng}}]
-		}},
-		{$project: {_id: 0, name: 1, type: 1, lngs: 1, title: '$titles.title'}},
-		{$unwind: {path: '$title', preserveNullAndEmptyArrays: true}},
-	]);
+export async function createArticle(slug: string, type: ArticleType) {
+	return await em.persistAndFlush(articles.create({slug, type}));
 }
 
-export function listTexts(name: string) {
-	return content.aggregate([
-		{$match: {name}},
-		{$project: {_id: 0, lng: 1, title: 1, text: 1}},
-	])
+export async function editArticle(slug: string) {
+	const rv = serialize(await articles.findOneOrFail({slug}, {populate: true}), {
+		populate: ['texts', 'images'],
+		exclude: ['texts.article', 'images.article']
+	});
+	console.dir(rv.texts, {depth: 10});
+	return {
+		...rv,
+		images: rv.images.map(img => img.name)
+	}
 }
 
-export async function createArticle(name: string, type: ArticleType) {
-	const ts = Date.now();
-	return (await keys.insertMany([{name, type, ts}]))[0]._id;
+export async function setText(slug: string, lng: Language, diff: Record<string, string>) {
+	const article = await articles.findOneOrFail({slug});
+	await em.upsert(ArticleText, {article: article._id, lng, ...diff});
 }
 
-export async function deleteArticle(name: string) {
-	// TODO! delete images
+export async function getArticle(slug: string, lng: Language) {
+	// TODO check access
+	const article = await articles.findOne({slug})
+	if(!article) return false;
+	const text = await texts.findOne({article: article._id, lng}, {fields: ['title', 'text']});
+	return text && serialize(text);
+}
+
+export async function deleteArticle(slug: string) {
+	const article = await articles.findOneOrFail({slug}, {populate: true}),
+		hashes = article.images.getItems().map(img => img.hash);
 	return await Promise.all([
-		content.deleteMany({name}),
-		keys.deleteMany({name})
+		articles.removeAndFlush(article),
+		garbageCollect(hashes)
 	]);
 }
 
-export async function setArticle(name: string, diff: any) {
-	diff.ts = Date.now();
-	// TODO! change name in texts and images
-	await keys.findOneAndUpdate({name}, {$set: diff});
+export async function setArticle(slug: string, diff: any) {
+	// TODO? createQueryBulder -> one-liner
+	const article = await articles.findOneOrFail({slug});
+	wrap(article).assign(diff);
+	await em.persistAndFlush(article);
 }
 
-export async function setText(name: string, lng: Language, diff: Record<string, string>) {
-	await content.findOneAndUpdate({name, lng}, {$set: diff}, {upsert: true});
-}
-
-async function exists(article: string, name: string) {
-	return !!await imgs.findOne({article, name});
+async function exists(article: Article, name: string) {
+	return !!await images.count({article: article._id, name});
 }
 
 async function availName(article, name) {
@@ -78,41 +70,46 @@ async function availName(article, name) {
 	return name+'-'+adder;
 }
 
-export async function saveFile(article: string, name: string, type: string, content: Uint8Array) {
+export async function saveFile(slug: string, name: string, type: string, content: Uint8Array) {
 	const
 		hash = await save(type, content),
-		ts = Date.now(),
 		names = name.split('.');
-	if(names.length > 1) names.pop();	// remove extension
-	name = await availName(article, names.join('.'));
-	await imgs.updateMany({article, name}, {$set: {hash, ts}}, {upsert: true});
+	// remove extension
+	if(names.length > 1) names.pop();
+	
+	const article = await articles.findOneOrFail({slug});
+	name = await availName(article._id, names.join('.'));
+	await em.persistAndFlush(images.create({article: article._id, name, hash}));
 	return name;
 }
 
-export async function renameImage(article: string, name: string, newName: string) {
+export async function renameImage(slug: string, name: string, newName: string) {
+	const article = await articles.findOneOrFail({slug});
 	if(await exists(article, newName)) throw error(400, 'Already exists');
-	await imgs.updateMany({article, name}, {$set: {name: newName}});
+	const img = await images.findOneOrFail({article: article._id, name});
+	img.name = newName;
+	await em.persistAndFlush(img);
 }
 
-export async function loadFile(article: string, name: string, cachedHash: string, trf?: [number, number?]) {
+export async function loadFile(slug: string, name: string, cachedHash: string, trf?: [number, number?]) {
 	// TODO check access
-	const img = await imgs.findOne({article, name});
-	if(!img) return null;
+	const article = await articles.findOneOrFail({slug});
+	const img = await images.findOneOrFail({article: article._id, name});
 	if(img.hash === cachedHash) return true;
 	return load(img.hash, trf);
 }
 
-export async function listFiles(article: string) {
-	const lst = await imgs.aggregate([
-		{$match: {article}},
-		{$project: {_id: 0, name: 1}},
+export async function deleteImg(slug: string, name: string) {
+	const article = await articles.findOneOrFail({slug});
+	const img = await images.findOneOrFail({article: article._id, name});
+	await Promise.all([
+		images.removeAndFlush(img),
+		garbageCollect([img.hash])
 	]);
-	return lst.map(x=> x.name);
 }
 
-// TODO garbage collector
-export async function deleteImg(article: string, name: string) {
-	let newName = await availName('', name);
-	const ts = Date.now();
-	await imgs.updateMany({article, name}, {$set: {article: '', name: newName, ts}});
+async function garbageCollect(hashes: string[]) {
+	const imgs = await images.find({hash: {$in: hashes}}, {fields: ['hash']});
+	const found = new Set<string>(imgs.map(img => img.hash));
+	await Promise.all(hashes.filter(hash => !found.has(hash)).map(hash => remove(hash)));
 }

@@ -25,6 +25,7 @@ mklink -J src\svemantic ..\svemantic\src\lib
 
 # TODO
 
+- Data returned from `load` while rendering /[[lng=lng]]/(@cms)/edit/[article] is not serializable: Cannot stringify arbitrary non-POJOs (data.list[0].texts[0])
 - summernote js CSR loading
 - DB garbage collection (sessions, pw recovery, ...)
 - row-model -> property (not store in context) ?

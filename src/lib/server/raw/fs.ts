@@ -18,6 +18,12 @@ export default function fsAccess(path: string) : raw.Access {
 				raw.findOne({hash})
 			]);
 			return {content, type: desc.type};
+		},
+		async remove(hash: string) {
+			await Promise.all([
+				fs.unlink(join(path, hash)),
+				raw.deleteMany({hash})
+			]);
 		}
 	}
 }

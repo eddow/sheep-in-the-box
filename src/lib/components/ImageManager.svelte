@@ -4,7 +4,7 @@
 	import { ajax } from '$sitb/ajax';
 	import { I, language } from '$sitb/intl';
 	import { slugify } from '$sitb/utils';
-	
+
     import { Dashboard } from '@uppy/svelte';
     import Uppy, { type UppyFile } from '@uppy/core';
     import Webcam from '@uppy/webcam';
@@ -31,8 +31,7 @@
 	let editedPicture: ImgDesc|undefined = undefined;
 	export let article: string, list: string[];
 	function uploadSuccess(file: UppyFile|undefined, response: any) {
-		list = [...list, response.body.name];
-		
+		list = [...list, response.body.name];		
 	}
 	/* TODO? manage errors
 	function uploadError(file: UppyFile|undefined, error: any, response: any){

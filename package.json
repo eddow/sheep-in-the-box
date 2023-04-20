@@ -13,6 +13,9 @@
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
 		"format": "prettier --plugin-search-dir . --write ."
 	},
+	"mikro-orm": {
+		"useTsNode": true
+	},
 	"devDependencies": {
 		"@fontsource/fira-mono": "^4.5.10",
 		"@neoconfetti/svelte": "^1.0.0",
@@ -42,6 +45,12 @@
 		"vitest": "^0.25.3"
 	},
 	"dependencies": {
+		"@mikro-orm/cli": "^5.6.16",
+		"@mikro-orm/core": "^5.6.16",
+		"@mikro-orm/migrations-mongodb": "^5.6.16",
+		"@mikro-orm/mongo-highlighter": "^1.0.0",
+		"@mikro-orm/mongodb": "^5.6.16",
+		"@mikro-orm/reflection": "^5.6.16",
 		"@sveltejs/adapter-vercel": "^2.4.1",
 		"@typegoose/typegoose": "^9.12.1",
 		"@uppy/image-editor": "^2.1.1",
@@ -50,6 +59,7 @@
 		"@uppy/url": "^3.3.0",
 		"@uppy/webcam": "^3.3.0",
 		"@uppy/xhr-upload": "^3.1.1",
+		"dotenv": "^16.0.3",
 		"fomantic-ui": "^2.9.2",
 		"gulp": "^4.0.2",
 		"gulp-rename": "^2.0.0",
@@ -60,6 +70,7 @@
 		"md5": "^2.3.0",
 		"mongoose": "~6.7.2",
 		"nodemailer": "^6.8.0",
+		"reflect-metadata": "^0.1.13",
 		"summernote": "^0.8.20",
 		"svelte-dnd-action": "^0.9.22",
 		"svemantic": "^0.0.3"
