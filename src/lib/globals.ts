@@ -4,7 +4,7 @@ export { user } from "./user";
 import { browser, dev } from "$app/environment";
 import { writable } from "svelte/store";
 
-import { app } from "$svemantic";
+import { app } from "svemantic";
 import { page } from '$app/stores';
 
 if(browser) page.subscribe(p=> {
