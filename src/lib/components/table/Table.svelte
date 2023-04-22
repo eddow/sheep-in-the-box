@@ -50,7 +50,6 @@
 $:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');	// Indexes are not a good key as they change while filtering
 $:	displayedData = data.filter((model: T)=>
 		unfiltered.includes(model) || Array.from(filters.values()).every(filter=> filter(model)))
-	// TODO Forward classes & styles
 </script>
 <TableT {...$$restProps}>
 	<thead>

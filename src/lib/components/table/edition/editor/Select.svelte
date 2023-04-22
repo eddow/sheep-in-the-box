@@ -5,7 +5,6 @@
 
 	type T = $$Generic;
 
-// TODO: multiple
 	function itmDisplay(value: string) {
 		const itm = options.find(o=> o.value === value);
 		return itm?.display || itm?.text || value;

@@ -3,7 +3,7 @@
 	import { Input, Field, Button, Buttons, LinkItem, Menu, ModalForm, Select } from "svemantic";
 	import type { LayoutData } from "./$types";
 	import { I } from "$sitb/intl";
-	import { Keys, slugify } from "$sitb/utils";
+	import { slugify } from "$sitb/utils";
 	import { ajax } from "$sitb/globals";
 	import { goto } from "$app/navigation";
 	export let data: LayoutData;
@@ -25,11 +25,11 @@
 			goto('/edit/'+slug);
 		}
 	}
-	const types = Keys(articleTypes).map(k=> ({
+	const types = Object.entries(articleTypes).map(([k, v])=> ({
 		value: k,
 		text: $I('artcl.type.'+k),	// TODO? reactive
-		icon: articleTypes[k].icon,
-		color: articleTypes[k].color
+		icon: v.icon,
+		color: v.color
 	}));
 </script>
 <div class="main-page toc">

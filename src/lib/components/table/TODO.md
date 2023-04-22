@@ -1,0 +1,5 @@
+- one name/id per column, one columnContext / (table * clmn)
+  - new: "ColumnContainer" (="TableDef") who contains the def and allows generated numbering for unnamed columns
+  - Table(=root) stores column contexts per id~name
+- `model` -> prop instead of context store
+- Read generated content' tree to check not (for ex.) to generate all rows in the modal form, ...

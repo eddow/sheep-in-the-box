@@ -29,3 +29,4 @@ mklink -J src\svemantic ..\svemantic\src\lib
 - summernote js CSR loading
 - DB garbage collection (sessions, pw recovery, ...)
 - row-model -> property (not store in context) ?
+- on:beforeUnload generic management - listenable ?

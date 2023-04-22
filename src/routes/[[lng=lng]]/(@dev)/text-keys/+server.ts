@@ -15,7 +15,7 @@ export async function POST(event: RequestEvent) {	// create
 		return json(await create(language, key, text, role, type));
 	} catch(x: any) {
 		if(x.code == 11000)
-			throw error(400, await i('err.key.dup'));
+			throw error(400, i('err.key.dup'));
 		throw x;
 	}
 }
@@ -23,7 +23,7 @@ export async function POST(event: RequestEvent) {	// create
 export async function PUT(event: RequestEvent) {	// rename key
 	const {oldK, newK} = await event.request.json();
 	const krv = await renameKey(oldK, newK);
-	if(!krv) throw error(400, await i('err.key.dup'));
+	if(!krv) throw error(400, i('err.key.dup'));
 	return json(krv);
 }
 

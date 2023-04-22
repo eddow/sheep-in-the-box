@@ -10,7 +10,8 @@
 	const
 		edtnCtx = getEdtnCtx(),
 		{ dialog, editing, actions } = edtnCtx,
-		{ field, title } = <{field: FieldContext, title: Readable<string>}>getClmnCtx();
+		{ field, title } = getClmnCtx(),
+		{ name } = field || {name: ''};
 	console.assert(field, 'Automatic edition requires field name');
 	export let
 		getDisplay: (x: any, row: T)=> string = x=>x,
@@ -19,7 +20,7 @@
 	let cs: string = actions ? 'left action' : '';
 </script>
 {#if $editing && dialog !== 'actions'}
-	<Field {required} {validate} name={field.name} label={dialog && $title}>
+	<Field {required} {validate} {name} label={dialog && $title}>
 		<Input class={cs} fluid={!dialog} form={edtnCtx.form}>
 			<svelte:component this={actions} />
 			<slot />

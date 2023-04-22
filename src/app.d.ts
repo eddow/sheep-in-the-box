@@ -10,10 +10,5 @@ declare global {
 			dictionary: Record<string, string>;
 			preferences: Record<string, unknown>;
 		}
-		
-		interface Error {
-			message: string;
-			code: string;
-		}
 	}
 }

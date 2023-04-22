@@ -3,14 +3,17 @@
 	import { Checkbox, Icon } from 'svemantic';
 	import { getClmnCtx, getEdtnCtx } from '../contexts';
 
-	const { dialog } = getEdtnCtx();
-	const { field } = getClmnCtx();
+	const
+		{ dialog } = getEdtnCtx();
+	const
+		{ field, title } = getClmnCtx(),
+		{ name } = field || {name: ''};
+	console.assert(field, 'Automatic edition requires field name');
 	export let value: boolean;
-	const {name, text: title} = field;
-// TODO always editable in cell-edit ?
-// TODO Not even tested
+// TODO always editable in cell-edit -> no ' Editor'
+// TODO Not even tested/used
 </script>
 <Editor {...$$restProps}>
 	<Icon slot="display" icon={value?'check':'times'} />
-	<Checkbox bind:value name={name} label={dialog?$title:''} />
+	<Checkbox bind:value {name} label={dialog?$title:''} />
 </Editor>

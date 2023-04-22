@@ -8,8 +8,6 @@ import { setCookie, setSSR } from '$sitb/cookies';
 import em from '$sitb/server/db';
 import { RequestContext } from '@mikro-orm/core';
 
-//TODO: 404 -> infinite reload loop
-
 // Version when `user.roles` is still a string
 function accessible(routeId: string, user: any) {
 	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))

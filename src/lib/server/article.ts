@@ -3,7 +3,7 @@ import type { Language, ArticleType } from '$sitb/constants';
 import em from "./db";
 import { save, load, remove } from './raw';
 import { error } from "@sveltejs/kit";
-import { PopulateHint, serialize, wrap } from "@mikro-orm/core";
+import { serialize, wrap } from "@mikro-orm/core";
 
 const
 	articles = em.getRepository(Article),
@@ -17,8 +17,13 @@ export async function listArticles(lng: Language) {
 export async function createArticle(slug: string, type: ArticleType) {
 	return await em.persistAndFlush(articles.create({slug, type}));
 }
-
-export async function editArticle(slug: string) {
+export interface ArticleEditon {
+	slug: string;
+	type: ArticleType;
+	texts: {lng: Language, title: string, text: string}[];
+	images: string[];
+}
+export async function editArticle(slug: string): Promise<ArticleEditon> {
 	const rv = serialize(await articles.findOneOrFail({slug}, {populate: true}), {
 		populate: ['texts', 'images'],
 		exclude: ['texts.article', 'images.article']
@@ -63,7 +68,7 @@ async function exists(article: Article, name: string) {
 	return !!await images.count({article: article._id, name});
 }
 
-async function availName(article, name) {
+async function availName(article: Article, name: string) {
 	if(!await exists(article, name)) return name;
 	let adder = 2;
 	while(await exists(article, name+'-'+adder)) ++adder;
@@ -78,14 +83,14 @@ export async function saveFile(slug: string, name: string, type: string, content
 	if(names.length > 1) names.pop();
 	
 	const article = await articles.findOneOrFail({slug});
-	name = await availName(article._id, names.join('.'));
+	name = await availName(article, names.join('.'));
 	await em.persistAndFlush(images.create({article: article._id, name, hash}));
 	return name;
 }
 
 export async function renameImage(slug: string, name: string, newName: string) {
 	const article = await articles.findOneOrFail({slug});
-	if(await exists(article, newName)) throw error(400, 'Already exists');
+	if(await exists(article, newName)) throw error(400, 'Name already exists');
 	const img = await images.findOneOrFail({article: article._id, name});
 	img.name = newName;
 	await em.persistAndFlush(img);

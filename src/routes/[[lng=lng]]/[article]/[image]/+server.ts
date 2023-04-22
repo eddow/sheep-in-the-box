@@ -7,8 +7,8 @@ export async function GET(e: RequestEvent) {
 	const
 		inm = e.request.headers.get('If-None-Match'),
 		{params: {article, image}, url: {search}} = e,
-		trf = search && search.substr(1).split('x').map(x=> +x),
-		rv = await loadFile(article, image, inm, trf);
+		trf = search ? <[number, number]>search.substring(1).split('x').map(x=> +x) : undefined,
+		rv = await loadFile(article, image, inm||'', trf);
 	if(rv === true) throw redirect(304, 'Hash cached');
 	if(typeof rv === 'string') throw redirect(302, rv);
 	if(!rv) throw error(404, article+'/'+image);
@@ -16,7 +16,7 @@ export async function GET(e: RequestEvent) {
 	if(trf) {
 		const
 			[width, height] = trf,
-			image = await Jimp.read(content);
+			image = await Jimp.read(Buffer.from(content));
 		await image.resize(width, height || Jimp.AUTO);
 		content = await image.getBufferAsync(Jimp.MIME_JPEG);
 		type = 'image/jpeg';

@@ -40,7 +40,6 @@
 	export let
 		name: keyT|undefined = undefined,
 		header: boolean = false;
-	// TODO? Have a prop-given `value` when `name` is undefined
 	console.assert(name, 'Name is compulsory for cell-edit columns')
 	let empty = false, uniqued: Partial<T> = {}, value: any;
 	const
@@ -60,7 +59,7 @@
 	$: context.form = form;
 	setEdtnCtx(context);
 	// Bug on blur->validate: field not found
-	// TODO Esc->cancel
+	// TODO Esc->cancel-edit
 </script>
 <ColumnT {name} {header} let:title {...$$restProps}>
 	<slot name="filter" slot="filter"><th></th></slot>

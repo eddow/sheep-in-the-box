@@ -3,7 +3,7 @@
 	import 'svemantic';
 	import { accessible, setGlobalUser } from "$sitb/user";
 	import Menu from './components/Menu.svelte';
-	import './styles.scss';		// TODO The CSS is cached, but something is reaallllyyy slow
+	//import './styles.scss';
 	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
 	import { beforeNavigate } from "$app/navigation";

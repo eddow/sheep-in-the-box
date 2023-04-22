@@ -26,7 +26,6 @@
 		}
 	}
 	setRowCtx({model: modelPrv.store});
-	// TODO Let `ModalForm` in `edition/Table`, managing `save` and only customize content
 </script>
 <ModalForm {save} huge bind:model>
 	<slot name="header" slot="header" />

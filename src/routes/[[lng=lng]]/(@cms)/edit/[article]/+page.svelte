@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { Article, ArticleText } from '$sitb/entities/article.ts';
 	import { beforeNavigate } from "$app/navigation";
 	import Wysiwyg from "$sitb/components/Wysiwyg.svelte";
 	import ImageManager from "$sitb/components/ImageManager.svelte";
@@ -16,12 +15,12 @@
 		title?: string;
 		text?: string;
 	}
-	let article: Article;
+	let article: typeof data.article;
 	$: {
 		article = data.article;
-		for(const lng in languages)
+		if(article) for(const lng in languages)
 			if(!article.texts.find((t: Translation)=> t.lng === lng))
-				article.texts.push({lng: <Language>lng});
+				article.texts.push({lng: <Language>lng, title: '', text: ''});
 	}
 
 	/* TODO Manage dirtiness
@@ -30,7 +29,7 @@
 		//cancel();
 	});*/
 	async function submit({detail: {values}}: CustomEvent<{values: Translation}>) {
-		const org = article.texts.find((t: ArticleText)=> t.lng === values.lng);
+		const org = article!.texts.find(t=> t.lng === values.lng);
 		console.assert(!!org, 'Language found');
 		const diff = compare(values, org);
 		if(diff) {
@@ -45,30 +44,34 @@
 	const loadings: Partial<Record<Language, boolean>> = {};
 
 </script>
-<Tabs active={$language}>
-	<Page key="imgs">
-		<svelte:fragment slot="header">
-			<Icon icon="images outline" /> {$I('ttl.images')}
-		</svelte:fragment>
-		<ImageManager article={article.slug} list={article.images} />
-	</Page>
-	{#each article.texts as text}
-		<Page key={text.lng}>
+{#if !article}
+	<p>{$I('msg.article-not-found')}</p>
+{:else}
+	<Tabs active={$language}>
+		<Page key="imgs">
 			<svelte:fragment slot="header">
-				<Flag code={flag(text.lng)} /> {languages[text.lng]}
+				<Icon icon="images outline" /> {$I('ttl.images')}
 			</svelte:fragment>
-			<Form model={text} on:submit={submit}>
-				<Loader inverted loading={!!loadings[text.lng]} />
-				<input type="hidden" name="lng" value={text.lng} />
-				<Field name="title">
-					<Input>
-						<Button slot="left-action" icon="save" submit primary>{$I('cmd.save')}</Button>
-					</Input>
-				</Field>
-				<Field name="text">
-					<Wysiwyg name="text" value={text.text} />
-				</Field>
-			</Form>
+			<ImageManager article={article.slug} list={article.images} />
 		</Page>
-	{/each}
-</Tabs>
+		{#each article.texts as text}
+			<Page key={text.lng}>
+				<svelte:fragment slot="header">
+					<Flag code={flag(text.lng)} /> {languages[text.lng]}
+				</svelte:fragment>
+				<Form model={text} on:submit={submit}>
+					<Loader inverted loading={!!loadings[text.lng]} />
+					<input type="hidden" name="lng" value={text.lng} />
+					<Field name="title">
+						<Input>
+							<Button slot="left-action" icon="save" submit primary>{$I('cmd.save')}</Button>
+						</Input>
+					</Field>
+					<Field name="text">
+						<Wysiwyg name="text" value={text.text} />
+					</Field>
+				</Form>
+			</Page>
+		{/each}
+	</Tabs>
+{/if}
