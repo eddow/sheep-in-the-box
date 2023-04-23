@@ -1,8 +1,8 @@
 import { readable } from "svelte/store";
 import { ajax } from "./ajax";
-import type { Language, Role, TextType } from "./constants";
+import { languages, type Language, type Role, type TextType } from "./constants";
 import { privateStore } from "./privateStore";
-import { i18n, i18nField } from 'svemantic';
+import { i18n, i18nField,  } from 'svemantic';
 import { addTree, camel2dot } from "./utils";
 
 interface Dictionary {
@@ -41,6 +41,7 @@ export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 		table: tree.table,
 		form: tree.form,
 		button: tree.cmd,
+		code: languages[languageStore.value].code
 	});
 	addTree(dictionary.hash, tree);
 	// TODO Whole tree => .set

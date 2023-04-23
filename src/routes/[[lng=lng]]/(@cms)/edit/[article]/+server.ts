@@ -1,14 +1,16 @@
-import { json } from '@sveltejs/kit';
-import { deleteArticle, setArticle, setText } from '$sitb/server/article';
+import { error, json } from '@sveltejs/kit';
+import { deleteArticle, saveFile, setArticle, setText } from '$sitb/server/article';
 import type { RequestEvent } from './$types';
 
-export async function GET(event: RequestEvent) {
-	debugger;
-	
-	return json({ok: true})
+export async function POST({params: {article}, request}: RequestEvent) {	// Upload image
+	const
+		fd = await request.formData(),
+		file = <File | null>fd.get('file');
+	return file ?
+		json({name: await saveFile(article, file.name, file.type, new Uint8Array(await file.arrayBuffer()))}) :
+		error(400, 'No file');
 }
-
-export async function POST(e: RequestEvent) {	// modify texts
+export async function PUT(e: RequestEvent) {	// modify texts
 	const
 		{params: {article}} = e,
 		{lng, diff} = await e.request.json();

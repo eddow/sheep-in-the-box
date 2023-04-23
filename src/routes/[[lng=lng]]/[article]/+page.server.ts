@@ -1,13 +1,8 @@
 import { getArticle } from '$sitb/server/article';
 
-export async function load({parent, params: {article}, locals: {language}}: any) {
-	const data = await parent(),
-		articles = await getArticle(article, language);
+export async function load({params: {article: slug}, locals: {language}}: any) {
 	return {
-		...data,
-		...(articles ? {
-			article: articles.text,
-			title: articles.title
-		} : {})
+		slug,
+		article: await getArticle(slug, language)
 	};
 }

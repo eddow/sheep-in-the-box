@@ -1,7 +1,16 @@
 export const languages = {
-	en: 'English',
-	fr: 'Français',
-	ro: 'Română'
+	en: {
+		code: 'en-GB',
+		text: 'English'
+	},
+	fr: {
+		code: 'fr-FR',
+		text: 'Français'
+	},
+	ro: {
+		code: 'ro-RO',
+		text: 'Română'
+	}
 } as const;
 
 export const articleTypes = {

@@ -4,6 +4,7 @@
 
 	export let language: Language;
 	const languagesDesc: Record<string, any> = {};
-	for(const l in languages) languagesDesc[l] = flags[l] ? {flag: flags[l], text: languages[<Language>l]} : languages[<Language>l];
+	for(const [l, d] of Object.entries(languages))
+		languagesDesc[l] = flags[d.code] ? {flag: flags[d.code], text: d.text} : d.text;
 </script>
 <Languages class="icon blue button" languages={languagesDesc} bind:language on:set-language />

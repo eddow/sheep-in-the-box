@@ -3,20 +3,17 @@
 	import 'svemantic';
 	import { accessible, setGlobalUser } from "$sitb/user";
 	import Menu from './components/Menu.svelte';
-	//import './styles.scss';
+	import './styles.scss';
 	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
-	import { beforeNavigate } from "$app/navigation";
 	import { writable } from "svelte/store";
 	import { pageTitle, styles, scripts, scriptLoaded } from '$sitb/globals';
+	import Nf404 from '$sitb/components/Nf404.svelte';
 
 	export let data: LayoutData;
-	setGlobalUser(data.user, $page.route.id);
-	/*beforeNavigate(async ({to, cancel})=> {
-		if(to?.route.id && !accessible(to.route.id))
-			cancel();
-		else pageTitle.set('');
-	});*/
+	setGlobalUser(data.user);
+	let pageFound: boolean;
+	$: pageFound = accessible($page.route.id);
 
 	const ttlHead = 'SitB';
 	let title: string;
@@ -32,9 +29,13 @@
 	<title>{title}</title>
 </svelte:head>
 <div class="app">
-	<Menu on:set-user={e=> setGlobalUser(e.detail, $page.route.id)} />
+	<Menu on:set-user={e=> setGlobalUser(e.detail)} />
 	<div class="main">
-		<slot />
+		{#if pageFound}
+			<slot />
+		{:else}
+			<Nf404 />
+		{/if}
 	</div>
 </div>
 <style lang="scss" global>

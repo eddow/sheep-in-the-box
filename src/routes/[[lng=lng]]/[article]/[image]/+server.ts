@@ -9,9 +9,9 @@ export async function GET(e: RequestEvent) {
 		{params: {article, image}, url: {search}} = e,
 		trf = search ? <[number, number]>search.substring(1).split('x').map(x=> +x) : undefined,
 		rv = await loadFile(article, image, inm||'', trf);
+	if(!rv) throw error(404, article+'/'+image);
 	if(rv === true) throw redirect(304, 'Hash cached');
 	if(typeof rv === 'string') throw redirect(302, rv);
-	if(!rv) throw error(404, article+'/'+image);
 	let {content, type} = rv;
 	if(trf) {
 		const

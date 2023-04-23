@@ -13,15 +13,13 @@ export function debugProxy(o: any) {
 	});
 }
 
-export function compare(dst: any, src: any): any {
-	let rv: any = null;
-	function spec(k: string) {
-		if(!rv) rv = {};
-		rv[k] = dst[k];
-	}
+export function compare<T>(dst: T, src: Partial<T>) {
+	let rv: Partial<T>|false = false;
 	for(const k in dst)
-		if(!(k in src) || JSON.stringify(src[k]) !== JSON.stringify(dst[k]))
-			spec(k);
+		if(!(k in src) || JSON.stringify(src[k]) !== JSON.stringify(dst[k])) {
+			if(!rv) rv = {};
+			rv[k] = dst[k];
+		}
 	return rv;
 }
 

@@ -33,11 +33,7 @@
 							<LinkItem icon="edit" href="/edit">{$I('ttl.content.edit')}</LinkItem>
 						{/if}
 						{#if $user?.roles.dev}
-							<div class="ui horizontal divider header"><Icon icon="code" /></div>
 							<LinkItem icon="key" href="/text-keys">{$I('ttl.text-keys')}</LinkItem>
-							<a class="nav-link prefix-icon item" data-sveltekit-preload-data="off" data-sveltekit-reload href="/export">
-								<Icon icon="cloud download alternate" />{$I('mnu.db-dld')}
-							</a>
 						{/if}
 					</Menu>
 				</Dropdown>

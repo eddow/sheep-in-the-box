@@ -19,10 +19,10 @@ export default function fsAccess(path: string) : raw.Access {
 			]);
 			return {content, type: desc.type};
 		},
-		async remove(hash: string) {
+		async remove(hashes: string[]) {
 			await Promise.all([
-				fs.unlink(join(path, hash)),
-				raw.deleteMany({hash})
+				...hashes.map(hash=> fs.unlink(join(path, hash))),
+				raw.deleteMany({hash: hashes})
 			]);
 		}
 	}

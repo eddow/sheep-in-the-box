@@ -2,10 +2,12 @@ import { articleTypes, languages, roles } from "$lib/const-lists";
 export { articleTypes, languages, roles };
 
 export type Language = keyof typeof languages;
-export const flags: Record<string, string> = {en: 'gb uk'};
-export const flag = (lng: string) => (flags[lng] || lng);
+export type LanguageDesc = typeof languages[Language];
+// All international defaults (to complete without fear of interfering on the end-application)
+export const flags: Record<string, string> = {'en-GB': 'gb uk', 'en-US': 'us'};
+export const flag = (lng: Language) => (flags[languages[lng].code] || lng);
 
-export type Role = typeof roles[number];
+export type Role = 'lgdn' | typeof roles[number];
 export type Roles = Record<Role, boolean>;
 
 export const textTypes = ['', 'tpl', 'html'] as const;
@@ -25,8 +27,5 @@ export interface UserSys {
 	preferences: any;
 }
 
-export interface ArticleTypeDesc {
-	icon: string,
-	color: string
-}
 export type ArticleType = keyof typeof articleTypes;
+export type ArticleTypeDesc = typeof articleTypes[ArticleType];

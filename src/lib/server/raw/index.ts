@@ -28,6 +28,6 @@ export async function load(hash: string, trf?: [number, number?]) {
 	return (typeof rv === 'string')  ? rv :  {hash, ...rv};
 }
 
-export async function remove(hash: string) {
-	return raw!.remove(hash);
+export async function remove(hashes: string[]) {
+	return raw!.remove(hashes);
 }

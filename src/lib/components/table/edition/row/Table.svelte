@@ -5,7 +5,7 @@
 	import { privateStore } from "$sitb/privateStore";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 
-	type T = $$Generic;//<{}>;
+	type T = $$Generic;
 	type keyT = string & keyof T;
 	const TableT = Table<T>;
 	

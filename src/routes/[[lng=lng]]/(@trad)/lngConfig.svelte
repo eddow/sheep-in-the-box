@@ -9,14 +9,14 @@
 </script>
 <script lang="ts">
 	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
-	import { flag, languages, type Language } from "$sitb/constants";
+	import { flag, languages, type Language, type LanguageDesc } from "$sitb/constants";
 	import { I, user } from "$sitb/globals";
 	import { preference, Side } from "$sitb/preferences";
 	import { displayTable } from '$sitb/components/table/collections';
 	
 	const tradLngs = preference('tradLngs', Side.server),
 		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $I('fld.key')}]
-			.concat((<Language[]>Object.keys(languages)).map((id: Language)=> ({id, icon: flag(id)+' flag', text: languages[id]}))),
+			.concat((<[Language, LanguageDesc][]>Object.entries(languages)).map(([id, {text}])=> ({id, icon: flag(id)+' flag', text}))),
 		groupIdx: Record<string, number> = {unused: 0, ref: 1, work: 2};
 	const [ref, wrk] = $tradLngs ?
 		$tradLngs.split(':').map((x: string)=> x.split('.').filter(x=>x)) :

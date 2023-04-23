@@ -28,7 +28,6 @@ export async function editArticle(slug: string): Promise<ArticleEditon> {
 		populate: ['texts', 'images'],
 		exclude: ['texts.article', 'images.article']
 	});
-	console.dir(rv.texts, {depth: 10});
 	return {
 		...rv,
 		images: rv.images.map(img => img.name)
@@ -43,9 +42,12 @@ export async function setText(slug: string, lng: Language, diff: Record<string, 
 export async function getArticle(slug: string, lng: Language) {
 	// TODO check access
 	const article = await articles.findOne({slug})
-	if(!article) return false;
+	if(!article) return undefined;
 	const text = await texts.findOne({article: article._id, lng}, {fields: ['title', 'text']});
-	return text && serialize(text);
+	if(!text) return;
+	const rv = serialize(text);
+	rv.text = rv.text.replace(/="\$\//g, `="${slug}/`);
+	return rv;
 }
 
 export async function deleteArticle(slug: string) {
@@ -116,5 +118,5 @@ export async function deleteImg(slug: string, name: string) {
 async function garbageCollect(hashes: string[]) {
 	const imgs = await images.find({hash: {$in: hashes}}, {fields: ['hash']});
 	const found = new Set<string>(imgs.map(img => img.hash));
-	await Promise.all(hashes.filter(hash => !found.has(hash)).map(hash => remove(hash)));
+	await remove(hashes.filter(hash => !found.has(hash)));
 }

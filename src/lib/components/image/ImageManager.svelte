@@ -14,22 +14,34 @@
     import '@uppy/dashboard/dist/style.css';
     import '@uppy/webcam/dist/style.css';
 	import '@uppy/image-editor/dist/style.min.css';
+
     let uppy: Uppy|null = null;
 	const locales = {fr: 'fr_FR', en: 'en_US', ro: 'ro_RO'};
 
 	const
 		props = {
 			proudlyDisplayPoweredByUppy : false
-		}, plugins = ["Webcam", "ImageEditor", "XHR"]
-
-	const dispatch = createEventDispatcher();
+		},
+		plugins = ["Webcam", "ImageEditor", "XHR"],
+		dispatch = createEventDispatcher();
 
 	interface ImgDesc {
 		name: string;
 	}
 
 	let editedPicture: ImgDesc|undefined = undefined;
-	export let article: string, list: string[];
+	export let
+	/**
+	 * @param {string} Url used to edit pictures.
+	 * Used to build the following routes:
+	 * - GET [endpoint]/[name] to get a picture
+	 * - POST [endpoint] to upload a picture
+	 * - DELETE [endpoint]/[name] to delete a picture
+	 * - PUT [endpoint]/[name] to edit(rename) a picture
+	*/
+		endpoint: string = '',
+		list: string[];
+
 	function uploadSuccess(file: UppyFile|undefined, response: any) {
 		list = [...list, response.body.name];		
 	}
@@ -42,7 +54,7 @@
 		// TODO https://uppy.io/docs/locales/
 		uppy = new Uppy({
 			//locale: await import('@uppy/locales/lib'+locales[$language])
-		}).use(Webcam).use(ImageEditor, {}).use(XHR, {endpoint: '/raw/'+article});
+		}).use(Webcam).use(ImageEditor, {}).use(XHR, {endpoint});
 		uppy.on('upload-success', uploadSuccess);
 		//uppy.on('upload-error', uploadError);
 	});
@@ -63,18 +75,25 @@
 		editedPicture = undefined;
 	}
 	async function deleteImg() {
-		await ajax.delete({name: editedPicture!.name}, '/raw/'+article);
+		await ajax.delete({}, imageEndPoint);
 		moveImg();
 	}
 	async function save(img: ImgDesc) {
-		if(slugified !== editedPicture!.name) {
-			if(list.includes(slugified)) throw new NotSaved($I('err.already-name'));
-			const rv = await ajax.patch({name: editedPicture!.name, newName: slugified}, '/raw/'+article, [400]);
+		const slug = slugify(img.name);
+		if(slug !== editedPicture!.name) {
+			if(list.includes(slug)) throw new NotSaved($I('err.already-name'));
+			const rv = await ajax.put({name: slug}, imageEndPoint, [400]);
 			if(rv.status === 400) throw new NotSaved($I('err.already-name'));
-			moveImg(slugified);
+			moveImg(slug);
 		}
 	}
-	let newName: string, slugified: string;
+	let newName: string,
+		imageEndPoint: string,
+		slugified: string;
+	function srcEndpoint(img?: string) {
+		return [endpoint, img].filter(x=> x).join('/');
+	}
+	$: imageEndPoint = srcEndpoint(editedPicture?.name);
 	$: slugified = newName && slugify(newName);
 </script>
 <Grid stackable doubling>
@@ -84,8 +103,6 @@
 	<Col eight>
 		TODO
 		<ul>
-			<li>Manage trash</li>
-			<li>Garbage collector</li>
 			<li>Borrow from other articles</li>
 		</ul>
 	</Col>
@@ -93,8 +110,8 @@
 <div class="ui cards">
 	{#each list as img (img)}
 		<div class="ui card">
-			<a href={`/${article}/${img}`} target="_blank" rel="noreferrer" on:click={imgClick} class="image">
-				<img src={`/${article}/${img}?256`} alt={img}>
+			<a href={srcEndpoint(img)} target="_blank" rel="noreferrer" on:click={imgClick} class="image">
+				<img src={srcEndpoint(img+'?256')} alt={img}>
 			</a>
 			<div class="content">{img}</div>
 		</div>
@@ -116,7 +133,7 @@
 	</Field>
 	<div class="imgr-image-preview">
 		{#if editedPicture}
-			<img src={`/${article}/${editedPicture?.name}`} alt={editedPicture?.name}>
+			<img src={imageEndPoint} alt={editedPicture?.name}>
 		{/if}
 	</div>
 </ModalForm>

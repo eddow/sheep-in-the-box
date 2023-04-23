@@ -36,14 +36,14 @@ export const handle: Handle = async ({ event, resolve })=> {
 		event.locals.language = <Language>llng;
 		event.locals.preferences = (user ? user.preferences : event.cookies.get('preferences')) || {};
 		event.locals.dictionary = await flat(event.locals.language, ((event.locals.user?.roles)?.split(' ') || []).concat(['']));
-		if(event.route.id && !accessible(event.route.id, user)) {
-			return new Response('"Not avail"', /^text\/html/.test(event.request.headers.get('accept') || '') ? 
-				{status: 303, headers: {location: '/'}} :
-				{status: 401, statusText: 'Not authorized'});
+		if(event.route.id && !accessible(event.route.id, user) && !/^text\/html/.test(event.request.headers.get('accept') || '')) {
+			return new Response('"Not avail"', {status: 401, statusText: 'Not authorized'});
 		}
-		return await resolve(event, {transformPageChunk(opts: { html: string, done: boolean }) {
-			return opts.html.replaceAll('%language%', event.locals.language);
-		}});
+		return await resolve(event, {
+			transformPageChunk(opts: { html: string, done: boolean }) {
+				return opts.html.replaceAll('%language%', event.locals.language);
+			}
+		});
 	});
 };
 

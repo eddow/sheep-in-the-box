@@ -17,10 +17,9 @@ export default function ikAccess(options: ImageKitOptions) : raw.Access {
 		async load(hash: string, trf?: [number, number?]): Promise<string> {
 			return imagekit.url({
 				path: path+hash,
-				...(trf ? {
-					width: trf[0],
-					...(trf[1] ? {height: trf[1]} : {})
-				} : {})
+				transformation: [
+					...(trf ? [{width: trf[0], ...(trf[1] ? {height: trf[1]} : {})}] : []),
+				]
 			})
 		},
 		async remove(hashes: string[]) {

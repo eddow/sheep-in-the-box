@@ -32,10 +32,12 @@ export function setSSPersistPreference(npp: (email: string, name: string, value?
 	persistPreference = npp;
 }
 
-
+interface Delay {
+	hndl: NodeJS.Timeout;
+	cb: ()=> void;
+}
 const egoDelay = 5*1000,
-	delays: any = {};
-// onBeforeLeave => call delays
+	delays: Record<PropertyKey, Delay> = {};
 function delay(prop: PropertyKey, cb: ()=> void) {
 	if(browser) {
 		if(delays[prop]) clearTimeout(delays[prop].hndl);
@@ -48,30 +50,30 @@ function delay(prop: PropertyKey, cb: ()=> void) {
 		};
 	} else cb();
 }
-if(browser)	// TODO Also send `ego` before user-change
-	window.addEventListener('beforeunload', (ev: BeforeUnloadEvent)=> {
-		for(let p of Object.keys(delays)) {
-			delays[p].cb();
-			delete delays[p];
-		}
-	})
+function solveAllDelays() {
+	for(let [p, d] of Object.entries(delays)) {
+		d.cb();
+		delete delays[p];
+	}
+}
+if(browser) window.addEventListener('beforeunload', solveAllDelays)
 const userPrefs = (preferences: Record<PropertyKey, any>)=> ({
-		get(prop: string): any {
-			return preferences[prop];
-		},
-		set(side: Side, prop: string, value: string) {
-			if(preferences[prop] != value) {
-				preferences[prop] = value;
-				delay(prop, ()=> persistPreference(userStore.value.email, prop.toString(), value));	// Note: Nothing is done, it is just expected... to have worked
-			}
-		},
-		del(side: Side, prop: string) {
-			if(prop in preferences) {
-				delete preferences[prop];
-				delay(prop, ()=> persistPreference(userStore.value.email, prop.toString()));
-			}
+	get(prop: string): any {
+		return preferences[prop];
+	},
+	set(side: Side, prop: string, value: string) {
+		if(preferences[prop] != value) {
+			preferences[prop] = value;
+			delay(prop, ()=> persistPreference(userStore.value.email, prop.toString(), value));	// Note: Nothing is done, it is just expected... to have worked
 		}
-	});
+	},
+	del(side: Side, prop: string) {
+		if(prop in preferences) {
+			delete preferences[prop];
+			delay(prop, ()=> persistPreference(userStore.value.email, prop.toString()));
+		}
+	}
+});
 
 function analyseRoles(str?: string) {
 	const rv: Roles = roles.reduce((p, c)=> ({...p, [c]:false}), <Roles>{});
@@ -85,7 +87,8 @@ function analyseRoles(str?: string) {
 }
 const userStore = privateStore<User>();
 export const user: SvelteStore<User> = userStore.store;
-export function setGlobalUser(userSpec: any, routeId: string | null) {
+export function setGlobalUser(userSpec: any) {
+	solveAllDelays();
 	userStore.value = userSpec && {
 		email: userSpec.email,
 		language: userSpec.language,
@@ -118,9 +121,5 @@ export function setGlobalUser(userSpec: any, routeId: string | null) {
 				accsLP(side, preferences=> delete preferences[prop]);
 			}
 		}, localVolatile);
-	}
-	if(routeId && !accessible(routeId)) {
-		if(browser) goto('/');
-		else throw redirect(302, '/');
 	}
 }
