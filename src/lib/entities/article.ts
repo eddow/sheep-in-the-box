@@ -12,9 +12,9 @@ export class Article extends BaseEntity {
 	type!: ArticleType
 
 	@OneToMany({mappedBy: 'article'})
-	texts: Collection<ArticleText>
+	texts!: Collection<ArticleText>
 	@OneToMany({mappedBy: 'article'})
-	images: Collection<ArticleImage>
+	images!: Collection<ArticleImage>
 }
 
 @Entity()

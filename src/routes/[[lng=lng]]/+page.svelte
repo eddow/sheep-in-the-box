@@ -6,9 +6,27 @@
 	import type { PageData } from "./$types";
 	export let data: PageData;
 
-	pageTitle.set(data.title);
+	pageTitle.set(data.title!);
 	let first = true;
 	onDestroy(language.subscribe(()=> { if(!first) invalidateAll(); }));
 	first = false;
 </script>
-{@html data.article}
+<div class="main ui segment">
+	<div class="ui left rail">
+		<div class="ui segment">
+			Left Rail Content
+		</div>
+	</div>
+	<div class="ui right rail">
+		<div class="ui segment">
+			Right Rail Content
+		</div>
+	</div>
+	{@html data.article}
+</div>
+<style lang="scss">
+	.main.segment {
+		width: 820px;
+		margin: 0 auto;
+	}
+</style>

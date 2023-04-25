@@ -1,31 +1,31 @@
 <script lang="ts">
-	import Wysiwyg from "$sitb/components/Wysiwyg.svelte";
-	import ImageManager from "$sitb/components/image/ImageManager.svelte";
+	import Wysiwyg from "$sitb/components/wysiwyg/Wysiwyg.svelte";
+	import ImageManager from "$sitb/components/wysiwyg/image/ImageManager.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
 	import { ajax, I, language } from "$sitb/globals";
-	import { Flag, Input, Field, Form, Button, Tabs, Page, toast, Icon, prompt } from "svemantic";
+	import { Flag, Input, Field, Form, Button, Tabs, Page, toast, Icon, prompt, InputHidden } from "svemantic";
 	import type { PageData } from "./$types";
 	import { compare } from '$sitb/utils';
 	import { Loader } from 'svemantic';
 	import ModalForm from "$svemantic/modules/modal/ModalForm.svelte";
-	import ImagePicker from "$sitb/components/image/ImagePicker.svelte";
+	import ImagePicker from "$sitb/components/wysiwyg/image/ImagePicker.svelte";
 	import Buttons from "$svemantic/elements/button/Buttons.svelte";
+	import { getContext } from "svelte";
+	import { type EditionContext, editionContext } from "../+layout.svelte";
 	export let data: PageData;
 	
 	interface Translation {
 		lng: Language;
-		title?: string;
-		text?: string;
+		title: string;
+		text: string;
 	}
+	const {setTitle, articles} = getContext<EditionContext>(editionContext);
 	let article: typeof data.article;
 	$: {
 		article = data.article;
 		if(article) for(const lng in languages) {
 			const texts = article.texts.find((t: Translation)=> t.lng === lng);
-			if(texts)	// Replace image urls
-				texts.text = texts.text.replace(/="\$\//g, `="${article.slug}/`);
-			else
-				article.texts.push({lng: <Language>lng, title: '', text: ''});
+			if(!texts) article.texts.push({lng: <Language>lng, title: '', text: ''});
 		}
 	}
 
@@ -39,21 +39,23 @@
 		console.assert(!!org, 'Language found');
 		const diff = compare(values, org!);
 		if(diff) {
-			if(diff.text) // replace image urls
-				diff.text = diff.text.replace(new RegExp(`="${article!.slug}/`, 'g'), '="$/');
 			loadings[values.lng] = true;
 			try {
-				ajax.put({lng: values.lng, diff});
+				await ajax.put({lng: values.lng, diff});
+				if(diff.title) setTitle(article!.slug, values.lng, diff.title);
+				article!.texts[article!.texts.indexOf(org!)] = values;
 			} finally {
 				loadings[values.lng] = false;
 			}
 		}
 	}
 	const loadings: Partial<Record<Language, boolean>> = {};
-	let picturePicker: ()=> Promise<{url: string}>;
+	type PictureType = 'internal' | 'external';
+	let picturePicker: ()=> Promise<{type: PictureType, internal: string, external: string}>,
+		pictureType: PictureType = 'internal';
 	async function pickPicture() {
-		const rv = (await picturePicker())?.url;
-		return rv && article!.slug + '/' + rv;
+		const rv = await picturePicker();
+		return rv && (pictureType === 'internal' ? `/${article!.slug}/${rv.internal}` : rv.external);
 	}
 </script>
 {#if !article}
@@ -64,7 +66,7 @@
 			<svelte:fragment slot="header">
 				<Icon icon="images outline" /> {$I('ttl.images')}
 			</svelte:fragment>
-			<ImageManager bind:list={article.images} endpoint={article.slug} />
+			<ImageManager articles={$articles} bind:list={article.images} endpoint={article.slug} />
 		</Page>
 		{#each article.texts as text}
 			<Page key={text.lng}>
@@ -81,20 +83,35 @@
 					</Field>
 					<Field name="text">
 						<Wysiwyg {pickPicture} name="text" value={text.text} />
-						<ModalForm bind:modal={picturePicker}>
-							<h2 slot="header">{$I('ttl.pick-picture')}</h2>
-							<Field name="url">
-								<ImagePicker name="url" list={article.images} endpoint={article.slug} />
-							</Field>
-							<Buttons slot="actions" let:dirty>
-								{dirty}
-								<Button cancel>{$I('cmd.cancel')}</Button>
-								<Button icon="plus" submit primary disabled={!dirty} >{$I('cmd.insert')}</Button>
-							</Buttons>
-						</ModalForm>
 					</Field>
 				</Form>
 			</Page>
 		{/each}
 	</Tabs>
+	<ModalForm bind:modal={picturePicker}>
+		<h2 slot="header">{$I('ttl.pick-picture')}</h2>
+		<Tabs bind:active={pictureType}>
+			<Page key="internal">
+				<svelte:fragment slot="header">
+					{$I('ttl.internal')}
+				</svelte:fragment>
+				<Field name="internal" validate="required">
+					<ImagePicker list={article.images} endpoint={article.slug} />
+				</Field>
+			</Page>
+			<Page key="external">
+				<svelte:fragment slot="header">
+					<Icon icon="linkify" /> {$I('ttl.external')}
+				</svelte:fragment>
+				<Field name="external" validate="required">
+					<Input type="url" />
+				</Field>
+			</Page>
+		</Tabs>
+		<Buttons slot="actions" let:dirty>
+			{dirty}
+			<Button cancel>{$I('cmd.cancel')}</Button>
+			<Button icon="plus" submit primary disabled={!dirty} >{$I('cmd.insert')}</Button>
+		</Buttons>
+	</ModalForm>
 {/if}

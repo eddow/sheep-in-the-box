@@ -9,7 +9,7 @@
 	import type { PageData } from "./$types";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
-	import Wysiwyg from '$sitb/components/Wysiwyg.svelte';
+	import Wysiwyg from '$sitb/components/wysiwyg/Wysiwyg.svelte';
 
 	export let data: PageData;
 	let dictionary: DictionaryEntry[] = data.transls;

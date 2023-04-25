@@ -1,5 +1,4 @@
 <script lang="ts">
-
 	import 'svemantic';
 	import { accessible, setGlobalUser } from "$sitb/user";
 	import Menu from './components/Menu.svelte';
@@ -17,6 +16,7 @@
 
 	const ttlHead = 'SitB';
 	let title: string;
+	// TODO setTitle in context
 	$: title = $pageTitle ? `${ttlHead} - ${$pageTitle}` : ttlHead;
 </script>
 <svelte:head>

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved } from 'svemantic';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved, prompt } from 'svemantic';
+	import { createEventDispatcher, getContext, onMount } from 'svelte';
 	import { ajax } from '$sitb/ajax';
 	import { I, language } from '$sitb/intl';
 	import { slugify } from '$sitb/utils';
@@ -14,9 +14,10 @@
     import '@uppy/dashboard/dist/style.css';
     import '@uppy/webcam/dist/style.css';
 	import '@uppy/image-editor/dist/style.min.css';
-
-    let uppy: Uppy|null = null;
-	const locales = {fr: 'fr_FR', en: 'en_US', ro: 'ro_RO'};
+	import ArticleSelect from '../ArticleSelect.svelte';
+	import type { ListedArticle } from '$sitb/server/article';
+	import ImagePicker from './ImagePicker.svelte';
+	import Form from '$svemantic/modules/form/Form.svelte';
 
 	const
 		props = {
@@ -29,18 +30,21 @@
 		name: string;
 	}
 
-	let editedPicture: ImgDesc|undefined = undefined;
+	let editedPicture: ImgDesc|undefined = undefined,
+    	uppy: Uppy|null = null;
 	export let
+		importArticle: ListedArticle|undefined = undefined,
+		articles: ListedArticle[],
+		list: string[],
 	/**
 	 * @param {string} Url used to edit pictures.
 	 * Used to build the following routes:
 	 * - GET [endpoint]/[name] to get a picture
 	 * - POST [endpoint] to upload a picture
 	 * - DELETE [endpoint]/[name] to delete a picture
-	 * - PUT [endpoint]/[name] to edit(rename) a picture
+	 * - PATCH [endpoint]/[name] to edit(rename) a picture
 	*/
-		endpoint: string = '',
-		list: string[];
+		endpoint: string = '';
 
 	function uploadSuccess(file: UppyFile|undefined, response: any) {
 		list = [...list, response.body.name];		
@@ -82,7 +86,7 @@
 		const slug = slugify(img.name);
 		if(slug !== editedPicture!.name) {
 			if(list.includes(slug)) throw new NotSaved($I('err.already-name'));
-			const rv = await ajax.put({name: slug}, imageEndPoint, [400]);
+			const rv = await ajax.patch({name: slug}, imageEndPoint, [400]);
 			if(rv.status === 400) throw new NotSaved($I('err.already-name'));
 			moveImg(slug);
 		}
@@ -93,6 +97,18 @@
 	function srcEndpoint(img?: string) {
 		return [endpoint, img].filter(x=> x).join('/');
 	}
+	async function importImg({detail: {values: {article, image}}}: CustomEvent) {
+		const name = await prompt({
+			title: $I('ttl.image.import'),
+			placeholder: $I('fld.image.name'),
+			defaultValue: image
+		});
+		if(name) {
+			const rv = await ajax.put({name: image, slug: article}, srcEndpoint(name), [400]);
+			if(rv.status === 200)
+				list = [...list, name];
+		}
+	}
 	$: imageEndPoint = srcEndpoint(editedPicture?.name);
 	$: slugified = newName && slugify(newName);
 </script>
@@ -101,10 +117,15 @@
 		{#if uppy}<Dashboard {uppy} {props} {plugins} />{/if}
 	</Col>
 	<Col eight>
-		TODO
-		<ul>
-			<li>Borrow from other articles</li>
-		</ul>
+		<Form on:submit={importImg}>
+			<Field name="article" required>
+				<ArticleSelect {articles} bind:value={importArticle} />
+			</Field>
+			<Field name="image" required>
+				<ImagePicker endpoint={importArticle?.slug} list={importArticle?.images||[]} />
+			</Field>
+			<Button fluid primary submit icon="file import">{$I('cmd.import')}</Button>
+		</Form>
 	</Col>
 </Grid>
 <div class="ui cards">

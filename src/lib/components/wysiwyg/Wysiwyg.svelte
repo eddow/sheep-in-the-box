@@ -16,7 +16,7 @@
 	import { onMount, tick } from 'svelte';
 
 	export let
-		pickPicture: (() => Promise<string>) | undefined = undefined;
+		pickPicture: (() => Promise<string|undefined>) | undefined = undefined;
 
 	// TODO: translate summernote
 	export let
@@ -32,7 +32,7 @@
 				['fontname', ['fontname', 'fontsize']],
 				['color', ['color']],
 				['para', ['ul', 'ol', 'paragraph']],
-				['insert', <Summernote.toolbarInsertGroupOptions[]>['link', 'picture', pickPicture?'pick-picture':'', 'hr', 'table']],
+				['insert', <Summernote.toolbarInsertGroupOptions[]>['link', pickPicture?'pick-picture':'picture', 'hr', 'table']],
 				['view', ['codeview', 'help']],
 			], popover: {
 				air: <Summernote.popoverAirDef><unknown>[	// Version difference between typings and library
@@ -40,7 +40,7 @@
 					['font', ['bold', 'underline', 'clear']],
 					['para', ['ul', 'paragraph']],
 					['table', ['table']],
-					['insert', ['link', 'picture', pickPicture?'pick-picture':'']]
+					['insert', ['link', pickPicture?'pick-picture':'picture']]
 				],
 				image: <Summernote.popoverImageDef><unknown>[	// Version difference between typings and library
 					['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
@@ -58,7 +58,7 @@
 						contents: '<i class="images outline icon"></i>',
 						tooltip: $I('cmd.pick-picture'),
 						click: async function () {
-							const picture = await pickPicture!();
+							const picture = (await pickPicture!());
 							if(picture)
 								context.invoke('editor.insertImage', picture, picture);
 						}
