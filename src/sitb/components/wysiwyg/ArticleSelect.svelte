@@ -7,7 +7,7 @@
 	
 	export let
 		articles: ListedArticle[],
-		value: ListedArticle|undefined;
+		value: ListedArticle|undefined = undefined;
 	let filtered: ListedArticle[],
 		typeSearch: ArticleType | undefined,
 		types: {value: ArticleType, text: string, icon: string, color: string}[],

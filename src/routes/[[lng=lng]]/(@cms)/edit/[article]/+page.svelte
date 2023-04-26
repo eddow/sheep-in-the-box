@@ -51,7 +51,7 @@
 	}
 	const loadings: Partial<Record<Language, boolean>> = {};
 	type PictureType = 'internal' | 'external';
-	let picturePicker: ()=> Promise<{type: PictureType, internal: string, external: string}>,
+	let picturePicker: ()=> Promise<{internal: string, external: string}>,
 		pictureType: PictureType = 'internal';
 	async function pickPicture() {
 		const rv = await picturePicker();
@@ -82,7 +82,7 @@
 						</Input>
 					</Field>
 					<Field name="text">
-						<Wysiwyg {pickPicture} name="text" value={text.text} />
+						<Wysiwyg {pickPicture} articles={$articles} name="text" value={text.text} />
 					</Field>
 				</Form>
 			</Page>
@@ -95,7 +95,7 @@
 				<svelte:fragment slot="header">
 					{$I('ttl.internal')}
 				</svelte:fragment>
-				<Field name="internal" validate="required">
+				<Field name="internal">
 					<ImagePicker list={article.images} endpoint={article.slug} />
 				</Field>
 			</Page>
@@ -103,7 +103,7 @@
 				<svelte:fragment slot="header">
 					<Icon icon="linkify" /> {$I('ttl.external')}
 				</svelte:fragment>
-				<Field name="external" validate="required">
+				<Field name="external">
 					<Input type="url" />
 				</Field>
 			</Page>

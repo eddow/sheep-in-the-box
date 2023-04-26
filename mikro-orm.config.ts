@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import config from './src/lib/server/config';
+import config from './src/sitb/server/config';
 
 dotenv.config();
 dotenv.config({ path: `.env.local`, override: true });

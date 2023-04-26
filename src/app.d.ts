@@ -1,6 +1,6 @@
 /// <reference types="@sveltejs/kit" />
 
-import type { Language, User } from "./lib/constants";
+import type { Language, User } from "$sitb/constants";
 
 declare global {
 	namespace App {

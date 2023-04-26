@@ -21,7 +21,7 @@ const config = {
 			} : {
 				$svemantic: './src/svemantic',
 				svemantic: './src/svemantic',
-				$sitb: './src/lib'
+				$sitb: './src/sitb'
 			}
 	}
 };
