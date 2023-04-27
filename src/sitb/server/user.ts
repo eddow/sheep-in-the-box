@@ -1,6 +1,6 @@
 import { map, stringIds } from "./db";
-import User, { Registration, Session } from "$sitb/server/objects/user";
-import type { RequestEvent } from "@sveltejs/kit";
+import User, { UserRegistration, UserSession } from "$sitb/entities/user";
+import { error, type RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
 import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS, REGISTRATION_TIMEOUT }  from "$env/static/private";
 import type { Language } from "./objects/intl";
@@ -9,85 +9,80 @@ import { parmed } from "$sitb/intl";
 import { getText } from "./intl";
 import { stringCookies } from "$sitb/cookies";
 
+import em from "./db";
+import { serialize, wrap } from "@mikro-orm/core";
+
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
 
-const users = map(User);
-const regs = map(Registration);
-const sessions = map(Session);
-
-export function userPublic(user: User) {
-	return user && {email: user.email, language: user.language, roles: ('lgdn '+user.roles).trimEnd(), preferences: user.preferences || {}};
-}
+const
+	users = em.getRepository(User),
+	regs = em.getRepository(UserRegistration),
+	sessions = em.getRepository(UserSession);
 
 // TODO Call `cleanup` regularly (each day/hour)
 export async function cleanup() {
 	const ts = Date.now();
 	return await Promise.all([
-		regs.deleteMany({ts: {$lt: ts-regTimeout}}),
-		sessions.deleteMany({ts: {$lt: ts-liTimeout}})
+		regs.removeAndFlush(regs.find({ts: {$lt: ts-regTimeout}})),
+		sessions.removeAndFlush(sessions.find({ts: {$lt: ts-regTimeout}}))
 	]);
 }
 
 export async function authed(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
 	const authKey = event.cookies.get('session'), ts = (new Date).getTime();
 	if(!authKey) return null;
-	let rv: Session|undefined = await sessions.findOne({authKey});
+	let rv = await sessions.findOne({authKey}, {populate: ['user']});
 	if(rv && ts-rv.ts > liTimeout) {
-		await sessions.deleteMany({authKey});
-		rv = undefined;
+		await sessions.removeAndFlush(rv);
+		rv = null;
 	}
-	let user = null;
 	if(rv) {
-		user = await users.findOne({email: rv.email});
-		await sessions.updateMany({email: rv.email}, {$set: {ts}});
+		rv.ts = ts;
+		await sessions.persistAndFlush(rv);
 		stringCookies.session = authKey;	// Refresh the maxAge
 	} else {
 		if(authKey) event.cookies.delete('session', {path: '/'});
 		return null;
 	}
-	return event.locals.user = userPublic(user);
+	return event.locals.user = serialize(rv.user);
 }
 
 export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string, password: string) {
 	const authKey = md5(crypto.randomUUID());
-	const one = await users.findOne({email, password: md5(password)});
-	if(!one) return null;
-	event.locals.user = userPublic(one);
-	await sessions.updateMany({email}, {$set: {authKey, ts: Date.now()}}, {upsert: true});
+	const user = await users.findOne({email, password: md5(password)});
+	if(!user) return null;
+	await sessions.upsert({user: user._id, authKey, ts: Date.now()});
 	stringCookies.session = authKey;
-	return userPublic(one);
+	event.locals.language = user.language;
+	return event.locals.user = serialize(user);
 }
 
 export async function logout(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
 	const authKey = event.cookies.get('session');
 	if(!authKey) return false;
-	await sessions.deleteMany({authKey});
+	let session = await sessions.findOneOrFail({authKey});
+	await sessions.removeAndFlush(session);
 	delete event.locals.user;
 	event.locals.language = <Language>event.cookies.get('language');
 	return true;
 }
 
 export async function changePass(event: RequestEvent<Partial<Record<string, string>>, string | null>, oldPass: string, newPass: string) {
-	const one = await users.findOne({email: event.locals.user!.email, password: md5(oldPass)});
-	if(!one) return false;
-	one.password = md5(newPass);
-	await one.save();
-	return true;
+	const user = await users.findOneOrFail({email: event.locals.user!.email, password: md5(oldPass)});
+	user.password = md5(newPass);
+	return em.persistAndFlush(user);
 }
 
-export async function registration(code: string) : Promise<string> {
+export async function registration(code: string) : Promise<UserRegistration> {
 	const ts = (new Date).getTime();
-	let rv = (await regs.aggregate([
-		{$match: {code}},
-		{$project: {email: 1}}
-	]))[0]?.email;
+	const reg = await regs.findOneOrFail({code});
 	
-	if(rv && ts-rv.ts > regTimeout) {
-		await sessions.deleteMany({code});
-		rv = undefined;
+	if(ts-reg.ts > regTimeout) {
+		await regs.removeAndFlush(reg);
+		throw error(404, code)
 	}
-	return rv;
+	return reg;
 }
 
 export async function userExists(email: string) {
@@ -103,34 +98,30 @@ export async function listUsers() {
 	}]));
 }
 
-export async function patchUser(_id: string, diff: {email?: string, roles?: string}) {
-	return await users.findByIdAndUpdate(_id, diff);
-}
-
-export async function setLanguage(email: string, language: Language) {
-	await users.findOneAndUpdate({email}, {$set:{language}});
+export async function patchUser(email: string, diff: {email?: string, roles?: string, language?: Language}) {
+	const user = await users.findOneOrFail({email});
+	wrap(user).assign(diff);
+	return em.persistAndFlush(user);
 }
 
 // Used by hook.server to access directly the DB instead of cookies or XHR
 export async function persistPreference(email: string, name: string, value?: any) {
-	let preferences = (await users.aggregate([
-			{$match: {email}},
-			{$project: {preferences: 1}}
-		]))[0].preferences;
+	const user = await users.findOneOrFail({email});
 	if(value === undefined) {
-		if(!preferences || !(name in preferences)) return preferences || {};
-		delete preferences[name];
-	} else if(preferences) preferences[name] = value;
-	else preferences = {[name]: value};
-	let rv = await users.updateMany({email}, {$set: {preferences}});
-	return rv.acknowledged && preferences;
+		if(!user.preferences || !(name in user.preferences)) return user.preferences || {};
+		const {[name]: _, ...unprefed} = user.preferences;
+		user.preferences = unprefed;
+	} else if(user.preferences) user.preferences = {...user.preferences, [name]: value};
+	else user.preferences = {[name]: value};
+	await users.persistAndFlush(user);
+	return user.preferences;
 }
 
 //#region Register/lost pw
 
 const transport = createTransport({
 	host: SMTP_HOST,
-	port: SMTP_PORT,
+	port: +SMTP_PORT,
 	auth: {
 		user: SMTP_USER,
 		pass: SMTP_PASS
@@ -139,7 +130,7 @@ const transport = createTransport({
 export async function register(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string) {
 	const code = md5(crypto.randomUUID()),
 			mailType = (await userExists(email)) ? 'chg-pw' : 'register',
-		parms = {'code-url': `${event.url.origin}/${event.locals.language}/user/${code}`},
+		parms = {'code-url': `${event.url.origin}/${event.locals.language}/${code}`},
 		[subject, html, text] = await Promise.all([
 			getText(`mail.${mailType}.topic`, event.locals.language),
 			getText(`mail.${mailType}.html`, event.locals.language).then(c=> /*markdown.toHTML(*/parmed(c, parms)/*)*/),
@@ -149,7 +140,7 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 			to: email,
 			subject, html, text
 		}, ts = Date.now();
-	await regs.updateMany({email}, {$set:{code, ts}}, {upsert: true});
+	await regs.upsert({email, code, ts});
 	return new Promise<void>(
 		(resolve: (value: void)=> void, reject: (reason: any)=> void)=> {
 			transport.sendMail(mailOptions, function(error: any){
@@ -159,21 +150,10 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 }
 
 export async function useCode(code: string, password: string) {
-	const email = (await regs.findOne({code}))?.email;
-	const ts = (new Date).getTime();
-	let rv = (await regs.aggregate([
-		{$match: {code}},
-		{$project: {email: 1}}
-	]))[0]?.ts;
+	const reg = await registration(code);
 	
-	if(rv && ts-rv > regTimeout) {
-		await sessions.deleteMany({code});
-		return null;
-	}
-	if(email) {
-		regs.deleteMany({email});
-		return await users.updateMany({email}, {$set: {password: md5(password)}}, {upsert: true});
-	}
+	await regs.removeAndFlush(reg);
+	return users.upsert({email:reg.email, password: md5(password)})
 }
 
 //#endregion

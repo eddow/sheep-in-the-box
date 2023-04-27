@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, Cell, Form } from "svemantic";
-	import { privateStore } from "$sitb/privateStore";
+	import { privateStore } from "$sitb/stores/privateStore";
 	import Column from "../../Column.svelte";
 	import { type Editing, setEdtnCtx, getTblCtx, type TableEditionContext, getRowCtx, type ItemEditionContext, type RowContext } from "../contexts";
 	import type { ComponentProps } from "svelte";

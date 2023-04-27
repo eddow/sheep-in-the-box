@@ -1,4 +1,5 @@
 import { writable, type Writable } from "svelte/store";
+import globic from "./globic";
 
 interface Preference extends Writable<string|undefined> {
 	forward: (v: string)=> void;
@@ -14,7 +15,7 @@ export interface ops {
 	del(side: Side, name: string): void;
 }
 
-const allPrefs: Record<string, Preference> = {};
+const allPrefs = globic<Record<string, Preference>>(()=> ({}));
 let operations: ops = {get: ()=> undefined, set: ()=> undefined, del: ()=> undefined};
 
 export function setPrefOperations(nwOps: ops, values: Record<string, string>) {
@@ -31,8 +32,10 @@ export function preference(name: string, side: Side = Side.client, dft?: string)
 			set: {value: (v?: string)=> {
 				if(!v) v = dft;
 				prefDef.set(v);
-				if(v === undefined) operations.del(side, name);
-				else operations.set(side, name, v);
+				if(v !== operations.get(name)) {
+					if(v === undefined) operations.del(side, name);
+					else operations.set(side, name, v);
+				}
 			}}
 		});
 	}

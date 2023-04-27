@@ -1,4 +1,4 @@
-import type { Language, ArticleType } from '$sitb/constants';
+import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
 import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from './base';
 
@@ -8,7 +8,7 @@ export class Article extends BaseEntity {
 	@Property()
 	slug!: string
 
-	@Enum()
+	@Enum({items: Object.keys(articleTypes)})
 	type!: ArticleType
 
 	@OneToMany({mappedBy: 'article'})
@@ -45,4 +45,12 @@ export class ArticleImage extends BaseEntity {
 
 	@Property()
 	hash!: string
+}
+
+export interface ReadArticle {
+	slug: string
+	type: ArticleType
+	title: string
+	text: string
+	images: string[]
 }

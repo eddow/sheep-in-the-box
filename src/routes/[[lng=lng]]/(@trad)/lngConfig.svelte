@@ -10,17 +10,22 @@
 <script lang="ts">
 	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
 	import { flag, languages, type Language, type LanguageDesc } from "$sitb/constants";
-	import { I, user } from "$sitb/globals";
+	import { I, language } from "$sitb/globals";
 	import { preference, Side } from "$sitb/preferences";
 	import { displayTable } from '$sitb/components/table/collections';
+	import { transWritable } from "$sitb/stores/transStore";
 	
-	const tradLngs = preference('tradLngs', Side.server),
+	type RfRef = LangId[][];
+	const tradLngs = transWritable<RfRef>(
+			preference('tradLngs', Side.server, `key:${$language}`),
+			(ser?: string)=>
+				ser!.split(':').map((x: string)=> <LangId[]>x.split('.').filter(x=>x)),
+			(rr)=> rr.map(g=> g.join('.')).join(':')
+		),
 		allItems: LangItem[] = [{id: <LangId>'key', icon: 'key icon', text: $I('fld.key')}]
 			.concat((<[Language, LanguageDesc][]>Object.entries(languages)).map(([id, {text}])=> ({id, icon: flag(id)+' flag', text}))),
 		groupIdx: Record<string, number> = {unused: 0, ref: 1, work: 2};
-	const [ref, wrk] = $tradLngs ?
-		$tradLngs.split(':').map((x: string)=> x.split('.').filter(x=>x)) :
-		[['key'], [$user.language]];
+	const [ref, wrk] = $tradLngs;
 	const used = ref.concat(wrk), groups = [
 		{id: 'unused', noDrop: false, items: allItems.filter((x: LangItem)=> !used.includes(x.id))},
 		{id: 'ref', noDrop: false, items: allItems.filter((x: LangItem)=> ref.includes(x.id))},
@@ -31,7 +36,7 @@
 	let refreshingOutp = false;
 	function outputGroups() {
 		refreshingOutp = false;
-		$tradLngs = [groups[1], groups[2]].map(g=> g.items.map(g=> g.id).join('.')).join(':');
+		$tradLngs = [groups[1], groups[2]].map(g=> g.items.map(g=> g.id));
 		config({reference: groups[1].items, work: groups[2].items});
 	}
 	outputGroups();

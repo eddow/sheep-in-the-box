@@ -3,10 +3,9 @@
 	import { ajax, I, user } from "$sitb/globals";
 	import { Col, Input, Form, Field, Button, toast } from "svemantic";
 
-$:	if(!$user) goto('/');
 	async function submit(e: CustomEvent) {
 		const { values, context } = e.detail, {passCur, passNew} = values;
-		let rv = await ajax.patch({passCur, passNew});
+		let rv = await ajax.put({passCur, passNew});
 		if(Math.floor(rv.status/100) === 4)
 			toast({message: $I('err.pw.wrong'), class: 'error'});
 		else {

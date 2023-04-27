@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Wysiwyg from "$sitb/components/wysiwyg/Wysiwyg.svelte";
-	import ImageManager from "$sitb/components/wysiwyg/image/ImageManager.svelte";
+	import ImageManager from "$sitb/components/image/ImageManager.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
 	import { ajax, I, language } from "$sitb/globals";
 	import { Flag, Input, Field, Form, Button, Tabs, Page, toast, Icon, prompt, InputHidden } from "svemantic";
@@ -8,7 +8,7 @@
 	import { compare } from '$sitb/utils';
 	import { Loader } from 'svemantic';
 	import ModalForm from "$svemantic/modules/modal/ModalForm.svelte";
-	import ImagePicker from "$sitb/components/wysiwyg/image/ImagePicker.svelte";
+	import ImagePicker from "$sitb/components/image/ImagePicker.svelte";
 	import Buttons from "$svemantic/elements/button/Buttons.svelte";
 	import { getContext } from "svelte";
 	import { type EditionContext, editionContext } from "../+layout.svelte";

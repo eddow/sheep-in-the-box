@@ -1,20 +1,16 @@
-import { goto } from "$app/navigation";
 import { browser } from "$app/environment";
 import { roles, type Role, type Roles, type User } from "./constants";
 import { jsonCookies } from "./cookies";
 import { ajax } from "./globals";
-import { privateStore } from "./privateStore";
+import { privateStore } from "./stores/privateStore";
 import { setPrefOperations, Side } from "./preferences";
-import { redirect } from "@sveltejs/kit";
 
-export function allGroups(rex: RegExp, hay: string, grpIndex: number) {
-	const rv = [];
+export function* allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	let m = rex.exec(hay);
 	while(m) {
-		rv.push(m[grpIndex]);
+		yield m[grpIndex];
 		m = rex.exec(hay)
 	}
-	return rv;
 }
 
 export function accessible(routeId: string) {
@@ -24,12 +20,6 @@ export function accessible(routeId: string) {
 			return false;
 		}
 	return true;
-}
-
-// Used by hook.server so that this code works in SSR as well as CS-regular usage
-export let persistPreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/user/ego')
-export function setSSPersistPreference(npp: (email: string, name: string, value?: string)=> any) {
-	persistPreference = npp;
 }
 
 interface Delay {
@@ -57,6 +47,12 @@ function solveAllDelays() {
 	}
 }
 if(browser) window.addEventListener('beforeunload', solveAllDelays)
+
+// Used by hook.server so that this code works in SSR as well as CS-regular usage
+export let persistPreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/ego')
+export function setSSPersistPreference(npp: (email: string, name: string, value?: string)=> any) {
+	persistPreference = npp;
+}
 const userPrefs = (preferences: Record<PropertyKey, any>)=> ({
 	get(prop: string): any {
 		return preferences[prop];
@@ -75,28 +71,21 @@ const userPrefs = (preferences: Record<PropertyKey, any>)=> ({
 	}
 });
 
-function analyseRoles(str?: string) {
-	const rv: Roles = roles.reduce((p, c)=> ({...p, [c]:false}), <Roles>{});
-	if(typeof str === 'string') {
-		rv.lgdn = true;
-		if(str)
-			for(const r of str.split(' '))
-				rv[<Role>r] = true;
-	}
-	return rv;
+function analyseRoles(rolestr?: string) {
+	const spec = rolestr?.split('|') || [];
+	return <Roles>roles.reduce((p, c)=> ({...p, [c]: spec?.includes(c)}), {lgdn: true});
 }
+
 const userStore = privateStore<User>();
 export const user: SvelteStore<User> = userStore.store;
 export function setGlobalUser(userSpec: any) {
 	solveAllDelays();
 	userStore.value = userSpec && {
 		email: userSpec.email,
-		language: userSpec.language,
-		preferences: userSpec.preferences,
 		roles: analyseRoles(userSpec.roles)
 	};
 	if(userSpec)
-		setPrefOperations(userPrefs(userSpec.preferences || {}), userSpec.preferences);
+		setPrefOperations(userPrefs(userSpec.preferences), userSpec.preferences);
 	else {
 		const localVolatile = Object.create(
 			jsonCookies.preferences,

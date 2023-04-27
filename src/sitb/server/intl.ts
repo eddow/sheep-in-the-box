@@ -1,6 +1,6 @@
 import Intl, { IntlKey, type Language, type TextType } from "./objects/intl";
 import { map } from "./db";
-import type { Role } from "./objects/user";
+import type { Role } from "$sitb/constants";
 
 const dictionary = map(Intl);
 const keys = map(IntlKey);

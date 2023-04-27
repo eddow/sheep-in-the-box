@@ -2,7 +2,7 @@
 	import { Table } from 'svemantic';
 	import TableRow from './TableRow.svelte'
 	import { specialRows, setTblCtx } from './contexts'
-	import { privateStore } from '$sitb/privateStore';
+	import { privateStore } from '$sitb/stores/privateStore';
 	import type { ComponentProps, ComponentType } from 'svelte';
 	// ? https://www.npmjs.com/package/svelte-tiny-virtual-list
 

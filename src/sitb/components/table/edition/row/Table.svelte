@@ -2,7 +2,7 @@
 	import TableRow from "./TableRow.svelte";
 	import Table, { type SaveCallback } from "../Table.svelte";
 	import type { AddableEditionContext } from "./contexts";
-	import { privateStore } from "$sitb/privateStore";
+	import { privateStore } from "$sitb/stores/privateStore";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 
 	type T = $$Generic;

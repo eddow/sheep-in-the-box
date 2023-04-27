@@ -19,13 +19,5 @@ export interface User {
 	preferences: any;
 }
 
-export interface UserSys {
-	_id: string;
-	email: string;
-	roles: string;
-	language: Language;
-	preferences: any;
-}
-
 export type ArticleType = keyof typeof articleTypes;
 export type ArticleTypeDesc = typeof articleTypes[ArticleType];

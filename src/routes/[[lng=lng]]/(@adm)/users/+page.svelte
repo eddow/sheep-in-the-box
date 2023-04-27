@@ -17,17 +17,17 @@
 	let options: DropdownOption[];
 $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 	async function saveCB(old: any, diff: any) {
-		await ajax.patch({...diff, _id: old._id});
+		await ajax.patch({diff, email: old.email});
 	}
 </script>
 <MgtPage title="ttl.users">
-	<Table key="_id" data={users} columnFilters {saveCB}>
+	<Table key="email" data={users} columnFilters {saveCB}>
 		<Column name="email" title={$I('fld.email')}>
 			<StringContent slot="filter" />
 			<Text />
 		</Column>
 		<Column name="roles" title={$I('fld.role')}>
-			<Select multiple {options} delimiter=" " />
+			<Select multiple {options} delimiter="|" />
 		</Column>
 		<Edition edition="row" />
 	</Table>

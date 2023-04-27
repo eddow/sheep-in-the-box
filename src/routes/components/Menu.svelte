@@ -5,7 +5,6 @@
 	import { language, setLanguage, I } from "$sitb/intl";
 	import type { Language, Role } from '$sitb/constants';
 	import { Buttons, Menu, Dropdown, Icon, LinkItem, toast } from 'svemantic';
-	import { browser } from '$app/environment';
 		
 	function setLng(e: CustomEvent) {
 		setLanguage(<Language>e.detail);
@@ -14,39 +13,32 @@
 	$: toolbox = $user && ['adm', 'dev', 'trad', 'cms'].some((r: string)=> $user.roles[<Role>r]);
 </script>
 
-<nav class="ui top fixed menu">
+{#if toolbox}
 	<div class="item">
-		<a href="/">SitB</a>
+		<Dropdown class="icon button" icon="tools">
+			<Menu vertical>
+				{#if $user?.roles.adm}
+					<LinkItem icon={['user', 'corner cog']} href="/users">{$I('ttl.users')}</LinkItem>
+				{/if}
+				{#if $user?.roles.trad}
+					<LinkItem icon="language" href="/translations">{$I('ttl.translations')}</LinkItem>
+				{/if}
+				{#if $user?.roles.cms}
+					<LinkItem icon="edit" href="/edit">{$I('ttl.content.edit')}</LinkItem>
+				{/if}
+				{#if $user?.roles.dev}
+					<LinkItem icon="key" href="/text-keys">{$I('ttl.text-keys')}</LinkItem>
+				{/if}
+			</Menu>
+		</Dropdown>
 	</div>
-	<div class="right menu">
-		{#if toolbox}
-			<div class="item">
-				<Dropdown class="icon button" icon="tools">
-					<Menu vertical>
-						{#if $user?.roles.adm}
-							<LinkItem icon={['user', 'corner cog']} href="/users">{$I('ttl.users')}</LinkItem>
-						{/if}
-						{#if $user?.roles.trad}
-							<LinkItem icon="language" href="/translations">{$I('ttl.translations')}</LinkItem>
-						{/if}
-						{#if $user?.roles.cms}
-							<LinkItem icon="edit" href="/edit">{$I('ttl.content.edit')}</LinkItem>
-						{/if}
-						{#if $user?.roles.dev}
-							<LinkItem icon="key" href="/text-keys">{$I('ttl.text-keys')}</LinkItem>
-						{/if}
-					</Menu>
-				</Dropdown>
-			</div>
-		{/if}
-		<div class="item">
-			<Buttons class="user-mgt">
-				<Languages language={$language} on:set-language={setLng} />
-				<User on:set-user />
-			</Buttons>
-		</div>
-	</div>
-</nav>
+{/if}
+<div class="item">
+	<Buttons class="user-mgt">
+		<Languages language={$language} on:set-language={setLng} />
+		<User on:set-user />
+	</Buttons>
+</div>
 <style lang="scss" global>
 .ui.buttons.user-mgt {
 	> .button:first-child,

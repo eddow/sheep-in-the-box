@@ -22,7 +22,7 @@
 			Right Rail Content
 		</div>
 	</div>
-	{@html data.article}
+	{@html data.text}
 </div>
 <style lang="scss">
 	.main.segment {

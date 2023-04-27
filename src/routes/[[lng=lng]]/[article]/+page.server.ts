@@ -1,12 +1,11 @@
+import { articleAccess } from '$lib/access';
 import { articleTypes } from '$sitb/const-lists';
+import type { ArticleType } from '$sitb/constants';
 import { getArticle } from '$sitb/server/article';
 
-export async function load({params: {article: slug}, locals: {language}}: any) {
-	const article = await getArticle(slug, language, ['blog', 'rcp', 'pres', 'ctlg']);
-	debugger;
+export async function load({params: {article: slug}, locals: {language, user}}: any) {
 	return {
-		slug,
-		// `ctlg`: if `role.cust`
-		article
+		article: await getArticle(slug, language, <ArticleType[]>Object.keys(articleTypes).filter(
+			(type) => type !== 'sys' && articleAccess(<ArticleType>type, /* TODO user's roles */'cms')))
 	};
 }

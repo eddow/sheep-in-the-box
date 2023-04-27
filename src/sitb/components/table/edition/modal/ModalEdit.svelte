@@ -1,7 +1,7 @@
 <script lang="ts">
 	import ModalPart from "./ModalPart.svelte";
 	import { type Editing, getTblCtx, type TableEditionContext, setRowCtx } from "../contexts";
-	import { privateStore } from "$sitb/privateStore";
+	import { privateStore } from "$sitb/stores/privateStore";
 	import { Buttons, ModalForm } from "svemantic";
 	import { compare } from "$sitb/utils";
 

@@ -8,7 +8,6 @@
 	import { writable } from "svelte/store";
 	import { pageTitle, styles, scripts, scriptLoaded } from '$sitb/globals';
 	import Nf404 from '$sitb/components/Nf404.svelte';
-
 	export let data: LayoutData;
 	setGlobalUser(data.user);
 	let pageFound: boolean;
@@ -29,7 +28,14 @@
 	<title>{title}</title>
 </svelte:head>
 <div class="app">
-	<Menu on:set-user={e=> setGlobalUser(e.detail)} />
+	<nav class="ui top fixed menu">
+		<div class="item">
+			<a href="/">SitB</a>
+		</div>
+		<div class="right menu">
+			<Menu on:set-user={e=> setGlobalUser(e.detail)} />
+		</div>
+	</nav>
 	<div class="main">
 		{#if pageFound}
 			<slot />

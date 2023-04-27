@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { privateStore } from '$sitb/privateStore';
+	import { privateStore } from '$sitb/stores/privateStore';
 	import { specialRows, getTblCtx, setClmnCtx, type ColumnContext, getRowCtx, type RowContext, setCellCtx, getCellCtx } from './contexts'
 	import { I } from '$sitb/globals';
 	import { Cell } from 'svemantic';

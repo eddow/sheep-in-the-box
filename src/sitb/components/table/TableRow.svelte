@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { privateStore } from '$sitb/privateStore';
+	import { privateStore } from '$sitb/stores/privateStore';
 	import { Tr } from 'svemantic';
 	import { setRowCtx } from './contexts'
 	

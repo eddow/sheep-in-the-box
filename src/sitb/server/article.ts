@@ -1,17 +1,14 @@
-import { Article, ArticleText, ArticleImage } from "../entities/article";
+import { Article, ArticleText, ArticleImage, type ReadArticle } from "../entities/article";
 import type { Language, ArticleType } from '$sitb/constants';
 import em from "./db";
 import { save, load, remove } from './raw';
 import { error } from "@sveltejs/kit";
 import { serialize, wrap } from "@mikro-orm/core";
 
-export interface ArticleData {
+export interface ArticleEdition {
 	slug: string;
 	type: ArticleType;
 	texts: {lng: Language, title: string, text: string}[];
-	images: string[];
-}
-export interface ArticleEdition extends ArticleData {
 	images: string[];
 }
 
@@ -80,16 +77,20 @@ export async function editArticle(slug: string): Promise<ArticleEdition> {
 
 export async function setText(slug: string, lng: Language, diff: Record<string, string>) {
 	const article = await articles.findOneOrFail({slug});
-	await em.upsert(ArticleText, {article: article._id, lng, ...await idedLinks(diff)});
+	await texts.upsert({article: article._id, lng, ...await idedLinks(diff)});
 }
 
-export async function getArticle(slug: string, lng: Language, types: ArticleType[]) {
-	// TODO check access
-	const article = await articles.findOne({slug, type: {$in: types}})
-	if(!article) return undefined;
+export async function getArticle(slug: string, lng: Language, types: ArticleType[]): Promise<ReadArticle> {
+	const article = await articles.findOne({slug, type: {$in: types}}, {populate: ['images']})
+	if(!article) throw error(404, slug);
 	const text = await texts.findOne({article: article._id, lng}, {fields: ['title', 'text']});
 	if(!text) throw error(404, slug);
-	return text && await namedLinks(serialize(text));
+	return {
+		slug,
+		type: article.type,
+		images: article.images.toArray().map(img => img!.name),
+		...await namedLinks(serialize(text))
+	};
 }
 
 export async function deleteArticle(slug: string) {
@@ -159,7 +160,6 @@ export async function deleteImg(slug: string, name: string) {
 }
 export type ImageSpec = {slug: string, name: string};
 export async function copyImg(src: ImageSpec, dst: ImageSpec) {
-	debugger;
 	const objs = await Promise.all([articles.findOneOrFail({slug: src.slug}), articles.findOneOrFail({slug: dst.slug})]);
 	const already = await images.count({article: objs[1]._id, name: dst.name});
 	if(already) throw error(400, 'Image already exists');

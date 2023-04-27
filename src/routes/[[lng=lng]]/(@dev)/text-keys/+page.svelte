@@ -5,7 +5,7 @@
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
 	import { roles, textTypes, type Language, type Role, type TextType } from "$sitb/constants";
-	import { I, ajax } from "$sitb/globals";
+	import { I, ajax, language } from "$sitb/globals";
 	import Preview from "$sitb/components/Preview.svelte";
 	import Languages from "$sitb/components/Languages.svelte";
 	import { preference, Side } from "$sitb/preferences";
@@ -27,8 +27,8 @@
 	export let data: PageData;
 	let textRoles: DropdownOption[];
 	$: textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
-	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $user.language);
-	let dictionaries = {[$kLang || $user.language]: data.dictionary},
+	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $language);
+	let dictionaries = {[$kLang || $language]: data.dictionary},
 		dictionary = data.dictionary;
 	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
 		const key = diff.key || old.key;

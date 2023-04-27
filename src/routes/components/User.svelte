@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import { I, dictionary, gotTree, languageStore } from '$sitb/intl';
+	import { I, dictionary, gotTree, setLanguage } from '$sitb/intl';
 	import { ajax, user } from '$sitb/globals';
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 
@@ -22,20 +22,20 @@
 			reset();
 			const login = await rv.json();
 			dispatch('set-user', login.user);
-			languageStore.value = login.user.language;
+			setLanguage(login.user.language, false);
 			if(login.dictionary)
 				gotTree(login.dictionary);
 			doneLogingIn();
 		} else if(rv.status === 401) {
 			const cnt = await(rv.json());
-			if(cnt) languageStore.value = cnt;
+			if(cnt) setLanguage(cnt, false);
 			toast({message: $I('err.login'), class: 'error'});
 			dispatch('set-user', null);
 		}
 	}
 	async function logout() {
-		const rv = await ajax.delete({}, '/user'), cnt = await(rv.json());
-		if(cnt) languageStore.value = cnt;
+		const rv = await ajax.delete({}, '/ego'), cnt = await(rv.json());
+			if(cnt) setLanguage(cnt, false);
 		dispatch('set-user', null);
 	}
 	let ppp: PopupSettings;
@@ -44,7 +44,7 @@
 	<Dropdown class="icon button" icon="colored blue user">
 		<Menu vertical>
 			<div class="right-aligned header">{$user.email}</div>
-			<LinkItem icon="cog" href="/user">{$I('cmd.configure')}</LinkItem>
+			<LinkItem icon="cog" href="/ego">{$I('cmd.configure')}</LinkItem>
 			<div class="ui divider"></div>
 			<LinkItem icon="sign out alternate" on:click={logout}>{$I('cmd.logout')}</LinkItem>
 		</Menu>

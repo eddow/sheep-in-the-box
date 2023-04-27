@@ -1,24 +1,33 @@
 import { readable } from "svelte/store";
 import { ajax } from "./ajax";
-import { languages, type Language, type Role, type TextType } from "./constants";
-import { privateStore } from "./privateStore";
+import { languages, type Language, type Role } from "./constants";
+import { privateStore } from "./stores/privateStore";
 import { i18n, i18nField,  } from 'svemantic';
 import { addTree, camel2dot } from "./utils";
+import globic from "./globic";
+import { frwrdReadable } from "./stores/frwrdStore";
 
 interface Dictionary {
 	hash: any;
 	roles: Role[]
 }
 let dics: Record<string, Dictionary> = {};
-export const languageStore = privateStore<Language>(),	//A- languageStore.value = ... is used when the dictionarries are managed
-	language = languageStore.store;
+const languageStore = globic(()=> privateStore<Language>());
+export const language = frwrdReadable(()=> languageStore.store);
 
-export async function setLanguage(lng: Language) {		//B- setLanguage is used to manage the directories
-	const rv = await ajax.post({language: lng, roles: dics[lng]?.roles}, '/user/ego'),
-		content = await rv.json();
+/**
+ * 
+ * @param lng 
+ * @param change If false, just set the language, but don't manage the language-change procedure
+ */
+export async function setLanguage(lng: Language, change: boolean = true) {
 	languageStore.value = lng;
-	if(content) gotTree(content);
-	else updateTexts();
+	if(change) {
+		const rv = await ajax.post({language: lng, roles: dics[lng]?.roles}, '/ego'),
+			content = await rv.json();
+		if(content) gotTree(content);
+		else updateTexts();
+	}
 }
 
 export let dictionary: Dictionary;

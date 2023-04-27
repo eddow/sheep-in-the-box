@@ -41,7 +41,7 @@
 				['fontname', ['fontname', 'fontsize']],
 				['color', ['color']],
 				['para', ['ul', 'ol', 'paragraph']],
-				['insert', <Summernote.toolbarInsertGroupOptions[]>['link', 'pick-link', pickPicture?'pick-picture':'picture', 'hr', 'table']],
+				['insert', <Summernote.toolbarInsertGroupOptions[]>['pick-link', pickPicture?'pick-picture':'picture', 'hr', 'table']],
 				['view', ['codeview', 'help']],
 			], popover: {
 				air: <Summernote.popoverAirDef><unknown>[	// Version difference between typings and library
@@ -49,7 +49,7 @@
 					['font', ['bold', 'underline', 'clear']],
 					['para', ['ul', 'paragraph']],
 					['table', ['table']],
-					['insert', ['link', 'pick-link', pickPicture?'pick-picture':'picture']]
+					['insert', ['pick-link', pickPicture?'pick-picture':'picture']]
 				],
 				image: <Summernote.popoverImageDef><unknown>[	// Version difference between typings and library
 					['image', ['resizeFull', 'resizeHalf', 'resizeQuarter', 'resizeNone']],
@@ -57,7 +57,7 @@
 					['remove', ['removeMedia']]
 				],
 				link: [
-					['link', ['linkDialogShow', 'unlink']]
+					['link', ['pick-link', 'unlink']]
 				],
 			}, buttons: {
 				'pick-picture'(context: any) {
@@ -124,6 +124,10 @@
 			}, callbacks: {
 				onChange(contents: string) {
 					contentValue = value = contents;
+				},
+				onInit({editingArea}: any) {
+					// Avoid svelte-kit to follow the link when they are selected for edition
+					editingArea[0].setAttribute('data-sveltekit-reload', '');
 				}
 			}
 		};
@@ -140,6 +144,7 @@
 	$: if(contentValue !== value) {
 		summernote('code', value || '');
 	}
+	// data-sveltekit-reload
 </script>
 {#await scriptLoad}
 	<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
@@ -156,7 +161,7 @@
 	</div>
 {/if}
 <ModalForm bind:modal={linkPicker}>
-	<h2 slot="header">{$I('ttl.pick-picture')}</h2>
+	<h2 slot="header">{lang?.link.insert}</h2>
 	<Field name="text" required text={lang?.link.textToDisplay}>
 		<Input type="text" />
 	</Field>

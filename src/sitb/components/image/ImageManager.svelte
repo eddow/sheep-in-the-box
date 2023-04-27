@@ -14,7 +14,7 @@
     import '@uppy/dashboard/dist/style.css';
     import '@uppy/webcam/dist/style.css';
 	import '@uppy/image-editor/dist/style.min.css';
-	import ArticleSelect from '../ArticleSelect.svelte';
+	import ArticleSelect from '../wysiwyg/ArticleSelect.svelte';
 	import type { ListedArticle } from '$sitb/server/article';
 	import ImagePicker from './ImagePicker.svelte';
 	import Form from '$svemantic/modules/form/Form.svelte';

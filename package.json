@@ -73,6 +73,7 @@
 		"reflect-metadata": "^0.1.13",
 		"summernote": "^0.8.20",
 		"svelte-dnd-action": "^0.9.22",
-		"svemantic": "^0.0.3"
+		"svemantic": "^0.0.3",
+		"viewerjs": "^1.11.3"
 	}
 }

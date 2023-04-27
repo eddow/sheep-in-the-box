@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { type RowEditionContext, getTblCtx, type AddableEditionContext, type Editing, setEdtnCtx, setRowCtx } from "./contexts";
-	import { privateStore } from "$sitb/privateStore";
+	import { privateStore } from "$sitb/stores/privateStore";
 	import { Form } from "svemantic";
 	import { compare } from "$sitb/utils";
 
