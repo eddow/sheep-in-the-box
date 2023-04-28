@@ -3,6 +3,7 @@
 	import { I, dictionary, gotTree, setLanguage } from '$sitb/intl';
 	import { ajax, user } from '$sitb/globals';
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
+	import { setGlobalUser } from '$sitb/user';
 
 	const dispatch = createEventDispatcher();
 	let doneLogingIn: ()=> void;
@@ -22,12 +23,14 @@
 			reset();
 			const login = await rv.json();
 			dispatch('set-user', login.user);
+			setGlobalUser(login.user);
 			setLanguage(login.user.language, false);
 			if(login.dictionary)
 				gotTree(login.dictionary);
 			doneLogingIn();
 		} else if(rv.status === 401) {
 			const cnt = await(rv.json());
+			setGlobalUser(null);
 			if(cnt) setLanguage(cnt, false);
 			toast({message: $I('err.login'), class: 'error'});
 			dispatch('set-user', null);

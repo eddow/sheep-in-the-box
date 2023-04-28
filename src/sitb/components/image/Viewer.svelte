@@ -1,10 +1,10 @@
-<script lang="ts" context="module">
-	import { I, addScript, addStyleSheet } from '$sitb/globals';
-	import { onMount } from 'svelte';
-	addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer.min.css');
-</script>
 <script lang="ts">
 	import Viewer from 'viewerjs';
+	import { createEventDispatcher, onMount } from 'svelte';
+	import { dev } from "$app/environment";
+	const
+		min = dev? '' : '.min',
+		dispatch = createEventDispatcher();
 	export let
 		images: string[];
 	let ul: HTMLElement,
@@ -56,11 +56,30 @@
 			...$$restProps,
 			url(img: HTMLImageElement) {
 				return img.dataset.original || img.src;
-			}
+			},
+			hidden(event: CustomEvent) { dispatch('hidden', event.detail); },
+			hide(event: CustomEvent) { dispatch('hide', event.detail); },
+			move(event: Viewer.MoveEvent) { dispatch('move', event.detail); },
+			moved(event: Viewer.MovedEvent) { dispatch('moved', event.detail); },
+			play(event: CustomEvent) { dispatch('play', event.detail); },
+			ready(event: CustomEvent) { dispatch('ready', event.detail); },
+			rotate(event: Viewer.RotateEvent) { dispatch('rotate', event.detail); },
+			rotated(event: Viewer.RotatedEvent) { dispatch('rotated', event.detail); },
+			scale(event: Viewer.ScaleEvent) { dispatch('scale', event.detail); },
+			scaled(event: Viewer.ScaledEvent) { dispatch('scaled', event.detail); },
+			show(event: CustomEvent) { dispatch('show', event.detail); },
+			shown(event: CustomEvent) { dispatch('shown', event.detail); },
+			stop(event: CustomEvent) { dispatch('stop', event.detail); },
+			view(event: CustomEvent) { dispatch('view', event.detail); },
+			viewed(event: CustomEvent) { dispatch('viewed', event.detail); },
+			zoom(event: Viewer.ZoomEvent) { dispatch('zoom', event.detail); },
+			zoomed(event: Viewer.ZoomedEvent) { dispatch('zoomed', event.detail); }
 		});
 	});
-
 </script>
+<svelte:head>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.3/viewer{min}.css" />
+</svelte:head>
 <div class={cls} bind:this={ul}>
 	{#each images||[] as image}
 		<img data-original={image} src={image+'?128'} alt={image} />

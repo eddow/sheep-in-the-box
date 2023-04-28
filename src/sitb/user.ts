@@ -71,8 +71,10 @@ const userPrefs = (preferences: Record<PropertyKey, any>)=> ({
 	}
 });
 
-function analyseRoles(rolestr?: string) {
-	const spec = rolestr?.split('|') || [];
+export function analyseRoles(rolestr?: string): Roles {
+	if(rolestr === undefined)
+		return <Roles>{lgdn: false};
+	const spec = rolestr.split('|') || [];
 	return <Roles>roles.reduce((p, c)=> ({...p, [c]: spec?.includes(c)}), {lgdn: true});
 }
 
@@ -82,7 +84,7 @@ export function setGlobalUser(userSpec: any) {
 	solveAllDelays();
 	userStore.value = userSpec && {
 		email: userSpec.email,
-		roles: analyseRoles(userSpec.roles)
+		roles: analyseRoles(userSpec.roles) || {}
 	};
 	if(userSpec)
 		setPrefOperations(userPrefs(userSpec.preferences), userSpec.preferences);

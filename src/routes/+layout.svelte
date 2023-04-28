@@ -1,30 +1,24 @@
 <script lang="ts">
 	import 'svemantic';
-	import { accessible, setGlobalUser } from "$sitb/user";
-	import Menu from './components/Menu.svelte';
+	import { accessible } from "$sitb/user";
+	import Menu from '../sitb/components/root/Menu.svelte';
 	import './styles.scss';
-	import type { LayoutData } from './$types';
 	import { page } from "$app/stores";
-	import { writable } from "svelte/store";
-	import { pageTitle, styles, scripts, scriptLoaded } from '$sitb/globals';
-	import Nf404 from '$sitb/components/Nf404.svelte';
-	export let data: LayoutData;
-	setGlobalUser(data.user);
+	import { dev } from "$app/environment";
+	import { pageTitle } from '$sitb/globals';
 	let pageFound: boolean;
-	$: pageFound = accessible($page.route.id);
+	$: pageFound = !$page.route.id || accessible($page.route.id);
 
+	const min = dev? '' : '.min';
 	const ttlHead = 'SitB';
 	let title: string;
 	// TODO setTitle in context
 	$: title = $pageTitle ? `${ttlHead} - ${$pageTitle}` : ttlHead;
 </script>
 <svelte:head>
-	{#each scripts as ss (ss)}
-		<script src={ss} on:load={()=> scriptLoaded(ss)}></script>
-	{/each}
-	{#each styles as style (style)}
-		<link rel="stylesheet" href={style} />
-	{/each}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery{min}.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic{min}.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fomantic-ui/2.9.2/semantic{min}.css" />
 	<title>{title}</title>
 </svelte:head>
 <div class="app">
@@ -33,14 +27,14 @@
 			<a href="/">SitB</a>
 		</div>
 		<div class="right menu">
-			<Menu on:set-user={e=> setGlobalUser(e.detail)} />
+			<Menu  />
 		</div>
 	</nav>
 	<div class="main">
 		{#if pageFound}
 			<slot />
 		{:else}
-			<Nf404 />
+			404 - TODO
 		{/if}
 	</div>
 </div>

@@ -3,9 +3,7 @@
 	import type { ArticleType } from '$sitb/constants';
 	import type { ReadArticle } from '$sitb/entities/article';
 	import { pageTitle } from '$sitb/globals';
-	import { getContext } from 'svelte';
 	import type { PageData } from "./$types";
-	import { page } from '$app/stores';
 	export let data: PageData;
 
 	import Ctlg from './types/Ctlg.svelte';

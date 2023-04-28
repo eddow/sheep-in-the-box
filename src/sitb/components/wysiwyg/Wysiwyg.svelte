@@ -1,11 +1,4 @@
-<script lang="ts" context="module">/*
-	import { text } from '@sveltejs/kit';
-	addStyleSheet('/node_modules/summernote/dist/summernote-lite.css');
-	const scriptLoad = addScript('/node_modules/summernote/dist/summernote-lite.js');*//*
-	addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css');
-	const scriptLoad = addScript('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js');*/
-	addStyleSheet('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.css');
-	const scriptLoad = addScript('https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.js');
+<script lang="ts" context="module">
 	export interface LinkInfo {
 		url: string
 		text: string
@@ -15,13 +8,8 @@
 	}
 </script>
 <script lang="ts">
-	import { Button, Buttons, Checkbox, Field, Input, ModalForm, Page, Tabs, module } from 'svemantic';/*
-	import 'summernote/dist/summernote-lite.css';
-	import 'summernote/dist/summernote-lite.js';*//*
-	import 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.css';
-	import 'https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.min.js';*/
-	import { I, addScript, addStyleSheet } from '$sitb/globals';
-	import { onMount, tick } from 'svelte';
+	import { Button, Buttons, Checkbox, Field, Input, ModalForm, Page, Tabs, module } from 'svemantic';
+	import { I } from '$sitb/globals';
 	import ArticleSelect from './ArticleSelect.svelte';
 	import type { ListedArticle } from '$sitb/server/article';
 
@@ -131,13 +119,9 @@
 				}
 			}
 		};
-	onMount(() => {
-		placeHolder = false;
-	});
 	type LinkType = 'article' | 'external' | 'code';
 	type LinkModel = {text: string, isNewWindow: boolean|'on'|'off', article: string, external: string, code: string};
 	let contentValue: string = value,
-		placeHolder = true,
 		linkPicker: (init: Partial<LinkModel>|undefined)=> Promise<LinkModel|undefined>,
 		linkType: LinkType = 'article',
 		lang: any;
@@ -146,20 +130,11 @@
 	}
 	// data-sveltekit-reload
 </script>
-{#await scriptLoad}
-	<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
-{/await}
-{#if placeHolder}
-	<div class="ui placeholder">
-		<div class="paragraph">
-			<div class="line"></div>
-			<div class="line"></div>
-			<div class="line"></div>
-			<div class="line"></div>
-			<div class="line"></div>
-		</div>
-	</div>
-{/if}
+<svelte:head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.css" />
+	</svelte:head>
+<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
 <ModalForm bind:modal={linkPicker}>
 	<h2 slot="header">{lang?.link.insert}</h2>
 	<Field name="text" required text={lang?.link.textToDisplay}>

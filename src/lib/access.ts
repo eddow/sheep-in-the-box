@@ -1,5 +1,5 @@
-import type { ArticleType, Role } from "$sitb/constants";
+import type { ArticleType, Roles } from "$sitb/constants";
 
-export function articleAccess(type: ArticleType, role: Role): boolean {
-	return true;// type !== 'ctlg' || role in ['cms', 'cust'];
+export function articleAccess(type: ArticleType, roles: Roles): boolean {
+	return type !== 'ctlg' || roles.cms || roles.cust;
 }

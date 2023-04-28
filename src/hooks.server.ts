@@ -62,3 +62,5 @@ export const handleError: HandleServerError = ({error})=> {
 	}
 	return {message: i(codes[code] || 'err.internal'), code};
 }
+
+// TODO hook.ts error logging
