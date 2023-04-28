@@ -22,6 +22,8 @@ export const language = frwrdReadable(()=> languageStore.store);
  */
 export async function setLanguage(lng: Language, change: boolean = true) {
 	languageStore.value = lng;
+	if(!dics[lng]) dics[lng] = {hash: {}, roles: []};
+	dictionary = dics[lng];
 	if(change) {
 		const rv = await ajax.post({language: lng, roles: dics[lng]?.roles}, '/ego'),
 			content = await rv.json();
@@ -35,13 +37,6 @@ export function resetDictionaries() {
 	dics = {};
 	dictionary = {hash: {}, roles: []};
 }
-
-language.subscribe((lng: Language)=> {
-	if(lng) {
-		if(!dics[lng]) dics[lng] = {hash: {}, roles: []};
-		dictionary = dics[lng];
-	}
-});
 
 export function gotTree({tree, roles}: {tree: any, roles: Role[]}) {
 	dictionary.roles.push(...roles);

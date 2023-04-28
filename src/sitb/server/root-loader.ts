@@ -1,9 +1,64 @@
 import { tree } from "$sitb/server/intl";
+import type { Handle } from '@sveltejs/kit';
+import { authed, persistPreference } from '$sitb/server/user';
+import { languages, type Language } from "$sitb/server/objects/intl";
+import { allGroups, setSSPersistPreference } from '$sitb/user';
+import { resetDictionaries } from '$sitb/intl';
+import { flat, i } from '$sitb/server/intl';
+import { setCookie, setSSR } from '$sitb/cookies';
+import em from '$sitb/server/db';
+import { RequestContext } from '@mikro-orm/core';
+import { setGlobicGetter } from '$sitb/globic';
+import { AsyncLocalStorage } from 'async_hooks';
 
-export default async function locals2data(locals: App.Locals) {
+export default function locals2data(locals: App.Locals) {
 	return {
 		user: locals.user,
 		language: locals.language,
-		dictionary: await tree(locals.dictionary)
+		dictionary: tree(locals.dictionary)
 	};
 }
+
+// Version when `user.roles` is still a string
+function accessible(routeId: string, user: any) {
+	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))
+		if(!user || (group !== 'lgdn' && !~user.roles.indexOf(group))) {
+			console.log('CS-401', `Unauthorized (@${group})`);
+			return false;
+		}
+	return true;
+}
+
+const globicStore = new AsyncLocalStorage<Record<string, any>>();
+setGlobicGetter(()=> globicStore.getStore());
+
+export const serve: Handle = async ({ event, resolve })=> {
+	setSSR(event.cookies);
+	setSSPersistPreference(persistPreference);
+	return globicStore.run({}, async ()=>
+		RequestContext.createAsync(em, async ()=> {
+			const user = await authed(event);
+			resetDictionaries();
+			let llng = event.params.lng || user?.language || event.cookies.get('language');
+			if(!llng) {
+				llng = event.request.headers.get('accept-language')?.
+						split(';').map(x=> x.split(' ')[1]).
+						find(x=> x && x in languages) ||
+					'en'
+				setCookie('language', llng);
+			}
+			event.locals.language = <Language>llng;
+			event.locals.preferences = (user ? user.preferences || (user.preferences = {}) : event.cookies.get('preferences')) || {};
+			event.locals.dictionary = await flat(event.locals.language, ((event.locals.user?.roles)?.split(' ') || []).concat(['']));
+			if(event.route.id && !accessible(event.route.id, user) && !/^text\/html/.test(event.request.headers.get('accept') || '')) {
+				return new Response('"Not avail"', {status: 401, statusText: 'Not authorized'});
+			}
+			return resolve(event, {
+				transformPageChunk(opts: { html: string, done: boolean }) {
+					return opts.html.replaceAll('%language%', event.locals.language);
+				}
+			});
+		}));
+};
+
+// TODO hook.ts error logging

@@ -10,7 +10,7 @@ export const flag = (lng: Language) => (flags[languages[lng].code] || lng);
 export type Role = 'lgdn' | typeof roles[number];
 export type Roles = Record<Role, boolean>;
 
-export const textTypes = ['', 'tpl', 'html'] as const;
+export const textTypes = ['', 'tpl', 'md', 'html'] as const;
 export type TextType = typeof textTypes[number];
 export interface User {
 	email: string;

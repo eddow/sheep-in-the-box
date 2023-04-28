@@ -1,7 +1,5 @@
 import { listArticles } from "$sitb/server/article";
 
-export async function load({parent, locals: {language}}: any) {
-	const data = await parent(),
-		list = await listArticles();
-	return {...data, list};
+export async function load(_: any) {
+	return {list: await listArticles()};
 }

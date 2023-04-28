@@ -111,3 +111,6 @@
 		</ModalEdit>
 	</Table>
 </MgtPage>
+<style lang="scss">
+	.prefix-icon i { margin-right: .5em; }
+</style>

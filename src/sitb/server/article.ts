@@ -1,5 +1,5 @@
 import { Article, ArticleText, ArticleImage, type ReadArticle } from "../entities/article";
-import type { Language, ArticleType } from '$sitb/constants';
+import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
 import em from "./db";
 import { save, load, remove } from './raw';
 import { error } from "@sveltejs/kit";
@@ -48,8 +48,7 @@ export interface ListedArticle {
 }
 export async function listArticles(): Promise<ListedArticle[]> {
 	return (<Article[]>//<unknown>serialize(
-		await articles.findAll({populate: ['texts.lng', 'texts.title', 'images']})/*,
-		{populate: ['texts.lng', 'texts.title', 'images']})*/
+		await articles.find({type: {$in: Object.keys(articleTypes)}}, {populate: ['texts.lng', 'texts.title', 'images']})
 	).map((article)=> ({
 		slug: article.slug,
 		type: article.type,

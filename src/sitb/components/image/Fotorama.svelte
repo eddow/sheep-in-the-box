@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { module } from 'svemantic';
+import External from './../External.svelte';
+	import { Loader, module } from 'svemantic';
 	export let
 		images: string[];
 	let cls: string = '';
@@ -52,12 +53,16 @@
 	});
 
 </script>
-<svelte:head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" />
-</svelte:head>
-<div class={cls} use:fotorama>
-	{#each images||[] as image}
-		<img src={image} alt={image} />
-	{/each}
-</div>
+<External lib="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama" module="fotorama" let:loading>
+	{#await loading}
+		<div class="ui placeholder" style="max-width: 100%;">
+			<div class="square image"></div>
+		</div>
+	{:then ok}
+		<div class={cls} use:fotorama>
+			{#each images||[] as image}
+				<img src={image} alt={image} />
+			{/each}
+		</div>
+	{/await}
+</External>

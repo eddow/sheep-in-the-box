@@ -104,7 +104,7 @@ export async function patchUser(email: string, diff: {email?: string, roles?: st
 	return em.persistAndFlush(user);
 }
 
-// Used by hook.server to access directly the DB instead of cookies or XHR
+// Used by server/root-loader to access directly the DB instead of cookies or XHR
 export async function persistPreference(email: string, name: string, value?: any) {
 	const user = await users.findOneOrFail({email});
 	if(value === undefined) {

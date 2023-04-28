@@ -4,25 +4,22 @@ Nothing to see here, I use this repo for sharing w/ pals and "saving" my work.
 
 ## install
 
-[https://fomantic-ui.com/introduction/getting-started.html]
-```sh
-$ cd node_modules/fomantic-ui
-$ npx gulp install
+Create a new sveltekit project
+link in the files:
+```
+./src/routes/[[lng=lng]/(sitb) -> /sheep-in-the-box/src/routes/[[lng=lng]]
+./src/sitb -> /sheep-in-the-box/src/sitb
+
 ```
 
-```sh
-$ cd semantic/
-$ npx gulp build
-```
+Copy the `src/params` folder
 
-# svemantic
+### `./src/routes/+layout`
+- `.ts` should return data from `import loadSideR from "$sitb/root-loader";`
+- `.server.ts` should return data from `import locals2data from "$sitb/server/root-loader";`
+- `.svelte` can include the language/user menu button from `import Menu from '$sitb/components/root/Menu.svelte';`
 
--> remove link in src/svemantic
--> change .kit.alias in svelte.config.js
--> uninstall jquery
-
-mklink -J src\svemantic ..\svemantic\src\lib
-
+### `./src
 # TODO
 
 - Data returned from `load` while rendering /[[lng=lng]]/(@cms)/edit/[article] is not serializable: Cannot stringify arbitrary non-POJOs (data.list[0].texts[0])

@@ -1,4 +1,4 @@
-import { articleAccess } from '$lib/access';
+import { articleAccess } from '$lib/articles';
 import { articleTypes } from '$sitb/const-lists';
 import type { ArticleType } from '$sitb/constants';
 import { getArticle } from '$sitb/server/article';

@@ -29,11 +29,7 @@ export const articleTypes = {
 	pres: {	// presentation
 		icon: 'file image',
 		color: '#dd8'
-	},
-	ctlg: {	// catalog
-		icon: 'money bill',
-		color: '#afb'
 	}
 } as const;
 
-export const roles = ['adm', 'trad', 'dev', 'cust', 'cms'] as const;
+export const roles = ['adm', 'trad', 'dev', 'cms'] as const;

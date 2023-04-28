@@ -48,7 +48,7 @@ function solveAllDelays() {
 }
 if(browser) window.addEventListener('beforeunload', solveAllDelays)
 
-// Used by hook.server so that this code works in SSR as well as CS-regular usage
+// Used by server/root-loader so that this code works in SSR as well as CS-regular usage
 export let persistPreference = (email: string, name: string, value?: string)=> ajax.patch({name, value}, '/ego')
 export function setSSPersistPreference(npp: (email: string, name: string, value?: string)=> any) {
 	persistPreference = npp;

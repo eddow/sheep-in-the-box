@@ -7,7 +7,8 @@ export function setGlobicGetter(getter: ()=>any) { getGlobic = getter; }
 function forwardProxy<T extends object = any>(get: ()=> any) {
 	return new Proxy<T>(<T>{}, {
 		get(target: any, prop: PropertyKey, receiver: any): any {
-			return get()[prop];
+			const obj = get(), rv = obj[prop];
+			return typeof rv === 'function' ? rv.bind(obj) : rv;
 		},
 		set(target: any, prop: PropertyKey, value: any, receiver: any): boolean {
 			get()[prop] = value;

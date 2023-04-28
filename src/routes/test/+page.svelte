@@ -9,6 +9,7 @@
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
 	import { browser } from '$app/environment';
+	import localStore from '$sitb/stores/localStore';
 
 	interface Item {
 		id: number;
@@ -51,9 +52,11 @@
 	}
 
 	let modaled: Item|undefined = undefined;
+
+	const tls = localStore<string>('test-string');
 </script>
 <MgtPage title="ttl.test">
-	
+	<input type="text" bind:value={$tls} />
 	<ReTable class="attached" compact="very" {saveCB} {deleteCB} celled striped selectable key="id" bind:data columnFilters let:model>
 		<RoColumn name="id" title="ID">
 			<Th collapsing slot="header">

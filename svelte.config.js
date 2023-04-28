@@ -11,14 +11,12 @@ const config = {
 	compilerOptions: {
 		enableSourcemap: true,
 	},
-	plugins: [
+	plugins: process.env.VERCEL ? [] : [
 		nodeLoaderPlugin()
 	],
 	kit: {
 		adapter: adapter(),
-		alias: process.env.VERCEL ? {
-				$sitb: './src/lib'
-			} : {
+		alias: {
 				$svemantic: './src/svemantic',
 				svemantic: './src/svemantic',
 				$sitb: './src/sitb'

@@ -65,3 +65,6 @@
 		</th>
 	</Column>
 {/if}
+<style lang="scss">
+	.prefix-icon i { margin-right: .5em; }
+</style>

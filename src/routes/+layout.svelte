@@ -1,8 +1,7 @@
 <script lang="ts">
 	import 'svemantic';
 	import { accessible } from "$sitb/user";
-	import Menu from '../sitb/components/root/Menu.svelte';
-	import './styles.scss';
+	import Menu from '$sitb/components/root/Menu.svelte';
 	import { page } from "$app/stores";
 	import { dev } from "$app/environment";
 	import { pageTitle } from '$sitb/globals';

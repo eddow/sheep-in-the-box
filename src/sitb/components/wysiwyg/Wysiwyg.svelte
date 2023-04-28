@@ -12,6 +12,7 @@
 	import { I } from '$sitb/globals';
 	import ArticleSelect from './ArticleSelect.svelte';
 	import type { ListedArticle } from '$sitb/server/article';
+	import External from '../External.svelte';
 
 	export let
 		pickPicture: (() => Promise<string|undefined>) | undefined = undefined,
@@ -130,11 +131,21 @@
 	}
 	// data-sveltekit-reload
 </script>
-<svelte:head>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.js"></script>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite.css" />
-	</svelte:head>
-<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
+<External lib="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.20/summernote-lite" module="summernote" let:loading>
+	{#await loading}
+		<div class="ui placeholder">
+			<div class="paragraph">
+				<div class="line"></div>
+				<div class="line"></div>
+				<div class="line"></div>
+				<div class="line"></div>
+				<div class="line"></div>
+			</div>
+		</div>
+	{:then ok}
+		<textarea style="display: none;" use:summernote={config} {name} bind:value></textarea>
+	{/await}
+</External>
 <ModalForm bind:modal={linkPicker}>
 	<h2 slot="header">{lang?.link.insert}</h2>
 	<Field name="text" required text={lang?.link.textToDisplay}>
