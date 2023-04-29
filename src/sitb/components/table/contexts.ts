@@ -12,19 +12,6 @@ export function getTblCtx<T extends Partial<TableContext> = TableContext>() { re
 export function setClmnCtx<T extends Partial<ColumnContext> = ColumnContext>(c: T) { setContext(columnContextKey, c); }
 export function getClmnCtx<T extends Partial<ColumnContext> = ColumnContext>() { return assertNnull(getContext<T>(columnContextKey), 'Element in a column'); }
 
-// Just unique objects
-const specialRow  = {
-	header: {},
-	filter: {},
-	footer: {}
-}
-
-export const specialRows = <T=any>()=> ({
-	header: <T>specialRow.header,
-	filter: <T>specialRow.filter,
-	footer: <T>specialRow.footer,
-})
-
 export interface TableContext<T=any> {
 	data: Readable<T[]>;
 	setFilter(key: any, filter?: (model: T)=> boolean): void;

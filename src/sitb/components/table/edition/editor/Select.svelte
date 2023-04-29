@@ -21,6 +21,7 @@
 	}
 	function getDisplay(value: string|string[]) {
 		if(!multiple) return itmDisplay(<string>value);
+		if(!value) return '';
 		if(typeof value === 'string') value = value.split(delimiter);
 		return value.map(itmDisplay).join(textDelimiter);
 	}

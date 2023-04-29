@@ -9,8 +9,7 @@
 		CellDisplayT = CellDisplay<T>,
 		edtnCtx = getEdtnCtx(),
 		{ dialog, editing, actions } = edtnCtx,
-		{ field, title } = getClmnCtx(),
-		{ name } = field || {name: ''};
+		{ field, title } = getClmnCtx();
 	console.assert(field, 'Automatic edition requires field name');
 	export let
 		getDisplay: (x: any, model: T)=> string = x=>x,
