@@ -1,10 +1,9 @@
-import { tree } from "$sitb/server/intl";
+import { tree, flat } from "$sitb/server/intl";
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { authed, persistPreference } from '$sitb/server/user';
-import { languages, type Language } from "$sitb/server/objects/intl";
-import { accessible, allGroups, setSSPersistPreference } from '$sitb/user';
+import { languages, type Language } from "$sitb/constants";
+import { accessible, setSSPersistPreference } from '$sitb/user';
 import { resetDictionaries } from '$sitb/intl';
-import { flat, i } from '$sitb/server/intl';
 import { setCookie, setSSR } from '$sitb/cookies';
 import em from '$sitb/server/db';
 import { RequestContext } from '@mikro-orm/core';
@@ -50,7 +49,7 @@ export const serve: Handle = async ({ event, resolve })=> {
 			}
 			event.locals.language = <Language>llng;
 			event.locals.preferences = (user ? user.preferences || (user.preferences = {}) : event.cookies.get('preferences')) || {};
-			event.locals.dictionary = await flat(event.locals.language, ((event.locals.user?.roles)?.split(' ') || []).concat(['']));
+			event.locals.dictionary = await flat(event.locals.language, ((event.locals.user?.roles)?.split('|') || []).concat(['']));
 			event.locals.roles = analyseRoles(user?.roles);
 			if(event.route.id && !accessible(event.route.id, event.locals.roles) && !/^text\/html/.test(event.request.headers.get('accept') || '')) {
 				return new Response('"Not avail"', {status: 401, statusText: 'Not authorized'});

@@ -3,6 +3,7 @@ import { flat, tree } from '$sitb/server/intl';
 import { persistPreference, patchUser, logout, changePass } from '$sitb/server/user';
 import { setCookie } from '$sitb/cookies';
 import { nodulesData } from '$sitb/server/root-loader';
+import { ok } from '$sitb/utils.js';
 
 // API related to "my user"
 
@@ -35,5 +36,5 @@ export async function DELETE(event) {	//logout
 export async function PUT(event: RequestEvent) {	//change pass
 	const {passCur, passNew} = await event.request.json();
 	await changePass(event, passCur, passNew);
-	return new Response(null, {status: 200});
+	return ok();
 }

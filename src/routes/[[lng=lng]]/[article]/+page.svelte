@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { typeComponents } from '$lib/articles';
 	import type { ReadArticle } from '$sitb/entities/article';
-	import { pageTitle } from '$sitb/globals';
+	import { setPageTitle } from '$sitb/globals';
 	import type { PageData } from "./$types";
 	export let data: PageData;
 
 	let article: ReadArticle, component: ConstructorOfATypedSvelteComponent|undefined;
 	$: {
 		article = data.article;
-		pageTitle.set(article.title);
+		setPageTitle(article.title);
 	}
 	$: component = typeComponents[article.type];
 </script>

@@ -4,6 +4,11 @@ export const assertNnull = <T>(v: T, msg: string): T => {
 	return v;
 };
 
+export function ok(status: number = 204) {
+	if(status < 200 || status >= 300) throw new Error(`Invalid status ${status}`);
+	return new Response(null, {status});
+}
+
 export function debugProxy(o: any) {
 	return new Proxy(o, {
 		set(target: any, prop: string | symbol, value: any, receiver: any) {

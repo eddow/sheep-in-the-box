@@ -1,4 +1,5 @@
 import { useCode } from '$sitb/server/user';
+import { ok } from '$sitb/utils';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export async function POST(event: RequestEvent) {
@@ -7,5 +8,5 @@ export async function POST(event: RequestEvent) {
 		(await event.request.json()).pass,
 		event.locals.language
 	);
-	return new Response(null, {status: 200})
+	return ok()
 }

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import ModalEdit from '$sitb/components/table/edition/modal/ModalEdit.svelte';
 	import { Input, Field, Accordion, Flag, NotSaved, Page, Button, Buttons, Th, Td, Popup } from 'svemantic';
-	import type { DictionaryEntry } from './DictionaryEntry';
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
@@ -10,10 +9,11 @@
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
 	import Wysiwyg from '$sitb/components/wysiwyg/Wysiwyg.svelte';
+	import type { TradDictionary } from '$sitb/intl';
 
 	export let data: PageData;
-	let dictionary: DictionaryEntry[] = data.transls;
-	const { Table, Column, RoColumn } = cellEditTable<DictionaryEntry>()
+	let dictionary: TradDictionary[] = data.transls;
+	const { Table, Column, RoColumn } = cellEditTable<TradDictionary>()
 	let reference: LangItem[],
 		work: LangItem[];
 	function nonKey(ref: LangItem[]): LangItem[]
@@ -32,12 +32,12 @@
 			value;
 	}
 
-	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
+	async function saveCB(old: TradDictionary, diff: Partial<TradDictionary>) {
 		const rv = await ajax.patch({key: old.key, diff});
 		if(!rv.ok) throw new NotSaved(await rv.text());
 	}
 
-	let modaled: DictionaryEntry|undefined = undefined;
+	let modaled: TradDictionary|undefined = undefined;
 	/*
 	- save
 	*/
