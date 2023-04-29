@@ -3,13 +3,10 @@
 	import ImageManager from "$sitb/components/image/ImageManager.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
 	import { ajax, I, language } from "$sitb/globals";
-	import { Flag, Input, Field, Form, Button, Tabs, Page, toast, Icon, prompt, InputHidden } from "svemantic";
+	import { Flag, Input, Field, Form, Button, Tabs, Page, Icon, ModalForm, Buttons, Loader } from "svemantic";
 	import type { PageData } from "./$types";
 	import { compare } from '$sitb/utils';
-	import { Loader } from 'svemantic';
-	import ModalForm from "$svemantic/modules/modal/ModalForm.svelte";
 	import ImagePicker from "$sitb/components/image/ImagePicker.svelte";
-	import Buttons from "$svemantic/elements/button/Buttons.svelte";
 	import { getContext } from "svelte";
 	import { type EditionContext, editionContext } from "../+layout.svelte";
 	export let data: PageData;

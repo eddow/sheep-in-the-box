@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved, prompt } from 'svemantic';
+	import { Form, Field, Input, Grid, Col, Button, ModalForm, Loader, Popup, NotSaved, prompt } from 'svemantic';
 	import { createEventDispatcher, getContext, onMount } from 'svelte';
 	import { ajax } from '$sitb/ajax';
 	import { I, language } from '$sitb/intl';
@@ -17,7 +17,6 @@
 	import ArticleSelect from '../wysiwyg/ArticleSelect.svelte';
 	import type { ListedArticle } from '$sitb/server/article';
 	import ImagePicker from './ImagePicker.svelte';
-	import Form from '$svemantic/modules/form/Form.svelte';
 
 	const
 		props = {
