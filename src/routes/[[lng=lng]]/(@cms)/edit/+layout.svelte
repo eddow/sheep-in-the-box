@@ -17,7 +17,7 @@
 	export let data: LayoutData;
 	import type { ListedArticle } from "$sitb/server/article";
 	import type { Readable } from "svelte/store";
-	import privateStore from "$svemantic/utils/privateStore";
+	import { privateStore } from "$sitb/stores/privateStore";
 	
 	let articles: ListedArticle[],
 		articlePrv = privateStore<ListedArticle[]>(),
