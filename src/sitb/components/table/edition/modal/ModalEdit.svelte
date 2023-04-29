@@ -1,23 +1,21 @@
 <script lang="ts">
 	import ModalPart from "./ModalPart.svelte";
-	import { type Editing, getTblCtx, type TableEditionContext, setRowCtx } from "../contexts";
+	import { type Editing, getTblCtx, type TableEditionContext } from "../contexts";
 	import { privateStore } from "$sitb/stores/privateStore";
 	import { Buttons, ModalForm } from "svemantic";
 	import { compare } from "$sitb/utils";
 
-	type T = $$Generic<{}>;
-	type keyT = string & keyof T;
+	type T = $$Generic;
 
 	export let
 		model: T|undefined;
 		
 	const
 		{ save: tblSave } = getTblCtx<TableEditionContext>(),
-		editingPrv = privateStore<Editing>(true),
-		modelPrv = privateStore<T|undefined>(model);
-	$: modelPrv.value = model;
+		editingPrv = privateStore<Editing>(true)
 	async function save(values: T) {
-		const diff = compare(values, model);
+		const diff = compare(values, <T>model);
+		if(!diff) return;
 		editingPrv.value = 'working';
 		try {
 			await tblSave(model!, diff);
@@ -25,7 +23,6 @@
 			editingPrv.value = true;
 		}
 	}
-	setRowCtx({model: modelPrv.store});
 </script>
 <ModalForm {save} huge bind:model>
 	<slot name="header" slot="header" />

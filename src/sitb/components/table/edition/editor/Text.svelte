@@ -1,19 +1,28 @@
 <script lang="ts">
-	import { InputBase, type FieldContext, type InputType } from 'svemantic';
+	import type { ComponentProps } from 'svelte';
+	import { InputBase, type InputType } from 'svemantic';
 	import Editor from './Editor.svelte'
-	import { getCellCtx, getClmnCtx } from '../contexts'
+	import { type ColumnContext, getClmnCtx } from '../contexts'
 
 	type T = $$Generic;
+	interface $$Props extends ComponentProps<Editor<T>> {
+		autofocus?: boolean;
+		placeholder?: string;
+		type?: InputType;
+	}
 
 	const
-		field = <FieldContext<T>>getClmnCtx().field,
-		{ value } = getCellCtx();
+		EditorT = Editor<T>,
+		field = getClmnCtx<ColumnContext<T>>().field!;
 	console.assert(field, 'Automatic edition requires field name');
 	export let
 		autofocus: boolean = false,
 		placeholder: string | undefined = undefined,
-		type: InputType = 'text';
+		type: InputType = 'text',
+		model: T;
+	let value: string;
+	$: value = <string>model[<keyof T>field.name] || '';
 </script>
-<Editor {...$$restProps}>
-	<InputBase {placeholder} {autofocus} {type} name={field.name} value={$value||''} />
-</Editor>
+<EditorT {model} {...$$restProps}>
+	<InputBase {placeholder} {autofocus} {type} name={field.name} {value} />
+</EditorT>

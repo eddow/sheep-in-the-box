@@ -1,22 +1,24 @@
 <script lang="ts">
+	import type { RowModel } from '../../Table.svelte';
+
 	import Column from '../../Column.svelte'
-	import { getRowCtx, getTblCtx } from '../../contexts';
-	import { getEdtnCtx, type RowContext } from '../contexts';
+	import { getTblCtx } from '../../contexts';
+	import { getEdtnCtx } from '../contexts';
 	import { I } from '$sitb/intl';;
-	import { Popup, Button, toast, Loader } from 'svemantic';
+	import { Popup, Button, Loader } from 'svemantic';
 	import type { AddableEditionContext, RowEditionContext } from './contexts';
 
 	type Edition = 'dialog'|'row'|'both'|false;
 	type T = $$Generic;
 
-	const { model: gvnRow } = getRowCtx<RowContext<T>>();
-	const { dialog, editing, deleteRow, startEdit } = getEdtnCtx<RowEditionContext<T>>();
-	const { deletable, add, editModal } = getTblCtx<AddableEditionContext<T>>();
+	const
+		{ dialog, editing, deleteRow, startEdit } = getEdtnCtx<RowEditionContext<T>>(),
+		{ deletable, add, editModal } = getTblCtx<AddableEditionContext<T>>(),
+		ColumnT = Column<T>;
 	export let edition: Edition = 'row',
 		create: Edition = false,
-		creation: ()=> T = ()=> (<T>{});
-	let row: T;
-	$: row = $gvnRow;
+		creation: ()=> T = ()=> (<T>{}),
+		model: RowModel<T>;
 	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
@@ -27,14 +29,15 @@
 			return;
 		await deleteRow();
 	}
+	const casT = (x: any)=> x as (T|undefined);
 </script>
 {#if dialog === 'actions'}
 	<Loader inverted loading={$editing === 'working'} />
 	<Button cancel class="prefix-icon" icon="times">{$I('cmd.cancel')}</Button>
 	<Button submit class="prefix-icon" primary icon="save">{$I('cmd.save')}</Button>
-	<slot name="dialog" adding={false} {row} />
+	<slot name="dialog" adding={false} model={casT(model)} />
 {:else if !dialog}
-	<Column>
+	<ColumnT {model} let:model>
 		<th scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> add(creation())} positive icon="add" />{/if}
 			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} icon={['external alternate', 'green corner add']} />{/if}
@@ -49,7 +52,7 @@
 				<slot name="edit-row" model={$editing} />
 			{:else}
 				{#if hasSpec(edition, 'row')}<Button tiny on:click={startEdit} icon="edit outline" />{/if}
-				{#if hasSpec(edition, 'dialog')}<Button tiny on:click={()=> editModal(row)} icon="external alternate" />{/if}
+				{#if hasSpec(edition, 'dialog')}<Button tiny on:click={()=> editModal(model)} icon="external alternate" />{/if}
 				{#if deletable}
 					<Button tiny on:click={()=> remove()} negative icon="trash alternate outline" />
 					{#if deleteConfirmation}
@@ -59,11 +62,11 @@
 						</Popup>
 					{/if}
 				{/if}
-				<slot name="row" editing={false} {row} />
-				<slot name="display-row" {row} />
+				<slot name="row" editing={false} {model} />
+				<slot name="display-row" {model} />
 			{/if}
 		</th>
-	</Column>
+	</ColumnT>
 {/if}
 <style lang="scss">
 	.prefix-icon i { margin-right: .5em; }

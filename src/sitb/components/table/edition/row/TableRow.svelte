@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type RowEditionContext, getTblCtx, type AddableEditionContext, type Editing, setEdtnCtx, setRowCtx } from "./contexts";
+	import { type RowEditionContext, getTblCtx, type AddableEditionContext, type Editing, setEdtnCtx } from "./contexts";
 	import { privateStore } from "$sitb/stores/privateStore";
 	import { Form } from "svemantic";
 	import { compare } from "$sitb/utils";
@@ -9,8 +9,7 @@
 	const FormT = Form<T>;
 
 	export let
-		model: T,
-		context: any = {};
+		model: T;
 	const editionContext = getTblCtx<AddableEditionContext<T>>(),
 		{ save, deleteRow, added, endEdit } = editionContext;
 		let t = 0;
@@ -25,6 +24,7 @@
 
 	async function saveRow({detail: {values}}: CustomEvent<{values: T}>) {
 		const diff = adding ? values : compare(values, model);
+		if(!diff) return;
 		editingPrv.value = 'working';
 		try {
 			endEdit(model, true);	// endEdit b4 save !important : remove from `added` before adding to `data`
@@ -41,9 +41,6 @@
 		endEdit(model, false);
 	}
 
-	const modelPrv = privateStore<T>(model);
-	$: modelPrv.value = model;
-	setRowCtx({model: modelPrv.store, ...context});
 	setEdtnCtx<RowEditionContext>({
 		dialog: false,
 		editing,

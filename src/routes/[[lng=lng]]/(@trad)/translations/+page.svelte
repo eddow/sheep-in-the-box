@@ -51,7 +51,7 @@
 	</svelte:fragment>
 	<Table class="attached" compact="very" {saveCB} celled striped selectable key="key" data={dictionary} columnFilters let:model>
 		{#each reference as lng (lng.id)}
-			<RoColumn name={lng.id} title="">
+			<RoColumn name={lng.id} title="" {model}>
 				<Th collapsing class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
 				</Th>
@@ -59,15 +59,15 @@
 			</RoColumn>
 		{/each}
 		{#each work as lng (lng.id)}
-			<Column name={lng.id} {html} {getDisplay}>
+			<Column name={lng.id} {html} {getDisplay} {model}>
 				<Th class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
 				</Th>
 				<StringContent slot="filter" />
-				<Text type="area" placeholder="" />
+				<Text type="area" placeholder="" {model} />
 			</Column>
 		{/each}
-		<RoColumn>
+		<RoColumn {model} let:model>
 			<th class="collapsing" slot="header" />
 			<Td>
 				<Button tiny on:click={()=> modaled = model} primary={model?.type === 'html'} icon="external alternate" />

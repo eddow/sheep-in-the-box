@@ -9,7 +9,7 @@
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
 	import { browser } from '$app/environment';
-	import localStore from '$sitb/stores/localStore';
+	import Table from '$sitb/components/table/Table.svelte';
 
 	interface Item {
 		id: number;
@@ -53,40 +53,46 @@
 
 	let modaled: Item|undefined = undefined;
 
-	const tls = localStore<string>('test-string');
 </script>
 <MgtPage title="ttl.test">
-	<input type="text" bind:value={$tls} />
-	<ReTable class="attached" compact="very" {saveCB} {deleteCB} celled striped selectable key="id" bind:data columnFilters let:model>
-		<RoColumn name="id" title="ID">
+	<Table class="attached" compact="very" celled striped selectable key="id" bind:data let:model>
+		<RoColumn name="id" title="ID" {model} let:model>
 			<Th collapsing slot="header">
 				ID
 			</Th>
 		</RoColumn>
-		<ReColumn name="text">
+		<RoColumn name="text" {model} title="Text" />
+	</Table>
+	<ReTable class="attached" compact="very" {saveCB} {deleteCB} celled striped selectable key="id" bind:data columnFilters let:model>
+		<RoColumn name="id" title="ID" {model}>
+			<Th collapsing slot="header">
+				ID
+			</Th>
+		</RoColumn>
+		<ReColumn name="text" {model} let:model>
 			<Th slot="header">
 				Text
 			</Th>
 			<StringContent slot="filter" />
-			<Text placeholder="" />
+			<Text placeholder="" {model} />
 		</ReColumn>
-		<Edition create="both" edition="both" />
+		<Edition create="both" edition="both" {model} />
 	</ReTable>
 	
 	<CeTable class="attached" compact="very" {saveCB} celled striped selectable key="id" bind:data columnFilters let:model>
-		<RoColumn name="id" title="ID">
+		<RoColumn name="id" title="ID" {model}>
 			<Th collapsing slot="header">
 				ID
 			</Th>
 		</RoColumn>
-		<CeColumn name="text">
+		<CeColumn name="text" {model} let:model>
 			<Th slot="header">
 				Text
 			</Th>
 			<StringContent slot="filter" />
-			<Text placeholder="" />
+			<Text placeholder="" {model} />
 		</CeColumn>
-		<RoColumn>
+		<RoColumn {model} let:model>
 			<th class="collapsing" slot="header" />
 			<Td>
 				<Button tiny on:click={()=> modaled = model} icon="external alternate" />

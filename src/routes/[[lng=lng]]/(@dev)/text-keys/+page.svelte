@@ -11,7 +11,7 @@
 	import { preference, Side } from "$sitb/preferences";
 	import type { Writable } from "svelte/store";
 	import type { DevDictionaryEntry } from "$sitb/intl";
-	import { Button, NotSaved, Modal, toast, type DropdownOption } from "svemantic";
+	import { Button, NotSaved, Modal, type DropdownOption } from "svemantic";
 	import { rowEditTable } from "$sitb/components/table/collections";
 	import MgtPage from "$sitb/components/MgtPage.svelte";
 	
@@ -31,8 +31,8 @@
 			ajax.post({language: $kLang, ...diff}) );
 		if(!rv.ok) throw new NotSaved('Cannot set infos');
 	}
-	async function deleteCB(row: DevDictionaryEntry) {
-		return (await ajax.delete({key: row.key})).ok;
+	async function deleteCB(model: DevDictionaryEntry) {
+		return (await ajax.delete({key: model.key})).ok;
 	}
 	let previewed: DevDictionaryEntry|undefined = undefined;
 	async function reloadKeys({detail: lng}: CustomEvent<Language>) {
@@ -47,25 +47,25 @@
 <MgtPage title="ttl.text-keys">
 	<Languages slot="config" bind:language={$kLang} on:set-language={reloadKeys} />
 	<Table class="attached" compact="very" single-line striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
-		<Column name="key">
+		<Column name="key" {model}>
 			<StringContent slot="filter" />
-			<Text required />
+			<Text required {model} />
 		</Column>
-		<Column name="text">
+		<Column name="text" {model}>
 			<StringContent slot="filter" />
-			<Text type="area" />
+			<Text type="area" {model} />
 		</Column>
-		<Column name="roles">
-			<Select options={textRoles} multiple delimiter="|" />
+		<Column name="roles" {model}>
+			<Select options={textRoles} multiple delimiter="|" {model} />
 		</Column>
-		<Column name="type">
-			<Select options={textTypeOptions} />
+		<Column name="type" {model}>
+			<Select options={textTypeOptions} {model} />
 		</Column>
-		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
-			<svelte:fragment slot="row">
+		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key" {model}>
+			<svelte:fragment slot="row" let:model>
 				{#if model?.type}<Button tiny color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" ></Button>{/if}
 			</svelte:fragment>
-			<svelte:fragment slot="dialog">
+			<svelte:fragment slot="dialog" let:model>
 				{#if model?.type}<Button color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" >{$I('cmd.preview')}</Button>{/if}
 			</svelte:fragment>
 		</Edition>

@@ -1,9 +1,19 @@
 <script lang="ts">
+	import type { ComponentProps } from 'svelte';
 	import Editor from './Editor.svelte'
 	import { Select, type DropdownOption, type RulesSpec, type FieldContext } from 'svemantic';
-	import { getCellCtx, getClmnCtx, getEdtnCtx, getRowCtx, type RowContext } from '../contexts';
+	import { getClmnCtx } from '../contexts';
 
 	type T = $$Generic;
+	interface $$Props extends ComponentProps<Editor<T>> {
+		options: DropdownOption[],
+		multiple?: boolean,
+		delimiter?: string,
+		textDelimiter?: string,
+		placeholder?: string,
+		model: T,
+		value?: string | string[] | undefined,
+	}
 
 	function itmDisplay(value: string) {
 		const itm = options.find(o=> o.value === value);
@@ -16,8 +26,8 @@
 	}
 
 	const
-		field = <FieldContext<T>>getClmnCtx().field,
-		{ value } = getCellCtx();
+		EditorT = Editor<T>,
+		field = <FieldContext<T>>getClmnCtx().field!;
 		
 	console.assert(field, 'Automatic edition requires field name');
 	export let
@@ -25,8 +35,11 @@
 		options: DropdownOption[],
 		delimiter: string = ',',
 		textDelimiter: string = ', ',
-		placeholder: string | undefined = undefined;
+		placeholder: string | undefined = undefined,
+		model: T,
+		value: string | string[] | undefined = '';
+	$: value = <string|string[]|undefined>model[<keyof T>field.name];
 </script>
-<Editor {...$$restProps} {getDisplay}>
-	<Select class="collapsing" {placeholder} fluid {options} {multiple} name={field.name} {delimiter} value={$value} />
-</Editor>
+<EditorT {model} {...$$restProps} {getDisplay}>
+	<Select class="collapsing" {placeholder} fluid {options} {multiple} name={field.name} {delimiter} {value} />
+</EditorT>

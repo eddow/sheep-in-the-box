@@ -54,9 +54,9 @@ $:	allItems[0].text = $I('fld.key');
 		groups[2].noDrop = id === 'key';
 	}
 </script>
-<Table data={[true]}>
-	{#each groups as group(group.id)}
-		<Column>
+<Table data={[true]} let:model>
+	{#each groups as group (group.id)}
+		<Column {model} let:model>
 			<th slot="header" class="flags">{$I('fld.trad.grp.'+group.id)}</th>
 			<td>
 				<Horizontal style="height: 1.5em" items={group.items} let:item

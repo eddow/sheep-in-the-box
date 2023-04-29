@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { Th } from 'svemantic';
 	import Column from './Column.svelte'
-	import { getRowCtx, getTblCtx, type RowContext } from './contexts'
+	import { getTblCtx } from './contexts'
 // TODO Re-check
 	type T = $$Generic;
-	export let selection: Set<T>;
-	const model = getRowCtx<RowContext>()?.model;
+	export let selection: Set<T>,
+		model: T;
 	let all: 'indeterminate'|boolean;
 	let selected: boolean;
 	let data: T[];
-	$: selected = selection.has($model);
+	$: selected = selection.has(model);
 	$: all = (selection.size === 0) ? false :
 		(selection.size === data.length) ? true :
 		'indeterminate';
 	function onChangeOne(evt: Event) {
-		selection[(evt.target as HTMLInputElement).checked?'add':'delete']($model);
+		selection[(evt.target as HTMLInputElement).checked?'add':'delete'](model);
 		selection = new Set(selection);
 	}
 	function onChangeAll(evt: Event) {
@@ -24,7 +24,7 @@
 	}
 	getTblCtx().data.subscribe((v: T[])=> { data = v; });
 </script>
-<Column>
+<Column {model}>
 	<Th slot="header" scope="col">
 		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
 			on:change={onChangeAll} />

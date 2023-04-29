@@ -1,3 +1,6 @@
+<script lang="ts" context="module">
+	export type RowModel<T> = T|'header'|'filter'|'footer';
+</script>
 <script lang="ts">
 	import { Table } from 'svemantic';
 	import TableRow from './TableRow.svelte'
@@ -50,32 +53,33 @@
 $:	console.assert(key || !filters.size, 'A table with `filters` needs a `key`');	// Indexes are not a good key as they change while filtering
 $:	displayedData = data.filter((model: T)=>
 		unfiltered.includes(model) || Array.from(filters.values()).every(filter=> filter(model)))
+	const id = (x: RowModel<T>)=> x;
 </script>
 <TableT {...$$restProps}>
 	<thead>
 		<slot name="header" />
 		{#if columnHeaders}
-			<svelte:component this={rowType} id="header" model={specialRow.header}>
-				<slot model={specialRow.header} />
+			<svelte:component this={rowType} id="header" model={id('header')}>
+				<slot model={id('header')} />
 			</svelte:component>
 		{/if}
 		{#if columnFilters}
-			<svelte:component this={rowType} id="filter" model={specialRow.filter}>
-				<slot model={specialRow.filter} />
+			<svelte:component this={rowType} id="filter" model={id('filter')}>
+				<slot model={id('filter')} />
 			</svelte:component>
 		{/if}
 	</thead>
 	<tbody>
 		{#each displayedData as model, ndx (rowId(model) || ndx)}
-			<svelte:component this={rowType} id={rowId(model)} model={model}>
+			<svelte:component this={rowType} id={rowId(model)} model={id(model)}>
 				<slot model={model} />
 			</svelte:component>
 		{/each}
 	</tbody>
 	<tfoot>
 		{#if columnFooters}
-			<svelte:component this={rowType} id="footer" model={specialRow.footer}>
-				<slot model={specialRow.footer} />
+			<svelte:component this={rowType} id="footer" model={id('footer')}>
+				<slot model={id('header')} />
 			</svelte:component>
 		{/if}
 		<slot name="footer" />

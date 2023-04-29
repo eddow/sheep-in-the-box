@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { RowModel } from "../../Table.svelte";
+
 	import TableRow from "./TableRow.svelte";
 	import Table, { type SaveCallback } from "../Table.svelte";
 	import type { AddableEditionContext } from "./contexts";
@@ -51,7 +53,7 @@
 		}
 		dispatch('saved', {model, old});
 	}
-	const castry = (x: Partial<T>[])=> <T[]>x;
+	const castry = (x: Partial<T>[])=> x as T[];
 </script>
 <TableT {saveCB} key={key} {...$$props} data={castry([...addedPrv.value, ...data])}
 	rowType={TableRow} unfiltered={castry(addedPrv.value)} context={edtnContext}

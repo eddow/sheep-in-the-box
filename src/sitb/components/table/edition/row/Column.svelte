@@ -1,4 +1,6 @@
 <script lang="ts">
+	import type { RowModel } from "../../Table.svelte";
+
 	import { Cell } from "svemantic";
 	import Column from "../../Column.svelte";
 	import { getEdtnCtx } from "../contexts";
@@ -15,11 +17,12 @@
 
 	export let
 		name: keyT|undefined = undefined,
-		header: boolean = false;
+		header: boolean = false,
+		model: RowModel<T>;
 	let cs: string;
 	$: cs = $editing ? 'editor' : '';
 </script>
-<ColumnT {name} {header} let:title {...$$restProps}>
+<ColumnT {name} {header} let:title {...$$restProps} {model} let:model>
 	<slot name="filter" slot="filter"><th></th></slot>
 	<slot name="header" slot="header"><th scope="col">{title}</th></slot>
 	<slot name="footer" slot="footer"><th scope="col" /></slot>
@@ -27,7 +30,7 @@
 		<slot {title} />
 	{:else}
 		<Cell {header} scope="row" class={cs}>
-			<slot {title} />
+			<slot {title} {model} />
 		</Cell>
 	{/if}
 </ColumnT>

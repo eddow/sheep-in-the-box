@@ -3,14 +3,15 @@
 	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|void>;
 </script>
 <script lang="ts">
-	import Table from "../Table.svelte";
+	import Table, { type RowModel } from "../Table.svelte";
 	import ModalEdit from "./modal/ModalEdit.svelte";
 	import type { TableEditionContext } from "./contexts";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
 
 	type T = $$Generic;
 	type keyT = string & keyof T;
-	const TableT = Table<T>;
+	const TableT = Table<T>,
+		ModalEditT = ModalEdit<T>;
 
 	interface $$Props extends ComponentProps<Table<T>> {
 		saveCB: SaveCallback;
@@ -23,7 +24,7 @@
 		key: keyT | undefined = undefined,
 		data: T[],
 		context = {};
-	let modalModel: Partial<T>|undefined = undefined;
+	let modalModel: T|undefined = undefined;
 	const
 		dispatch = createEventDispatcher(),
 		edtnContext: Partial<TableEditionContext<T>> = {
@@ -37,30 +38,31 @@
 				else data = [model, ...data];
 				dispatch('saved', {model, old});
 			},
-			async deleteRow(row: T) {
+			async deleteRow(model: T) {
 				console.assert(!!deleteCB, 'Delete called on non-deletable');
-				if(await deleteCB!(row) === false)
+				if(await deleteCB!(model) === false)
 					return false;
-				const ndx = data.indexOf(row);
+				const ndx = data.indexOf(model);
 				if(~ndx)
 					data = [...data.slice(0, ndx), ...data.slice(ndx+1)];
-				dispatch('deleted', row);
+				dispatch('deleted', model);
 			},
-			editModal(row: Partial<T>) {
-				modalModel = row;
+			editModal(model: Partial<T>) {
+				modalModel = <T>model;
 			},
 			...context
 		};
+	const rmCast = (x: any)=> (x as RowModel<T>);
 </script>
 <TableT {...$$props} bind:data {key} context={edtnContext} let:model>
-	<slot {model} />
+	<slot model={rmCast(model)} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 	<svelte:fragment slot="once">
 		<slot name="modal" model={modalModel}>
-			<ModalEdit bind:model={modalModel}>
-				<slot model={modalModel} />
-			</ModalEdit>
+			<ModalEditT bind:model={modalModel}>
+				<slot model={rmCast(modalModel)} />
+			</ModalEditT>
 		</slot>
 		<slot name="once" />
 	</svelte:fragment>
