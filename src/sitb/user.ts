@@ -4,6 +4,8 @@ import { jsonCookies } from "./cookies";
 import { ajax } from "./globals";
 import { privateStore } from "./stores/privateStore";
 import { setPrefOperations, Side } from "./preferences";
+import globic from "./globic";
+import { frwrdReadable } from "./stores/frwrdStore";
 
 export function* allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	let m = rex.exec(hay);
@@ -13,9 +15,11 @@ export function* allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	}
 }
 
-export function accessible(routeId: string) {
+export function accessible(routeId: string, roles?: Roles) {
+	if(!roles)
+		roles = userStore.value?.roles || <Roles>{lgdn: false};
 	for(const group of allGroups(/\/\(@(.*?)\)\//g, routeId, 1))
-		if(!userStore.value ||!(<Roles>userStore.value.roles)[<Role>group]) {
+		if(!roles[<Role>group]) {
 			console.log('CS-401', `Unauthorized (@${group})`);
 			return false;
 		}
@@ -78,8 +82,8 @@ export function analyseRoles(rolestr?: string): Roles {
 	return <Roles>roles.reduce((p, c)=> ({...p, [c]: spec?.includes(c)}), {lgdn: true});
 }
 
-const userStore = privateStore<User>();
-export const user: SvelteStore<User> = userStore.store;
+const userStore = globic(()=> privateStore<User>());
+export const user = frwrdReadable(()=> userStore.store);
 export function setGlobalUser(userSpec: any) {
 	solveAllDelays();
 	userStore.value = userSpec && {

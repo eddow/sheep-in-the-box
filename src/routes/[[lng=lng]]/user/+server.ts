@@ -1,7 +1,8 @@
 import { json } from '@sveltejs/kit';
-import { login, logout, changePass, register } from "$sitb/server/user";
+import { login, logout, register } from "$sitb/server/user";
 import { flat, tree } from '$sitb/server/intl';
 import type { RequestEvent } from './$types';
+import { nodulesData } from '$sitb/server/root-loader';
 
 export async function POST(event: RequestEvent) {	//login
 	const {email, pass, roles} = await event.request.json();
@@ -14,6 +15,7 @@ export async function POST(event: RequestEvent) {	//login
 	const toSendRoles = (user.roles?.split('|')||[]).concat(['']).filter(r=> !roles.includes(r)), rv: any = {user};
 	if(toSendRoles.length)
 		rv.dictionary = {roles: toSendRoles, tree: tree(await flat(user.language, toSendRoles))}
+	rv.nodules = await nodulesData(event);
 	return json(rv);
 }
 

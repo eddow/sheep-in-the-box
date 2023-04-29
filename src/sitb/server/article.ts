@@ -97,7 +97,7 @@ export async function deleteArticle(slug: string) {
 		article = await articles.findOneOrFail({slug}, {populate: true}),
 		hashes = article.images?.getItems().map(img => img.hash);
 	return await Promise.all([
-		articles.removeAndFlush(article),
+		em.removeAndFlush(article),
 		hashes ? garbageCollect(hashes) : Promise.resolve()
 	]);
 }
@@ -153,7 +153,7 @@ export async function deleteImg(slug: string, name: string) {
 	const article = await articles.findOneOrFail({slug});
 	const img = await images.findOneOrFail({article: article._id, name});
 	await Promise.all([
-		images.removeAndFlush(img),
+		em.removeAndFlush(img),
 		garbageCollect([img.hash])
 	]);
 }

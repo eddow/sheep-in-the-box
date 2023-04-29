@@ -11,7 +11,7 @@ link in the files:
 ./src/sitb -> /sheep-in-the-box/src/sitb
 
 ```
-
+The `sitb` folder must be referenced as `$sitb` in `svelte.config.js` *and* be a dirrect sibbling of `nodules` (be in `/src/`)
 Copy the `src/params` folder
 
 ### `./src/routes/+layout`

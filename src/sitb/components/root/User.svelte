@@ -4,6 +4,7 @@
 	import { ajax, user } from '$sitb/globals';
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 	import { setGlobalUser } from '$sitb/user';
+	import { nodulesData } from '$sitb/nodules';
 
 	const dispatch = createEventDispatcher();
 	let doneLogingIn: ()=> void;
@@ -25,6 +26,7 @@
 			dispatch('set-user', login.user);
 			setGlobalUser(login.user);
 			setLanguage(login.user.language, false);
+			nodulesData.set(login.nodules);
 			if(login.dictionary)
 				gotTree(login.dictionary);
 			doneLogingIn();
@@ -38,7 +40,11 @@
 	}
 	async function logout() {
 		const rv = await ajax.delete({}, '/ego'), cnt = await(rv.json());
-			if(cnt) setLanguage(cnt, false);
+		setGlobalUser(null);
+		if(cnt) {
+			setLanguage(cnt.language, false);
+			nodulesData.set(cnt.nodules);
+		}
 		dispatch('set-user', null);
 	}
 	let ppp: PopupSettings;

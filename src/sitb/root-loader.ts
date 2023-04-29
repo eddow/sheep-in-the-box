@@ -1,6 +1,7 @@
 import { gotTree, setLanguage } from "$sitb/intl";
 import type { Role } from "$sitb/constants";
 import { setGlobalUser } from "$sitb/user";
+import { nodulesData } from "./nodules";
 
 export default function loadSideR(data: any) {
 	setLanguage(data.language, false);
@@ -9,5 +10,6 @@ export default function loadSideR(data: any) {
 	if(data.user?.roles) roles.push(...data.user.roles.split('|'));
 	gotTree({tree: data.dictionary, roles});
 	setGlobalUser(data.user);
+	nodulesData.set(data.nodules);
 	return data;
 }

@@ -2,6 +2,7 @@ import adapter from '@sveltejs/adapter-auto';
 import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
+import noduleLoader from './src/sitb/rollup/nodules.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -11,12 +12,17 @@ const config = {
 	compilerOptions: {
 		enableSourcemap: true,
 	},
-	plugins: process.env.VERCEL ? [] : [
-		nodeLoaderPlugin()
+	plugins: [
+		noduleLoader('menu', '+menu.svelte'),
+		...(process.env.VERCEL ? [] : [
+			nodeLoaderPlugin()
+		])
 	],
 	kit: {
 		adapter: adapter(),
-		alias: {
+		alias: process.env.VERCEL ? {
+				$sitb: './src/sitb'
+			} : {
 				$svemantic: './src/svemantic',
 				svemantic: './src/svemantic',
 				$sitb: './src/sitb'

@@ -1,5 +1,5 @@
 import { articleAccess } from '$lib/articles';
-import { articleTypes } from '$sitb/const-lists';
+import { articleTypes } from '$lib/const-lists';
 import type { ArticleType } from '$sitb/constants';
 import { getArticle } from '$sitb/server/article';
 import { analyseRoles } from '$sitb/user';

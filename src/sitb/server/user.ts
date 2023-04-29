@@ -1,4 +1,4 @@
-import { map, stringIds } from "./db";
+import { stringIds } from "./db";
 import User, { UserRegistration, UserSession } from "$sitb/entities/user";
 import { error, type RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
@@ -11,6 +11,7 @@ import { stringCookies } from "$sitb/cookies";
 
 import em from "./db";
 import { serialize, wrap } from "@mikro-orm/core";
+import { analyseRoles } from "$sitb/user";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
@@ -24,8 +25,8 @@ const
 export async function cleanup() {
 	const ts = Date.now();
 	return await Promise.all([
-		regs.removeAndFlush(regs.find({ts: {$lt: ts-regTimeout}})),
-		sessions.removeAndFlush(sessions.find({ts: {$lt: ts-regTimeout}}))
+		em.removeAndFlush(regs.find({ts: {$lt: ts-regTimeout}})),
+		em.removeAndFlush(sessions.find({ts: {$lt: ts-regTimeout}}))
 	]);
 }
 
@@ -34,12 +35,12 @@ export async function authed(event: RequestEvent<Partial<Record<string, string>>
 	if(!authKey) return null;
 	let rv = await sessions.findOne({authKey}, {populate: ['user']});
 	if(rv && ts-rv.ts > liTimeout) {
-		await sessions.removeAndFlush(rv);
+		await em.removeAndFlush(rv);
 		rv = null;
 	}
 	if(rv) {
 		rv.ts = ts;
-		await sessions.persistAndFlush(rv);
+		await em.persistAndFlush(rv);
 		stringCookies.session = authKey;	// Refresh the maxAge
 	} else {
 		if(authKey) event.cookies.delete('session', {path: '/'});
@@ -55,6 +56,7 @@ export async function login(event: RequestEvent<Partial<Record<string, string>>,
 	await sessions.upsert({user: user._id, authKey, ts: Date.now()});
 	stringCookies.session = authKey;
 	event.locals.language = user.language;
+	event.locals.roles = analyseRoles(user.roles);
 	return event.locals.user = serialize(user);
 }
 
@@ -62,9 +64,10 @@ export async function logout(event: RequestEvent<Partial<Record<string, string>>
 	const authKey = event.cookies.get('session');
 	if(!authKey) return false;
 	let session = await sessions.findOneOrFail({authKey});
-	await sessions.removeAndFlush(session);
+	await em.removeAndFlush(session);
 	delete event.locals.user;
 	event.locals.language = <Language>event.cookies.get('language');
+	event.locals.roles = {lgdn: false};
 	return true;
 }
 
@@ -79,7 +82,7 @@ export async function registration(code: string) : Promise<UserRegistration> {
 	const reg = await regs.findOneOrFail({code});
 	
 	if(ts-reg.ts > regTimeout) {
-		await regs.removeAndFlush(reg);
+		await em.removeAndFlush(reg);
 		throw error(404, code)
 	}
 	return reg;
@@ -113,7 +116,7 @@ export async function persistPreference(email: string, name: string, value?: any
 		user.preferences = unprefed;
 	} else if(user.preferences) user.preferences = {...user.preferences, [name]: value};
 	else user.preferences = {[name]: value};
-	await users.persistAndFlush(user);
+	await em.persistAndFlush(user);
 	return user.preferences;
 }
 
@@ -149,11 +152,14 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 		});
 }
 
-export async function useCode(code: string, password: string) {
+export async function useCode(code: string, password: string, language: Language) {
 	const reg = await registration(code);
 	
-	await regs.removeAndFlush(reg);
-	return users.upsert({email:reg.email, password: md5(password)})
+	await em.removeAndFlush(reg);
+	let user = await users.findOne({email: reg.email});
+	if(!user) user = users.create({email: reg.email, roles: 'new', language});
+	user.password = md5(password);
+	return em.persistAndFlush(user);
 }
 
 //#endregion

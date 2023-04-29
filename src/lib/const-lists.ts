@@ -32,4 +32,4 @@ export const articleTypes = {
 	}
 } as const;
 
-export const roles = ['adm', 'trad', 'dev', 'cms'] as const;
+export const roles = ['adm', 'trad', 'dev', 'cms', 'new'] as const;

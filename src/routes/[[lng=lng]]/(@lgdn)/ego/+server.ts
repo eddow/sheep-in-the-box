@@ -2,6 +2,7 @@ import { json, type RequestEvent } from '@sveltejs/kit';
 import { flat, tree } from '$sitb/server/intl';
 import { persistPreference, patchUser, logout, changePass } from '$sitb/server/user';
 import { setCookie } from '$sitb/cookies';
+import { nodulesData } from '$sitb/server/root-loader';
 
 // API related to "my user"
 
@@ -25,11 +26,14 @@ export async function PATCH(event: RequestEvent) {	// set/delete preference
 }
 
 export async function DELETE(event) {	//logout
-	return json(await logout(event) ? event.locals.language : false);
+	return json(await logout(event) ? {
+		language: event.locals.language,
+		nodules: await nodulesData(event)
+	} : false);
 }
 
 export async function PUT(event: RequestEvent) {	//change pass
 	const {passCur, passNew} = await event.request.json();
 	await changePass(event, passCur, passNew);
-	return json({ok: true});
+	return new Response(null, {status: 200});
 }
