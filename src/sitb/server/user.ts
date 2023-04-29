@@ -25,8 +25,8 @@ const
 export async function cleanup() {
 	const ts = Date.now();
 	return await Promise.all([
-		em.removeAndFlush(regs.find({ts: {$lt: ts-regTimeout}})),
-		em.removeAndFlush(sessions.find({ts: {$lt: ts-regTimeout}}))
+		regs.nativeDelete({ts: {$lt: ts-regTimeout}}),
+		sessions.nativeDelete({ts: {$lt: ts-liTimeout}})
 	]);
 }
 
@@ -63,8 +63,7 @@ export async function login(event: RequestEvent<Partial<Record<string, string>>,
 export async function logout(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
 	const authKey = event.cookies.get('session');
 	if(!authKey) return false;
-	let session = await sessions.findOneOrFail({authKey});
-	await em.removeAndFlush(session);
+	await sessions.nativeDelete({authKey});
 	delete event.locals.user;
 	event.locals.language = <Language>event.cookies.get('language');
 	event.locals.roles = {lgdn: false};
@@ -155,8 +154,7 @@ export async function register(event: RequestEvent<Partial<Record<string, string
 export async function useCode(code: string, password: string, language: Language) {
 	const reg = await registration(code);
 	
-	await em.removeAndFlush(reg);
-	let user = await users.findOne({email: reg.email});
+	let [user, _] = await Promise.all([users.findOne({email: reg.email}), em.removeAndFlush(reg)]);
 	if(!user) user = users.create({email: reg.email, roles: 'new', language});
 	user.password = md5(password);
 	return em.persistAndFlush(user);

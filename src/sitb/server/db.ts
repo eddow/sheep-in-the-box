@@ -4,7 +4,6 @@ import { connect } from 'mongoose';
 import { MikroORM } from '@mikro-orm/core'
 import config from './config'
 import type { EntityManager  } from '@mikro-orm/mongodb';
-//import articleEntities from './objects/article';
 
 import { MONGODB_URI }  from "$env/static/private";
 import { error } from '@sveltejs/kit';

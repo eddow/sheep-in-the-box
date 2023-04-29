@@ -10,6 +10,7 @@ declare global {
 			language: Language;
 			dictionary: Record<string, string>;
 			preferences: Record<string, unknown>;
+			roles: Roles;
 		}
 	}
 }
