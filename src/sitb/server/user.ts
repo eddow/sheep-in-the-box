@@ -12,8 +12,8 @@ import { serialize } from "@mikro-orm/core";
 import { analyseRoles } from "$sitb/user";
 import em from "./db";
 
-const liTimeout = (LOGGEDIN_TIMEOUT ? eval(LOGGEDIN_TIMEOUT) : 5*60) * 1000,
-	regTimeout = (REGISTRATION_TIMEOUT ? eval(REGISTRATION_TIMEOUT) : 1*60*60)*1000
+const liTimeout = (LOGGEDIN_TIMEOUT ? +LOGGEDIN_TIMEOUT : 5*60) * 1000,
+	regTimeout = (REGISTRATION_TIMEOUT ? +REGISTRATION_TIMEOUT : 1*60*60)*1000
 
 const
 	users = em.getRepository(User),
