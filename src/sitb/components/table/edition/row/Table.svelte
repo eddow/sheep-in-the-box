@@ -1,6 +1,4 @@
 <script lang="ts">
-	import type { RowModel } from "../../Table.svelte";
-
 	import TableRow from "./TableRow.svelte";
 	import Table, { type SaveCallback } from "../Table.svelte";
 	import type { AddableEditionContext } from "./contexts";

@@ -56,43 +56,43 @@
 </script>
 <MgtPage title="ttl.test">
 	<Table class="attached" compact="very" celled striped selectable key="id" bind:data let:model>
-		<RoColumn name="id" title="ID" {model} let:model>
+		<RoColumn name="id" title="ID" let:model>
 			<Th collapsing slot="header">
 				ID
 			</Th>
 		</RoColumn>
-		<RoColumn name="text" {model} title="Text" />
+		<RoColumn name="text" title="Text" />
 	</Table>
 	<ReTable class="attached" compact="very" {saveCB} {deleteCB} celled striped selectable key="id" bind:data columnFilters let:model>
-		<RoColumn name="id" title="ID" {model}>
+		<RoColumn name="id" title="ID">
 			<Th collapsing slot="header">
 				ID
 			</Th>
 		</RoColumn>
-		<ReColumn name="text" {model} let:model>
+		<ReColumn name="text" let:model>
 			<Th slot="header">
 				Text
 			</Th>
 			<StringContent slot="filter" />
-			<Text placeholder="" {model} />
+			<Text placeholder="" />
 		</ReColumn>
-		<Edition create="both" edition="both" {model} />
+		<Edition create="both" edition="both" />
 	</ReTable>
 	
 	<CeTable class="attached" compact="very" {saveCB} celled striped selectable key="id" bind:data columnFilters let:model>
-		<RoColumn name="id" title="ID" {model}>
+		<RoColumn name="id" title="ID">
 			<Th collapsing slot="header">
 				ID
 			</Th>
 		</RoColumn>
-		<CeColumn name="text" {model} let:model>
+		<CeColumn name="text" let:model>
 			<Th slot="header">
 				Text
 			</Th>
 			<StringContent slot="filter" />
-			<Text placeholder="" {model} />
+			<Text placeholder="" />
 		</CeColumn>
-		<RoColumn {model} let:model>
+		<RoColumn let:model>
 			<th class="collapsing" slot="header" />
 			<Td>
 				<Button tiny on:click={()=> modaled = model} icon="external alternate" />

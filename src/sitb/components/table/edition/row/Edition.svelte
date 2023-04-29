@@ -1,8 +1,6 @@
 <script lang="ts">
-	import type { RowModel } from '../../Table.svelte';
-
 	import Column from '../../Column.svelte'
-	import { getTblCtx } from '../../contexts';
+	import { getRowCtx, getTblCtx } from '../../contexts';
 	import { getEdtnCtx } from '../contexts';
 	import { I } from '$sitb/intl';;
 	import { Popup, Button, Loader } from 'svemantic';
@@ -14,11 +12,11 @@
 	const
 		{ dialog, editing, deleteRow, startEdit } = getEdtnCtx<RowEditionContext<T>>(),
 		{ deletable, add, editModal } = getTblCtx<AddableEditionContext<T>>(),
-		ColumnT = Column<T>;
+		ColumnT = Column<T>,
+		model = getRowCtx<T|undefined>();
 	export let edition: Edition = 'row',
 		create: Edition = false,
-		creation: ()=> T = ()=> (<T>{}),
-		model: RowModel<T>;
+		creation: ()=> T = ()=> (<T>{});
 	
 	function hasSpec(e: Edition, spec: Edition) {
 		return <string>e in {[<string>spec]: 1, both: 1};
@@ -29,15 +27,14 @@
 			return;
 		await deleteRow();
 	}
-	const casT = (x: any)=> x as (T|undefined);
 </script>
 {#if dialog === 'actions'}
 	<Loader inverted loading={$editing === 'working'} />
 	<Button cancel class="prefix-icon" icon="times">{$I('cmd.cancel')}</Button>
 	<Button submit class="prefix-icon" primary icon="save">{$I('cmd.save')}</Button>
-	<slot name="dialog" adding={false} model={casT(model)} />
+	<slot name="dialog" adding={false} model={$model} />
 {:else if !dialog}
-	<ColumnT {model} let:model>
+	<ColumnT let:model>
 		<th scope="col" slot="header">
 			{#if hasSpec(create, 'row')}<Button tiny on:click={()=> add(creation())} positive icon="add" />{/if}
 			{#if hasSpec(create, 'dialog')}<Button tiny on:click={()=> editModal(creation())} icon={['external alternate', 'green corner add']} />{/if}

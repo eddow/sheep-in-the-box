@@ -14,8 +14,7 @@
 	export let
 		getDisplay: (x: any, model: T)=> string = x=>x,
 		required: boolean = false,
-		validate: RulesSpec|undefined = undefined,
-		model: any;
+		validate: RulesSpec|undefined = undefined;
 	let cs: string = actions ? 'left action' : '';
 </script>
 {#if field && $editing && dialog !== 'actions'}
@@ -27,7 +26,7 @@
 	</Field>
 {:else if !dialog}
 	<slot name="display">
-		<CellDisplayT {getDisplay} {model} />
+		<CellDisplayT {getDisplay} />
 	</slot>
 {/if}
 <style lang="scss" global>

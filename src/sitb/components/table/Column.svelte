@@ -1,8 +1,6 @@
 <script lang="ts">
-	import type { RowModel } from './Table.svelte';
-
 	import { privateStore } from '$sitb/stores/privateStore';
-	import { getTblCtx, setClmnCtx, type ColumnContext } from './contexts'
+	import { getTblCtx, setClmnCtx, type ColumnContext, specialRow, getRowCtx } from './contexts'
 	import { I } from '$sitb/globals';
 	import { Cell } from 'svemantic';
 	import CellDisplay from './CellDisplay.svelte';
@@ -17,8 +15,7 @@
 		controls: ConstructorOfATypedSvelteComponent|undefined = undefined,
 		collapsing: boolean = false,
 		html: ((model: any)=> boolean)|boolean = false,
-		getDisplay = (x: any, model: any)=> x?.toString() || '',
-		model: RowModel<T>;
+		getDisplay = (x: any, model: any)=> x?.toString() || '';
 	const
 		tblSetFilter = getTblCtx().setFilter,
 		titlePrv = privateStore<string>(),
@@ -36,28 +33,29 @@
 			header,
 			field,
 			title: titlePrv.store
-		};
+		},
+		model = getRowCtx<T|symbol>();
 	setClmnCtx(context);
 	$: textPrv.value = $I(`fld.${name||'unnamed'}`);
 	$: titlePrv.value = title === true ? textPrv.value : title;
-	const cast =(x: RowModel<T>)=> x as T;
+	const cast =(x: T|symbol)=> x as T;
 </script>
 {#if !tblSetFilter}
 	<td class="error message">`Column` is to be used in a `Table` only</td>
-{:else if model === 'filter'}
+{:else if $model === specialRow.filter}
 	<slot name="filter">
 		<th></th>
 	</slot>
-{:else if model === 'header'}
+{:else if $model === specialRow.header}
 	<slot name="header">
 		<th scope="col">{titlePrv.value}</th>
 	</slot>
-{:else if model === 'footer'}
+{:else if $model === specialRow.footer}
 	<slot name="footer"><th scope="col" /></slot>
 {:else if model !== undefined}
-	<slot model={cast(model)} title={titlePrv.value}>
+	<slot model={cast($model)} title={titlePrv.value}>
 		<Cell {header} scope="row" {collapsing}>
-			<CellDisplay model={cast(model)} />
+			<CellDisplay />
 		</Cell>
 	</slot>
 {/if}

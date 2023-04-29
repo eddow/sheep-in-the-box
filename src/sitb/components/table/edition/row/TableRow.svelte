@@ -1,26 +1,24 @@
 <script lang="ts">
-	import { type RowEditionContext, getTblCtx, type AddableEditionContext, type Editing, setEdtnCtx } from "./contexts";
+	import { type RowEditionContext, getTblCtx, type AddableEditionContext, type Editing, setEdtnCtx, setRowCtx } from "./contexts";
 	import { privateStore } from "$sitb/stores/privateStore";
-	import { Form } from "svemantic";
+	import { Form, Tr } from "svemantic";
 	import { compare } from "$sitb/utils";
 
 	type T = $$Generic;
 
-	const FormT = Form<T>;
-
 	export let
 		model: T;
-	const editionContext = getTblCtx<AddableEditionContext<T>>(),
-		{ save, deleteRow, added, endEdit } = editionContext;
-		let t = 0;
-	const	// Weird but need 2 `const` declaration
+	const
+		FormT = Form<T>,
+		{ save, deleteRow, added, endEdit } = getTblCtx<AddableEditionContext<T>>();
+	const	// Weird but need 2 `const` declaration for `added` to be in scope
 		editingPrv = privateStore<Editing>($added.includes(model)),
-		editing = editingPrv.store;
-		
+		editing = editingPrv.store,
+		modelPrv = privateStore<T|symbol>(model);
+	$: modelPrv.value = model;
+	setRowCtx<T|symbol>(modelPrv.store);
 	let adding: boolean;
-	$: {
-		adding = $added.includes(model);
-	}
+	$: adding = $added.includes(model);
 
 	async function saveRow({detail: {values}}: CustomEvent<{values: T}>) {
 		const diff = adding ? values : compare(values, model);
@@ -64,7 +62,7 @@
 		<slot {model} />
 	</FormT>
 {:else}
-	<tr {...$$restProps}>
+	<Tr {...$$restProps}>
 		<slot {model} />
-	</tr>
+	</Tr>
 {/if}

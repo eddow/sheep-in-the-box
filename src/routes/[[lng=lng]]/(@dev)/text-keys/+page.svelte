@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Edition from "$sitb/components/table/edition/row/Edition.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import Select from "$sitb/components/table/edition/editor/Select.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
@@ -15,7 +14,7 @@
 	import { rowEditTable } from "$sitb/components/table/collections";
 	import MgtPage from "$sitb/components/MgtPage.svelte";
 	
-	const { Table, Column } = rowEditTable<DevDictionaryEntry>()
+	const { Table, Column, Edition } = rowEditTable<DevDictionaryEntry>()
 
 	export let data: PageData;
 	let textRoles: DropdownOption[];
@@ -47,21 +46,21 @@
 <MgtPage title="ttl.text-keys">
 	<Languages slot="config" bind:language={$kLang} on:set-language={reloadKeys} />
 	<Table class="attached" compact="very" single-line striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
-		<Column name="key" {model}>
+		<Column name="key">
 			<StringContent slot="filter" />
-			<Text required {model} />
+			<Text required />
 		</Column>
-		<Column name="text" {model}>
+		<Column name="text">
 			<StringContent slot="filter" />
-			<Text type="area" {model} />
+			<Text type="area" />
 		</Column>
-		<Column name="roles" {model}>
-			<Select options={textRoles} multiple delimiter="|" {model} />
+		<Column name="roles">
+			<Select options={textRoles} multiple delimiter="|" />
 		</Column>
-		<Column name="type" {model}>
-			<Select options={textTypeOptions} {model} />
+		<Column name="type">
+			<Select options={textTypeOptions} />
 		</Column>
-		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key" {model}>
+		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">
 			<svelte:fragment slot="row" let:model>
 				{#if model?.type}<Button tiny color="blue" tertiary on:click={()=> { previewed = model; }} icon="eye" ></Button>{/if}
 			</svelte:fragment>

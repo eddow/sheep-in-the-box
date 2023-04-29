@@ -1,10 +1,8 @@
 <script lang="ts">
-	import type { RowModel } from "../../Table.svelte";
-
 	import { Button, Cell, Form } from "svemantic";
 	import { privateStore } from "$sitb/stores/privateStore";
 	import Column from "../../Column.svelte";
-	import { type Editing, setEdtnCtx, getTblCtx, type TableEditionContext, type ItemEditionContext } from "../contexts";
+	import { type Editing, setEdtnCtx, getTblCtx, type TableEditionContext, type ItemEditionContext, getRowCtx } from "../contexts";
 	import type { ComponentProps } from "svelte";
 	import CellAction from "./CellAction.svelte";
 	import { compare } from "$sitb/utils";
@@ -20,11 +18,11 @@
 		editing.value = false;
 	}
 	async function submit({detail: {values}}: CustomEvent<{values: T}>) {
-		const diff = compare(values, <T>model);
+		const diff = compare(values, <T>$model);
 		if(diff) {
 			editing.value = 'working';
 			try {
-				await save(<T>model, diff);
+				await save(<T>$model, diff);
 				editing.value = false;
 			} catch(x) {
 				editing.value = true;
@@ -37,8 +35,7 @@
 
 	export let
 		name: keyT|undefined = undefined,
-		header: boolean = false,
-		model: RowModel<T>;
+		header: boolean = false
 	console.assert(name, 'Name is compulsory for cell-edit columns');
 	const
 		editing = privateStore<Editing>(false),
@@ -47,7 +44,8 @@
 			editing: editing.store,
 			dialog: false,
 			actions: CellAction
-		};
+		},
+		model = getRowCtx<T|symbol>();
 	const value = (model: T)=> model[name!];
 	const empty = (model: T)=> model[name!] === undefined;
 	const uniqued = (model: T)=> ({[name!]: model[name!]});
@@ -57,7 +55,7 @@
 	// Bug on blur->validate: field not found
 	// TODO Esc->cancel-edit
 </script>
-<ColumnT {name} {header} let:title {...$$restProps} {model} let:model>
+<ColumnT {name} {header} let:title {...$$restProps} let:model>
 	<slot name="filter" slot="filter"><th></th></slot>
 	<slot name="header" slot="header"><th scope="col">{title}</th></slot>
 	<slot name="footer" slot="footer"><th scope="col" /></slot>

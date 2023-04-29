@@ -23,13 +23,13 @@ $:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 </script>
 <MgtPage title="ttl.users">
 	<Table key="email" data={users} columnFilters {saveCB} let:model>
-		<Column name="email" {model} let:model>
+		<Column name="email" let:model>
 			<StringContent slot="filter" />
-			<Text {model} />
+			<Text />
 		</Column>
-		<Column name="roles" {model} let:model>
-			<Select {options} multiple delimiter="|" {model} />
+		<Column name="roles" let:model>
+			<Select {options} multiple delimiter="|" />
 		</Column>
-		<Edition edition="row" {model} />
+		<Edition edition="row" />
 	</Table>
 </MgtPage>

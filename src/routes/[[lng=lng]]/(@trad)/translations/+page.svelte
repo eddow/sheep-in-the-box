@@ -9,7 +9,7 @@
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
 	import Wysiwyg from '$sitb/components/wysiwyg/Wysiwyg.svelte';
-	import type { TradDictionary } from '$sitb/intl';
+	import { I, type TradDictionary } from '$sitb/intl';
 
 	export let data: PageData;
 	let dictionary: TradDictionary[] = data.transls;
@@ -49,9 +49,9 @@
 			<LngConfig {config} />
 		</Popup>
 	</svelte:fragment>
-	<Table class="attached" compact="very" {saveCB} celled striped selectable key="key" data={dictionary} columnFilters let:model>
+	<Table class="attached" compact="very" {saveCB} celled striped selectable key="key" data={dictionary} columnFilters>
 		{#each reference as lng (lng.id)}
-			<RoColumn name={lng.id} title="" {model}>
+			<RoColumn name={lng.id} title="">
 				<Th collapsing class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
 				</Th>
@@ -59,15 +59,15 @@
 			</RoColumn>
 		{/each}
 		{#each work as lng (lng.id)}
-			<Column name={lng.id} {html} {getDisplay} {model}>
+			<Column name={lng.id} {html} {getDisplay}>
 				<Th class="prefix-icon" slot="header">
 					<i class={lng.icon}></i>{lng.text}
 				</Th>
 				<StringContent slot="filter" />
-				<Text type="area" placeholder="" {model} />
+				<Text type="area" placeholder="" />
 			</Column>
 		{/each}
-		<RoColumn {model} let:model>
+		<RoColumn let:model>
 			<th class="collapsing" slot="header" />
 			<Td>
 				<Button tiny on:click={()=> modaled = model} primary={model?.type === 'html'} icon="external alternate" />
@@ -105,8 +105,8 @@
 				{/each}
 			</Accordion>
 			<Buttons slot="actions">
-				<Button tiny submit primary icon="save" />
-				<Button tiny cancel color="yellow" icon="times" />
+				<Button tiny submit primary icon="save">{$I('cmd.save')}</Button>
+				<Button cancel color="yellow" icon="times">{$I('cmd.cancel')}</Button>
 			</Buttons>
 		</ModalEdit>
 	</Table>

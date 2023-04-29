@@ -24,7 +24,7 @@
 	}
 	getTblCtx().data.subscribe((v: T[])=> { data = v; });
 </script>
-<Column {model}>
+<Column>
 	<Th slot="header" scope="col">
 		<input type="checkbox" checked={!!all} indeterminate={all === 'indeterminate'}
 			on:change={onChangeAll} />

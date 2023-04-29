@@ -1,6 +1,6 @@
 <script lang="ts">
 	import ModalPart from "./ModalPart.svelte";
-	import { type Editing, getTblCtx, type TableEditionContext } from "../contexts";
+	import { type Editing, getTblCtx, type TableEditionContext, setRowCtx } from "../contexts";
 	import { privateStore } from "$sitb/stores/privateStore";
 	import { Buttons, ModalForm } from "svemantic";
 	import { compare } from "$sitb/utils";
@@ -12,7 +12,10 @@
 		
 	const
 		{ save: tblSave } = getTblCtx<TableEditionContext>(),
-		editingPrv = privateStore<Editing>(true)
+		editingPrv = privateStore<Editing>(true),
+		modelPrv = privateStore<T|undefined>();
+	$: modelPrv.value = model;
+	setRowCtx<T|undefined>(modelPrv.store);
 	async function save(values: T) {
 		const diff = compare(values, <T>model);
 		if(!diff) return;

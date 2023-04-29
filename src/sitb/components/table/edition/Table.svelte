@@ -3,7 +3,7 @@
 	export type DeleteCallback<T = any> = (values: T) => Promise<boolean|void>;
 </script>
 <script lang="ts">
-	import Table, { type RowModel } from "../Table.svelte";
+	import Table from "../Table.svelte";
 	import ModalEdit from "./modal/ModalEdit.svelte";
 	import type { TableEditionContext } from "./contexts";
 	import { createEventDispatcher, type ComponentProps } from "svelte";
@@ -52,16 +52,16 @@
 			},
 			...context
 		};
-	const rmCast = (x: any)=> (x as RowModel<T>);
+	const muCast = (x: any)=> (x as T|symbol|undefined);
 </script>
 <TableT {...$$props} bind:data {key} context={edtnContext} let:model>
-	<slot model={rmCast(model)} />
+	<slot model={muCast(model)} />
 	<slot name="header" slot="header" />
 	<slot name="footer" slot="footer" />
 	<svelte:fragment slot="once">
 		<slot name="modal" model={modalModel}>
 			<ModalEditT bind:model={modalModel}>
-				<slot model={rmCast(modalModel)} />
+				<slot model={muCast(modalModel)} />
 			</ModalEditT>
 		</slot>
 		<slot name="once" />
