@@ -1,4 +1,3 @@
-import { stringIds } from "./db";
 import User, { UserRegistration, UserSession } from "$sitb/entities/user";
 import { error, type RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
@@ -85,16 +84,12 @@ export async function registration(code: string) : Promise<UserRegistration> {
 }
 
 export async function userExists(email: string) {
-	return !!(await users.aggregate([
-			{$match: {email}},
-			{$count: 'count'}
-		]))[0]?.count;
+	const [_, count] = await users.findAndCount({email});
+	return !!count;
 }
 
 export async function listUsers() {
-	return stringIds(await users.aggregate([{
-		$project: {email: 1, roles: 1}
-	}]));
+	return <User[]>serialize(await users.findAll());
 }
 
 export async function patchUser(email: string, diff: {email?: string, roles?: string, language?: Language}) {

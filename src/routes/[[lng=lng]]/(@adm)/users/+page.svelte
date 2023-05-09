@@ -16,7 +16,7 @@
 	let users = data.users;
 
 	let options: DropdownOption[];
-$:	options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
+	$: options = roles.map(r=> ({value: r, text: $I('role.'+r)}));
 	async function saveCB(old: any, diff: any) {
 		await ajax.patch({diff, email: old.email});
 	}

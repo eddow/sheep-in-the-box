@@ -7,14 +7,12 @@
 	import { nodulesData } from '$sitb/nodules';
 
 	const dispatch = createEventDispatcher();
-	let doneLogingIn: ()=> void;
 
 	async function register({detail: {values: {email}, context: {reset}}}: CustomEvent) {
 		const rv = await ajax.put({email}, '/user');
 		if(await rv.json()) {
 			reset();
 			toast({message: $I('msg.mail-sent', {email})});
-			doneLogingIn();
 		}
 	}
 
@@ -29,7 +27,6 @@
 			nodulesData.set(login.nodules);
 			if(login.dictionary)
 				gotTree(login.dictionary);
-			doneLogingIn();
 		} else if(rv.status === 401) {
 			const cnt = await(rv.json());
 			setGlobalUser(null);
@@ -59,7 +56,7 @@
 		</Menu>
 	</Dropdown>
 {:else}
-	<Popup bind:config={ppp} on="click" bind:hide={doneLogingIn} lastResort="bottom right">
+	<Popup bind:config={ppp} on="click" lastResort="bottom right">
 		<Tabs active="login" headerClass="two-items">
 			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>

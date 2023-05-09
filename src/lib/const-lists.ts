@@ -22,10 +22,6 @@ export const articleTypes = {
 		icon: 'cog',
 		color: '#ccc'
 	},
-	rcp: {	// receipy
-		icon: 'book',
-		color: '#c58'
-	},
 	pres: {	// presentation
 		icon: 'file image',
 		color: '#dd8'
