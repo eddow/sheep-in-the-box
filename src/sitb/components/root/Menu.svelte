@@ -1,7 +1,7 @@
 <script lang="ts">
 	import User from './User.svelte';
 	import Languages from '$sitb/components/Languages.svelte';
-	import { user } from '$sitb/globals';
+	import { user } from '$sitb/user';
 	import { language, setLanguage, I } from "$sitb/intl";
 	import type { Language, Role, Roles } from '$sitb/constants';
 	import { Buttons, Menu, Dropdown, LinkItem } from 'svemantic';

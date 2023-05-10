@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { Col, Input, Form, Field, Button, toast } from "svemantic";
 	import { goto } from "$app/navigation";
-	import { ajax, I, } from "$sitb/globals";
+	import { I } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;

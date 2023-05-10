@@ -4,7 +4,7 @@
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
-	import { ajax } from "$sitb/globals";
+	import { ajax } from "$sitb/ajax";
 	import type { PageData } from "./$types";
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';

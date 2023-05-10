@@ -10,7 +10,7 @@
 <script lang="ts">
 	import Horizontal from "$sitb/components/dnd/Horizontal.svelte";
 	import { flag, languages, type Language, type LanguageDesc } from "$sitb/constants";
-	import { I, language } from "$sitb/globals";
+	import { I, language } from "$sitb/intl";
 	import { preference, Side } from "$sitb/preferences";
 	import { displayTable } from '$sitb/components/table/collections';
 	import { transWritable } from "$sitb/stores/transStore";

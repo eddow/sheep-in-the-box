@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { goto } from "$app/navigation";
-	import { ajax, I, user } from "$sitb/globals";
+	import { I } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import { Col, Input, Form, Field, Button, toast } from "svemantic";
 
 	async function submit(e: CustomEvent) {

@@ -2,7 +2,7 @@
 	import { slugify } from '$sitb/utils';
 	import { type ArticleType, articleTypes } from "$sitb/constants";
 	import { Button, Buttons, Menu, Label, Input, Select1, Icon } from "svemantic";
-	import { language, I } from "$sitb/globals";
+	import { language, I } from "$sitb/intl";
 	import type { ListedArticle } from "$sitb/server/article";
 	
 	export let

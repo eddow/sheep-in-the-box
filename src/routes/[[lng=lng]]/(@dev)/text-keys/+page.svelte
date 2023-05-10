@@ -4,7 +4,8 @@
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import type { PageData } from "./$types";
 	import { roles, textTypes, type Language, type Role, type TextType } from "$sitb/constants";
-	import { I, ajax, language } from "$sitb/globals";
+	import { I, language } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import Preview from "$sitb/components/Preview.svelte";
 	import Languages from "$sitb/components/Languages.svelte";
 	import { preference, Side } from "$sitb/preferences";

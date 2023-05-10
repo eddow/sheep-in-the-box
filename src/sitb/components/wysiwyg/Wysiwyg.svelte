@@ -9,7 +9,7 @@
 </script>
 <script lang="ts">
 	import { Button, Buttons, Checkbox, Field, Input, ModalForm, Page, Tabs, module } from 'svemantic';
-	import { I } from '$sitb/globals';
+	import { I } from '$sitb/intl';
 	import ArticleSelect from './ArticleSelect.svelte';
 	import type { ListedArticle } from '$sitb/server/article';
 	import External from '../External.svelte';

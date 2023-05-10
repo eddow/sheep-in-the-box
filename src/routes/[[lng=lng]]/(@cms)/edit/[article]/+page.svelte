@@ -2,7 +2,8 @@
 	import Wysiwyg from "$sitb/components/wysiwyg/Wysiwyg.svelte";
 	import ImageManager from "$sitb/components/image/ImageManager.svelte";
 	import { flag, languages, type Language } from "$sitb/constants";
-	import { ajax, I, language } from "$sitb/globals";
+	import { I, language } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import { Flag, Input, Field, Form, Button, Tabs, Page, Icon, ModalForm, Buttons, Loader } from "svemantic";
 	import type { PageData } from "./$types";
 	import { compare } from '$sitb/utils';

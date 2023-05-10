@@ -11,7 +11,8 @@
 	import { Input, Field, Button, Buttons, LinkItem, Menu, ModalForm, Select, Label, popup } from "svemantic";
 	import type { LayoutData } from "./$types";
 	import { slugify } from "$sitb/utils";
-	import { ajax, language, I } from "$sitb/globals";
+	import { I, language } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import { goto } from "$app/navigation";
 	import { setContext } from "svelte";
 	export let data: LayoutData;

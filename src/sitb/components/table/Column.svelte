@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { privateStore } from '$sitb/stores/privateStore';
 	import { getTblCtx, setClmnCtx, type ColumnContext, specialRow, getRowCtx } from './contexts'
-	import { I } from '$sitb/globals';
+	import { I } from '$sitb/intl';
 	import { Cell } from 'svemantic';
 	import CellDisplay from './CellDisplay.svelte';
 

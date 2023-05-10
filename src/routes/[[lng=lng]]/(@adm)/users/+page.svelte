@@ -1,7 +1,8 @@
 <script lang="ts">
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
-	import { ajax, I } from "$sitb/globals";
+	import { I } from "$sitb/intl";
+	import { ajax } from "$sitb/ajax";
 	import Select from "$sitb/components/table/edition/editor/Select.svelte";
 	import type { PageData } from "./$types";
 	import { roles } from "$sitb/constants";

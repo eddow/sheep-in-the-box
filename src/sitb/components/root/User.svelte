@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { I, dictionary, gotTree, setLanguage } from '$sitb/intl';
-	import { ajax, user } from '$sitb/globals';
+	import { user } from '$sitb/user';
+	import { ajax } from "$sitb/ajax";
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 	import { setGlobalUser } from '$sitb/user';
 	import { nodulesData } from '$sitb/nodules';

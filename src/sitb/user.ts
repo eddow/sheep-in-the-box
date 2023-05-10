@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { roles, type Role, type Roles, type User } from "./constants";
 import { jsonCookies } from "./cookies";
-import { ajax } from "./globals";
+import { ajax } from "./ajax";
 import { privateStore } from "./stores/privateStore";
 import { setPrefOperations, Side } from "./preferences";
 import globic from "./globic";
