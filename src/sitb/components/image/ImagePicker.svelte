@@ -20,14 +20,17 @@
 <!-- TODO: .fields.error -> redish -->
 <div class="ui wrapped wrapping menu">
 	{#each list as img (img)}
-		<a href="#" class="item" class:active={img===selected} on:click={()=> selected = img}>
+		<button class="item" class:active={img===selected} on:click={()=> selected = img}>
 			<img class="ui image" src={srcEndpoint(img+'?128')} alt={img}>
 			<div class="content">{img}</div>
-		</a>
+		</button>
 	{/each}
 </div>
 <style lang="scss">
-	.item .content {
-		padding-left: 16px;
+	.item {
+		border: 0;
+		.content {
+			padding-left: 16px;
+		}
 	}
 </style>
