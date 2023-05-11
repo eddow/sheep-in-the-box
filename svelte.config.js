@@ -1,4 +1,5 @@
 import adapter from '@sveltejs/adapter-auto';
+import vercel from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 import { nodeLoaderPlugin } from "@vavite/node-loader/plugin";
@@ -18,15 +19,18 @@ const config = {
 			nodeLoaderPlugin()
 		])
 	],
-	kit: {
+	kit: process.env.VERCEL ? {
+		adapter: vercel(),
+		alias: {
+			$sitb: './src/sitb'
+		}
+	} : {
 		adapter: adapter(),
-		alias: process.env.VERCEL ? {
-				$sitb: './src/sitb'
-			} : {
-				$svemantic: './src/svemantic',
-				svemantic: './src/svemantic',
-				$sitb: './src/sitb'
-			}
+		alias: {
+			$svemantic: './src/svemantic',
+			svemantic: './src/svemantic',
+			$sitb: './src/sitb'
+		}
 	}
 };
 

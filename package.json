@@ -51,7 +51,7 @@
 		"@mikro-orm/mongo-highlighter": "^1.0.0",
 		"@mikro-orm/mongodb": "^5.6.16",
 		"@mikro-orm/reflection": "^5.6.16",
-		"@sveltejs/adapter-vercel": "^2.4.1",
+		"@sveltejs/adapter-vercel": "^2.4.3",
 		"@uppy/image-editor": "^2.1.1",
 		"@uppy/locales": "^3.1.0",
 		"@uppy/svelte": "^3.0.1",
