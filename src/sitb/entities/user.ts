@@ -3,7 +3,7 @@ import { Entity, Enum, ManyToOne, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from './base';
 
 @Entity()
-export default class User extends BaseEntity {
+export class User extends BaseEntity {
 	@Property({unique: true})
 	email!: string;
 	

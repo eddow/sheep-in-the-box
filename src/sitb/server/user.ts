@@ -1,4 +1,4 @@
-import User, { UserRegistration, UserSession } from "$sitb/entities/user";
+import { User, UserRegistration, UserSession } from "$sitb/entities/user";
 import { error, type RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
 import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS, REGISTRATION_TIMEOUT }  from "$env/static/private";
