@@ -12,7 +12,7 @@ export class Article extends BaseEntity {
 
 	@OneToMany({entity: ()=> ArticleText, mappedBy: 'article', cascade: [Cascade.ALL]})
 	texts!: Collection<ArticleText>
-	@OneToMany({entity: ()=> ArticleText, mappedBy: 'article', cascade: [Cascade.ALL]})
+	@OneToMany({entity: ()=> ArticleImage, mappedBy: 'article', cascade: [Cascade.ALL]})
 	images!: Collection<ArticleImage>
 }
 
