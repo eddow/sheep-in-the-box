@@ -4,16 +4,16 @@ import { BaseEntity } from '../base';
 
 @Entity()
 export class User extends BaseEntity {
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	email!: string;
 	
-	@Property({hidden: true})
+	@Property({type: ()=> String, hidden: true})
 	password?: string
 	
-	@Enum({items: Object.keys(languages)})
+	@Enum({type: ()=> String, items: Object.keys(languages)})
 	language!: Language
 	
-	@Property()
+	@Property({type: ()=> String})
 	roles!: string
 	
 	@Property({type: 'json'})
@@ -23,24 +23,24 @@ export class User extends BaseEntity {
 @Entity()
 export class UserRegistration extends BaseEntity {
 	// /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	email!: string;
 	
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	code!: string;
 
-	@Property({ onUpdate: Date.now })
+	@Property({type: ()=> Number, onUpdate: Date.now})
 	ts!: number;
 }
 
 @Entity()
 export class UserSession extends BaseEntity {
-	@ManyToOne()
+	@ManyToOne({entity: ()=> User})
 	user!: User
 	
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	authKey!: string;
 
-	@Property({ onUpdate: Date.now })
+	@Property({type: ()=> Number, onUpdate: Date.now})
 	ts!: number;
 }

@@ -3,9 +3,9 @@ import { BaseEntity } from '../base';
 
 @Entity()
 export class Raw extends BaseEntity {
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	hash!: string;
 	
-	@Property()
+	@Property({type: ()=> String})
 	type!: string;
 }

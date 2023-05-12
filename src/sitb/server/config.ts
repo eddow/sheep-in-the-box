@@ -1,15 +1,13 @@
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
-import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
+import { ReflectMetadataProvider } from "@mikro-orm/core";
 import type { Configuration, Connection, IDatabaseDriver, Options } from '@mikro-orm/core'
 
-const rwd = process.env.VERCEL ? '/vercel/path0' : '.';	// TODO: find a prettier solution
-	
 export default function config(env: Record<string, string|undefined>): Configuration<IDatabaseDriver<Connection>> | Options<IDatabaseDriver<Connection>> {
 	return {
-		//debug: ['discovery'],
-		entities: [`${rwd}/src/entities/**/*.ts`],
-		entitiesTs: [`${rwd}/src/entities/**/*.ts`],
-		metadataProvider: TsMorphMetadataProvider,
+		debug: ['discovery'],
+		entities: ['./src/entities/**/*.ts'],
+		//entitiesTs: ['./src/entities/**/*.ts'],
+		metadataProvider: ReflectMetadataProvider,
 		// TODO: this last part should be project-dependant
 		type: "mongo",
 		highlighter: new MongoHighlighter(),

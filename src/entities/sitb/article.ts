@@ -4,47 +4,47 @@ import { BaseEntity } from '../base';
 
 @Entity()
 export class Article extends BaseEntity {
-	@Property({unique: true})
+	@Property({unique: true, type: ()=> String})
 	slug!: string
 
-	@Enum({items: Object.keys(articleTypes)})
+	@Enum({type: ()=> String, items: Object.keys(articleTypes)})
 	type!: ArticleType
 
-	@OneToMany({mappedBy: 'article', cascade: [Cascade.ALL]})
+	@OneToMany({entity: ()=> ArticleText, mappedBy: 'article', cascade: [Cascade.ALL]})
 	texts!: Collection<ArticleText>
-	@OneToMany({mappedBy: 'article', cascade: [Cascade.ALL]})
+	@OneToMany({entity: ()=> ArticleText, mappedBy: 'article', cascade: [Cascade.ALL]})
 	images!: Collection<ArticleImage>
 }
 
 @Entity()
 @Unique({properties: ['article', 'lng']})
 export class ArticleText extends BaseEntity {
-	@ManyToOne({index: true})
+	@ManyToOne({entity: ()=> Article, index: true})
 	article!: Article
 
-	@Property()
+	@Property({type: ()=> String})
 	lng!: Language
 
-	@Property()
+	@Property({type: ()=> String})
 	title!: string
 
-	@Property()
+	@Property({type: ()=> String})
 	text!: string
 
-	@Property({ onUpdate: Date.now })
+	@Property({type: ()=> Number, onUpdate: Date.now})
 	ts!: number;
 }
 
 @Entity()
 @Unique({properties: ['article', 'name']})
 export class ArticleImage extends BaseEntity {
-	@ManyToOne()
+	@ManyToOne({entity: ()=> Article, index: true})
 	article!: Article
 
-	@Property()
+	@Property({type: ()=> String})
 	name!: string
 
-	@Property()
+	@Property({type: ()=> String})
 	hash!: string
 }
 

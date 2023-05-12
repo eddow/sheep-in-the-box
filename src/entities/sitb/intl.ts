@@ -4,31 +4,31 @@ import { BaseEntity } from '../base';
 
 @Entity()
 export class IntlKey extends BaseEntity {
-	@Property({unique: true})
+	@Property({type: ()=> String, unique: true})
 	key!: string;
 	
-	@Property()
+	@Property({type: ()=> String})
 	roles!: string;
 
-	@Enum({items: [...textTypes]})
+	@Enum({type: ()=> String, items: [...textTypes]})
 	type!: TextType;
 	
-	@OneToMany({mappedBy: 'key', cascade: [Cascade.ALL]})
+	@OneToMany({entity: ()=> Intl, mappedBy: 'key', cascade: [Cascade.ALL]})
 	texts!: Collection<Intl>
 }
 
 @Entity()
 @Unique({properties: ['key', 'lng']})
 export class Intl extends BaseEntity {
-	@ManyToOne({index: true})
+	@ManyToOne({entity: ()=> IntlKey, index: true})
 	key!: IntlKey;
 	
-	@Enum({items: Object.keys(languages)})
+	@Enum({type: ()=> String, items: Object.keys(languages)})
 	lng!: Language;
 
-	@Property()
+	@Property({type: ()=> String})
 	text!: string;
 
-	@Property({ onUpdate: Date.now })
+	@Property({type: ()=> Number, onUpdate: Date.now})
 	ts!: number;
 }
