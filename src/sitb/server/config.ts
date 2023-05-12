@@ -4,8 +4,9 @@ import type { Configuration, Connection, IDatabaseDriver, Options } from '@mikro
 
 export default function config(env: Record<string, string|undefined>): Configuration<IDatabaseDriver<Connection>> | Options<IDatabaseDriver<Connection>> {
 	return {
-		entities: ['./src/lib/entities/**/*.ts', './src/sitb/entities/**/*.ts'],
-		entitiesTs: ['./src/lib/entities/**/*.ts', './src/sitb/entities/**/*.ts'],
+		// + './src/lib/entities/**/*.ts'
+		entities: ['./src/sitb/entities/**/*.ts'],
+		entitiesTs: ['./src/sitb/entities/**/*.ts'],
 		metadataProvider: TsMorphMetadataProvider,
 		migrations: {
 			emit: "js"

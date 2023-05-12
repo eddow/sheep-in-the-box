@@ -17,6 +17,7 @@ const orm = await MikroORM.init({
 	dynamicImportProvider(id: string) {
 		let fn = /\/entities\/([^//]*)\.ts$/.exec(id);
 		if(!fn) throw 'Dynamically import entities';
+		// TODO: beware the $lib/entities case
 		return import(`../entities/${fn[1]}.ts`)
 	}
 })
