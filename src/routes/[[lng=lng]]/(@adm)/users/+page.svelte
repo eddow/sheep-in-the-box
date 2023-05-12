@@ -9,7 +9,7 @@
 	import type { DropdownOption } from "svemantic";
 	import { rowEditTable } from "$sitb/components/table/collections";
 	import MgtPage from "$sitb/components/MgtPage.svelte";
-	import type { User } from "$sitb/entities/user";
+	import type { User } from "$entities/sitb/user";
 
 	const { Table, Column, Edition } = rowEditTable<User>()
 

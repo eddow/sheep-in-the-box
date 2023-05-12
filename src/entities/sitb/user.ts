@@ -1,6 +1,6 @@
 import { languages, type Language, type Role, roles } from '$sitb/constants';
 import { Entity, Enum, ManyToOne, Property, Unique } from '@mikro-orm/core';
-import { BaseEntity } from './base';
+import { BaseEntity } from '../base';
 
 @Entity()
 export class User extends BaseEntity {

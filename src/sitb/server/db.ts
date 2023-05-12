@@ -15,10 +15,14 @@ const orm = await MikroORM.init({
 		throw error(404, dev ? `Entity ${entityName} not found for query ${JSON.stringify(where)}` : 'Not found');
 	},
 	dynamicImportProvider(id: string) {
-		let fn = /\/entities\/([^//]*)\.ts$/.exec(id);
+		let fn = /\/entities\/(.*)\.ts$/.exec(id);
 		if(!fn) throw 'Dynamically import entities';
-		// TODO: beware the $lib/entities case
-		return import(`../entities/${fn[1]}.ts`)
+		let sitbed = fn[1].split('/');
+		if(sitbed.length === 1)
+			return import(`../../entities/${sitbed[0]}.ts`)
+		if(sitbed.length === 2 && sitbed[0] === 'sitb')
+			return import(`../../entities/sitb/${sitbed[1]}.ts`);
+		throw Error(`Unreachable entity: ${fn[1]}`);
 	}
 })
 // Create the new migrations, then apply them

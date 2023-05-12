@@ -1,4 +1,4 @@
-import { Intl, IntlKey } from "$sitb/entities/intl";
+import { Intl, IntlKey } from "$entities/sitb/intl";
 import type { Language, TextType } from "$sitb/constants";
 import em from "./db";
 import type { RequestEvent } from "@sveltejs/kit";

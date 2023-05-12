@@ -1,6 +1,6 @@
 import { languages, textTypes, type Language, type TextType } from '$sitb/constants';
 import { Cascade, Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
-import { BaseEntity } from './base';
+import { BaseEntity } from '../base';
 
 @Entity()
 export class IntlKey extends BaseEntity {

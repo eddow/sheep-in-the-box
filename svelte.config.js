@@ -22,14 +22,16 @@ const config = {
 	kit: process.env.VERCEL ? {
 		adapter: vercel(),
 		alias: {
-			$sitb: './src/sitb'
+			$sitb: './src/sitb',
+			$entities: './src/entities'
 		}
 	} : {
 		adapter: adapter(),
 		alias: {
 			$svemantic: './src/svemantic',
 			svemantic: './src/svemantic',
-			$sitb: './src/sitb'
+			$sitb: './src/sitb',
+			$entities: './src/entities'
 		}
 	}
 };

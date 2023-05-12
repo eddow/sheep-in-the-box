@@ -1,6 +1,6 @@
 import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
 import { Cascade, Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
-import { BaseEntity } from './base';
+import { BaseEntity } from '../base';
 
 @Entity()
 export class Article extends BaseEntity {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { typeComponents } from '$lib/articles';
-	import type { ReadArticle } from '$sitb/entities/article';
+	import type { ReadArticle } from '$entities/sitb/article';
 	import { setPageTitle } from '$sitb/globals';
 	import type { PageData } from "./$types";
 	export let data: PageData;

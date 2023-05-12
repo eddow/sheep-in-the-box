@@ -1,4 +1,4 @@
-import Raws from '$sitb/entities/raw';
+import Raws from '$entities/sitb/raw';
 import { join } from 'path';
 import { promises as fs } from 'fs';
 import em from "../db";

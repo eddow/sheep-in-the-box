@@ -1,4 +1,4 @@
-import { Article, ArticleText, ArticleImage, type ReadArticle } from "../entities/article";
+import { Article, ArticleText, ArticleImage, type ReadArticle } from "$entities/sitb/article";
 import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
 import em from "./db";
 import { save, load, remove } from './raw';

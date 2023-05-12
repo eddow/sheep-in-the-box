@@ -1,5 +1,5 @@
 import { Entity, Property } from '@mikro-orm/core';
-import { BaseEntity } from './base';
+import { BaseEntity } from '../base';
 
 @Entity()
 export default class Raw extends BaseEntity {
