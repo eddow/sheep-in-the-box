@@ -1,7 +1,7 @@
 import { MongoHighlighter } from "@mikro-orm/mongo-highlighter";
 import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 import type { Configuration, Connection, IDatabaseDriver, Options } from '@mikro-orm/core'
-
+console.log('cwd', process.cwd());
 export default function config(env: Record<string, string|undefined>): Configuration<IDatabaseDriver<Connection>> | Options<IDatabaseDriver<Connection>> {
 	return {
 		debug: ['discovery'],
