@@ -20,7 +20,7 @@ const config = {
 		])
 	],
 	kit: process.env.VERCEL ? {
-		adapter: vercel(),
+		adapter: adapter(),
 		alias: {
 			$sitb: './src/sitb',
 			$entities: './src/entities'
