@@ -3,9 +3,10 @@ import { TsMorphMetadataProvider } from "@mikro-orm/reflection";
 import type { Configuration, Connection, IDatabaseDriver, Options } from '@mikro-orm/core'
 
 export default function config(env: Record<string, string|undefined>): Configuration<IDatabaseDriver<Connection>> | Options<IDatabaseDriver<Connection>> {
-	return {	// No glob-like path: it's supposed to work but of course does not
-		entities: ['./src/entities/*.ts', './src/entities/sitb/*.ts'],
-		entitiesTs: ['./src/entities/*.ts', './src/entities/sitb/*.ts'],
+	return {
+		debug: ['discovery'],
+		entities: ['./src/entities/**/*.ts'],
+		entitiesTs: ['./src/entities/**/*.ts'],
 		metadataProvider: TsMorphMetadataProvider,
 		// TODO: this last part should be project-dependant
 		type: "mongo",
