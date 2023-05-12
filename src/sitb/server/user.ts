@@ -2,14 +2,15 @@ import User, { UserRegistration, UserSession } from "$sitb/entities/user";
 import { error, type RequestEvent } from "@sveltejs/kit";
 import md5 from "md5";
 import { LOGGEDIN_TIMEOUT, SMTP_HOST, SMTP_PORT, SMTP_SENDER, SMTP_USER, SMTP_PASS, REGISTRATION_TIMEOUT }  from "$env/static/private";
-import type { Language } from "$sitb/constants";
+import type { Language } from "./objects/intl";
 import { createTransport } from "nodemailer";
 import { parmed } from "$sitb/intl";
 import { getText } from "./intl";
 import { stringCookies } from "$sitb/cookies";
-import { serialize } from "@mikro-orm/core";
-import { analyseRoles } from "$sitb/user";
+
 import em from "./db";
+import { serialize, wrap } from "@mikro-orm/core";
+import { analyseRoles } from "$sitb/user";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? +LOGGEDIN_TIMEOUT : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? +REGISTRATION_TIMEOUT : 1*60*60)*1000
@@ -29,17 +30,17 @@ export async function cleanup() {
 }
 
 export async function authed(event: RequestEvent<Partial<Record<string, string>>, string | null>) {
-	const authKey = event.cookies.get('session');
+	const authKey = event.cookies.get('session'), ts = (new Date).getTime();
 	if(!authKey) return null;
 	let rv = await sessions.findOne({authKey}, {populate: ['user']});
-	if(rv && Date.now()-rv.ts > liTimeout) {
+	if(rv && ts-rv.ts > liTimeout) {
 		await em.removeAndFlush(rv);
 		rv = null;
 	}
 	if(rv) {
-		// Refresh the maxAge
+		rv.ts = ts;
 		await em.persistAndFlush(rv);
-		stringCookies.session = authKey;
+		stringCookies.session = authKey;	// Refresh the maxAge
 	} else {
 		if(authKey) event.cookies.delete('session', {path: '/'});
 		return null;
@@ -69,7 +70,9 @@ export async function logout(event: RequestEvent<Partial<Record<string, string>>
 }
 
 export async function changePass(event: RequestEvent<Partial<Record<string, string>>, string | null>, oldPass: string, newPass: string) {
-	return users.nativeUpdate({email: event.locals.user!.email, password: md5(oldPass)}, {password: md5(newPass)});
+	const user = await users.findOneOrFail({email: event.locals.user!.email, password: md5(oldPass)});
+	user.password = md5(newPass);
+	return em.persistAndFlush(user);
 }
 
 export async function registration(code: string) : Promise<UserRegistration> {
@@ -93,7 +96,9 @@ export async function listUsers() {
 }
 
 export async function patchUser(email: string, diff: {email?: string, roles?: string, language?: Language}) {
-	return users.nativeUpdate({email}, diff);
+	const user = await users.findOneOrFail({email});
+	wrap(user).assign(diff);
+	return em.persistAndFlush(user);
 }
 
 // Used by server/root-loader to access directly the DB instead of cookies or XHR

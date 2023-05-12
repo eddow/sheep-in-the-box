@@ -23,12 +23,12 @@
 	}
 </script>
 <MgtPage title="ttl.users">
-	<Table key="email" data={users} columnFilters {saveCB} let:model>
-		<Column name="email" let:model>
+	<Table key="email" data={users} columnFilters {saveCB}>
+		<Column name="email">
 			<StringContent slot="filter" />
 			<Text />
 		</Column>
-		<Column name="roles" let:model>
+		<Column name="roles">
 			<Select {options} multiple delimiter="|" />
 		</Column>
 		<Edition edition="row" />

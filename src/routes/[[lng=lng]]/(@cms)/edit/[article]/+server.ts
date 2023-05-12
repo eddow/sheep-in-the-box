@@ -1,7 +1,6 @@
 import { error, json } from '@sveltejs/kit';
 import { deleteArticle, saveFile, setArticle, setText } from '$sitb/server/article';
 import type { RequestEvent } from './$types';
-import { ok } from '$sitb/utils';
 
 export async function POST({params: {article}, request}: RequestEvent) {	// Upload image
 	const
@@ -16,7 +15,7 @@ export async function PUT(e: RequestEvent) {	// modify texts
 		{params: {article}} = e,
 		{lng, diff} = await e.request.json();
 	await setText(article, lng, diff);
-	return ok();
+	return new Response(null, {status: 200});
 }
 
 export async function PATCH(e: RequestEvent) {	// modify name/type
@@ -24,11 +23,11 @@ export async function PATCH(e: RequestEvent) {	// modify name/type
 		{params: {article}} = e,
 		{diff} = await e.request.json();
 	await setArticle(article, diff);
-	return ok();
+	return new Response(null, {status: 200});
 }
 
 export async function DELETE(e: RequestEvent) {	// Delete: article, texts, images
 	const {params: {article}} = e;
 	await deleteArticle(article);
-	return ok();
+	return new Response(null, {status: 200});
 }

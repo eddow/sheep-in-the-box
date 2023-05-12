@@ -10,31 +10,43 @@
 	import Languages from "$sitb/components/Languages.svelte";
 	import { preference, Side } from "$sitb/preferences";
 	import type { Writable } from "svelte/store";
-	import type { DevDictionaryEntry } from "$sitb/intl";
 	import { Button, NotSaved, Modal, type DropdownOption } from "svemantic";
 	import { rowEditTable } from "$sitb/components/table/collections";
 	import MgtPage from "$sitb/components/MgtPage.svelte";
 	
-	const { Table, Column, Edition } = rowEditTable<DevDictionaryEntry>()
+	interface DictionaryEntry {
+		key: string;
+		text: string;
+		role : Role|'srv'|'';
+		type: TextType;
+	}
+
+	const { Table, Column, Edition } = rowEditTable<DictionaryEntry>()
 
 	export let data: PageData;
 	let textRoles: DropdownOption[];
-	$: textRoles = ['lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
+	$: textRoles = ['', 'lgdn', 'srv'].concat(roles).map(r=> ({value: r, text: $I('role.'+(r||'none'))}));
 	let kLang = <Writable<Language>>preference('devKeysLng', Side.server, $language);
 	let dictionaries = {[$kLang || $language]: data.dictionary},
 		dictionary = data.dictionary;
-	async function saveCB(old: DevDictionaryEntry, diff: Partial<DevDictionaryEntry>) {
+	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
 		const key = diff.key || old.key;
 		if(!(diff.key || old.key)) throw new Error('No key given for text');
-		const rv = await (old.key ?
-			ajax.patch({key: old.key, language: $kLang, diff}) :
-			ajax.post({language: $kLang, ...diff}) );
-		if(!rv.ok) throw new NotSaved('Cannot set infos');
+		if(diff.key && old.key) {
+			const rv = await ajax.put({oldK: old.key, newK: diff.key});
+			if(!rv.ok) throw new NotSaved('Cannot change key');
+		}
+		const chg: Partial<DictionaryEntry> = {};
+		for(const k of <(keyof DictionaryEntry)[]>['text', 'role', 'type']) if(k in diff) chg[k] = <any>diff[k];
+		if(Object.keys(chg).length) {
+			const rv = await ajax[old.key?'patch':'post']({key, language: $kLang, ...chg});
+			if(!rv.ok) throw new NotSaved('Cannot set infos');
+		}
 	}
-	async function deleteCB(model: DevDictionaryEntry) {
-		return (await ajax.delete({key: model.key})).ok;
+	async function deleteCB(row: DictionaryEntry) {
+		return (await ajax.delete({key: row.key})).ok;
 	}
-	let previewed: DevDictionaryEntry|undefined = undefined;
+	let previewed: DictionaryEntry|undefined = undefined;
 	async function reloadKeys({detail: lng}: CustomEvent<Language>) {
 		if(!dictionaries[lng]) {
 			let qr = await ajax.get('?'+lng);
@@ -47,18 +59,18 @@
 <MgtPage title="ttl.text-keys">
 	<Languages slot="config" bind:language={$kLang} on:set-language={reloadKeys} />
 	<Table class="attached" compact="very" single-line striped selectable key="key" data={dictionary} columnFilters {saveCB} {deleteCB} let:model>
-		<Column name="key">
+		<Column name="key" title={$I('fld.key')}>
 			<StringContent slot="filter" />
 			<Text required />
 		</Column>
-		<Column name="text">
+		<Column name="text" title={$I('fld.text')}>
 			<StringContent slot="filter" />
 			<Text type="area" />
 		</Column>
-		<Column name="roles">
-			<Select options={textRoles} multiple delimiter="|" />
+		<Column name="role" title={$I('fld.role')}>
+			<Select options={textRoles} />
 		</Column>
-		<Column name="type">
+		<Column name="type" title={$I('fld.type')}>
 			<Select options={textTypeOptions} />
 		</Column>
 		<Edition create="both" edition="both" deleteConfirmation="msg.delete-key">

@@ -1,25 +1,27 @@
 import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
-import { Cascade, Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
+import { Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from './base';
 
 @Entity()
 export class Article extends BaseEntity {
-	@Property({unique: true})
+	@Unique()
+	@Property()
 	slug!: string
 
 	@Enum({items: Object.keys(articleTypes)})
 	type!: ArticleType
 
-	@OneToMany({mappedBy: 'article', cascade: [Cascade.ALL]})
+	@OneToMany({mappedBy: 'article'})
 	texts!: Collection<ArticleText>
-	@OneToMany({mappedBy: 'article', cascade: [Cascade.ALL]})
+	@OneToMany({mappedBy: 'article'})
 	images!: Collection<ArticleImage>
 }
 
 @Entity()
+@Index({properties: ['article']})
 @Unique({properties: ['article', 'lng']})
 export class ArticleText extends BaseEntity {
-	@ManyToOne({index: true})
+	@ManyToOne()
 	article!: Article
 
 	@Property()
@@ -30,9 +32,6 @@ export class ArticleText extends BaseEntity {
 
 	@Property()
 	text!: string
-
-	@Property({ onUpdate: Date.now })
-	ts!: number;
 }
 
 @Entity()

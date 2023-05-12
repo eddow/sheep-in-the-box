@@ -47,17 +47,18 @@ export interface ListedArticle {
 	titles: Partial<Record<Language, string>>
 }
 export async function listArticles(): Promise<ListedArticle[]> {
-	return (<Article[]>await articles.find({type: {$in: Object.keys(articleTypes)}}, {populate: ['texts.lng', 'texts.title', 'images']}))
-		.map((article)=> ({
-			slug: article.slug,
-			type: article.type,
-			images: article.images.toArray().map(img => img!.name) ,
-			titles: article.texts.toArray().reduce((rv, {lng, title})=> ({...rv, [lng]: title}), {})
-		}));
+	return (<Article[]>//<unknown>serialize(
+		await articles.find({type: {$in: Object.keys(articleTypes)}}, {populate: ['texts.lng', 'texts.title', 'images']})
+	).map((article)=> ({
+		slug: article.slug,
+		type: article.type,
+		images: article.images.toArray().map(img => img!.name) ,
+		titles: article.texts.toArray().reduce((rv, {lng, title})=> ({...rv, [lng]: title}), {})
+	}));
 }
 
 export async function createArticle(slug: string, type: ArticleType) {
-	return await articles.nativeInsert({slug, type});
+	return await em.persistAndFlush(articles.create({slug, type}));
 }
 
 export async function editArticle(slug: string): Promise<ArticleEdition> {
@@ -102,7 +103,10 @@ export async function deleteArticle(slug: string) {
 }
 
 export async function setArticle(slug: string, diff: any) {
-	await articles.nativeUpdate({slug}, diff);
+	// TODO? createQueryBulder -> one-liner
+	const article = await articles.findOneOrFail({slug});
+	wrap(article).assign(diff);
+	await em.persistAndFlush(article);
 }
 
 async function exists(article: Article, name: string) {
@@ -125,14 +129,16 @@ export async function saveFile(slug: string, name: string, type: string, content
 	
 	const article = await articles.findOneOrFail({slug});
 	name = await availName(article, names.join('.'));
-	await images.nativeInsert({article: article._id, name, hash});
+	await em.persistAndFlush(images.create({article: article._id, name, hash}));
 	return name;
 }
 
 export async function renameImage(slug: string, name: string, newName: string) {
 	const article = await articles.findOneOrFail({slug});
-	if(await exists(article, newName)) throw error(400, /* TODO: i()*/'err.already-name');
-	await images.nativeUpdate({article: article._id, name}, {name: newName});
+	if(await exists(article, newName)) throw error(400, 'Name already exists');
+	const img = await images.findOneOrFail({article: article._id, name});
+	img.name = newName;
+	await em.persistAndFlush(img);
 }
 
 export async function loadFile(slug: string, name: string, cachedHash: string, trf?: [number, number?]) {
@@ -157,7 +163,7 @@ export async function copyImg(src: ImageSpec, dst: ImageSpec) {
 	const already = await images.count({article: objs[1]._id, name: dst.name});
 	if(already) throw error(400, 'Image already exists');
 	const img = await images.findOneOrFail({article: objs[0]._id, name: src.name});
-	await images.nativeInsert({article: objs[1]._id, name: dst.name, hash: img.hash});
+	await em.persistAndFlush(images.create({article: objs[1]._id, name: dst.name, hash: img.hash}));
 }
 
 async function garbageCollect(hashes: string[]) {

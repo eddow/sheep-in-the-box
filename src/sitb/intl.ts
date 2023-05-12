@@ -1,22 +1,12 @@
 import { readable } from "svelte/store";
 import { ajax } from "./ajax";
-import { languages, type Language, type Role, type TextType } from "./constants";
+import { languages, type Language, type Role } from "./constants";
 import { privateStore } from "./stores/privateStore";
 import { i18n, i18nField,  } from 'svemantic';
 import { addTree, camel2dot } from "./utils";
 import globic from "./globic";
 import { frwrdReadable } from "./stores/frwrdStore";
 
-export interface DevDictionaryEntry {
-	key: string;
-	text: string;
-	roles : string; //(Role|'srv'|'')[].join('|');
-	type: TextType;
-}
-export interface TradDictionary extends Partial<Record<Language, string>> {
-	key: string;
-	type: TextType;
-}
 interface Dictionary {
 	hash: any;
 	roles: Role[]
@@ -83,7 +73,6 @@ export function parmed(str: string, parms?: any): string {
 
 let updateTexts = ()=> {}
 type translationFunction = (key: string, parms?: any)=> string;
-// TODO: globic
 export const I = readable<translationFunction>(x=> `[${x}]`, (set: (i: translationFunction)=> void)=> {
 	updateTexts = ()=> {
 		const hash = dictionary.hash;

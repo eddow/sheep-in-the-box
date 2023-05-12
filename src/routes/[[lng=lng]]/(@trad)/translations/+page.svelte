@@ -1,6 +1,7 @@
 <script lang="ts">
 	import ModalEdit from '$sitb/components/table/edition/modal/ModalEdit.svelte';
 	import { Input, Field, Accordion, Flag, NotSaved, Page, Button, Buttons, Th, Td, Popup } from 'svemantic';
+	import type { DictionaryEntry } from './DictionaryEntry';
 	import { cellEditTable } from "$sitb/components/table/collections";
 	import StringContent from "$sitb/components/table/filters/StringContent.svelte";
 	import Text from "$sitb/components/table/edition/editor/Text.svelte";
@@ -9,11 +10,11 @@
 	import LngConfig, { type LangItem } from "../lngConfig.svelte";
 	import MgtPage from '$sitb/components/MgtPage.svelte';
 	import Wysiwyg from '$sitb/components/wysiwyg/Wysiwyg.svelte';
-	import { I, type TradDictionary } from '$sitb/intl';
+	import { I } from '$sitb/intl';
 
 	export let data: PageData;
-	let dictionary: TradDictionary[] = data.transls;
-	const { Table, Column, RoColumn } = cellEditTable<TradDictionary>()
+	let dictionary: DictionaryEntry[] = data.transls;
+	const { Table, Column, RoColumn } = cellEditTable<DictionaryEntry>()
 	let reference: LangItem[],
 		work: LangItem[];
 	function nonKey(ref: LangItem[]): LangItem[]
@@ -32,12 +33,12 @@
 			value;
 	}
 
-	async function saveCB(old: TradDictionary, diff: Partial<TradDictionary>) {
+	async function saveCB(old: DictionaryEntry, diff: Partial<DictionaryEntry>) {
 		const rv = await ajax.patch({key: old.key, diff});
 		if(!rv.ok) throw new NotSaved(await rv.text());
 	}
 
-	let modaled: TradDictionary|undefined = undefined;
+	let modaled: DictionaryEntry|undefined = undefined;
 	/*
 	- save
 	*/

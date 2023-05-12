@@ -4,7 +4,8 @@ import { BaseEntity } from './base';
 
 @Entity()
 export default class User extends BaseEntity {
-	@Property({unique: true})
+	@Unique()
+	@Property()
 	email!: string;
 	
 	@Property({hidden: true})
@@ -23,13 +24,15 @@ export default class User extends BaseEntity {
 @Entity()
 export class UserRegistration extends BaseEntity {
 	// /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
-	@Property({unique: true})
+	@Unique()
+	@Property()
 	email!: string;
 	
-	@Property({unique: true})
+	@Unique()
+	@Property()
 	code!: string;
 
-	@Property({ onUpdate: Date.now })
+	@Property()
 	ts!: number;
 }
 
@@ -38,9 +41,10 @@ export class UserSession extends BaseEntity {
 	@ManyToOne()
 	user!: User
 	
-	@Property({unique: true})
+	@Unique()
+	@Property()
 	authKey!: string;
 
-	@Property({ onUpdate: Date.now })
+	@Property()
 	ts!: number;
 }

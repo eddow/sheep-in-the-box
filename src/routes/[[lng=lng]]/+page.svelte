@@ -2,11 +2,11 @@
 	import { invalidateAll } from "$app/navigation";
 	import { language } from "$sitb/intl";
 	import { onDestroy } from "svelte";
-	import { setPageTitle } from '$sitb/globals';
+	import { pageTitle } from '$sitb/globals';
 	import type { PageData } from "./$types";
 	export let data: PageData;
 
-	setPageTitle(data.title!);
+	pageTitle.set(data.title!);
 	let first = true;
 	onDestroy(language.subscribe(()=> { if(!first) invalidateAll(); }));
 	first = false;
