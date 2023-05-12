@@ -1,10 +1,10 @@
-import Raws from '$entities/sitb/raw';
+import { Raw } from '$entities/sitb/raw';
 import { join } from 'path';
 import { promises as fs } from 'fs';
 import em from "../db";
 
 // TODO: Never tested
-const raws = em.getRepository(Raws);
+const raws = em.getRepository(Raw);
 export default function fsAccess(path: string) : raw.Access {
 	return {
 		async save(hash: string, image: raw.ImageInfo) {
