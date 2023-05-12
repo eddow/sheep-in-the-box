@@ -4,12 +4,10 @@ import type { Configuration, Connection, IDatabaseDriver, Options } from '@mikro
 
 export default function config(env: Record<string, string|undefined>): Configuration<IDatabaseDriver<Connection>> | Options<IDatabaseDriver<Connection>> {
 	return {
-		entities: ['./src/entities/**/*.ts'],
-		entitiesTs: ['./src/entities/**/*.ts'],
+		entities: ['./src/entities/*.ts', './src/entities/sitb/*.ts'],
+		entitiesTs: ['./src/entities/*.ts', './src/entities/sitb/*.ts'],
 		metadataProvider: TsMorphMetadataProvider,
-		migrations: {
-			emit: "js"
-		},
+		// TODO: this last part should be project-dependant
 		type: "mongo",
 		highlighter: new MongoHighlighter(),
 		clientUrl: env.MONGODB_URI
