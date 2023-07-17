@@ -1,8 +1,9 @@
-import { languages, type Language, type Role, roles } from '$sitb/constants';
-import { Entity, Enum, ManyToOne, Property, Unique } from '@mikro-orm/core';
+import { languages, type Language } from '$sitb/constants';
+import { Entity, Enum, ManyToOne, Property } from '@mikro-orm/core';
 import { BaseEntity } from '../base';
+import { TABLE_PREFIX }  from "$env/static/private";
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'user'})
 export class User extends BaseEntity {
 	@Property({type: ()=> String, unique: true})
 	email!: string;
@@ -20,7 +21,7 @@ export class User extends BaseEntity {
 	preferences!: any
 }
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'user-registration'})
 export class UserRegistration extends BaseEntity {
 	// /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/}
 	@Property({type: ()=> String, unique: true})
@@ -33,7 +34,7 @@ export class UserRegistration extends BaseEntity {
 	ts!: number;
 }
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'user-session'})
 export class UserSession extends BaseEntity {
 	@ManyToOne({entity: ()=> User})
 	user!: User

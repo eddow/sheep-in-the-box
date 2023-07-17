@@ -1,11 +1,12 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { I, dictionary, gotTree, setLanguage } from '$sitb/intl';
-	import { user } from '$sitb/user';
+	import { user, type IdCheck } from '$sitb/user';
 	import { ajax } from "$sitb/ajax";
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 	import { setGlobalUser } from '$sitb/user';
 	import { nodulesData } from '$sitb/nodules';
+	import Google from './signin/Google.svelte';
 
 	const dispatch = createEventDispatcher();
 
@@ -17,10 +18,10 @@
 		}
 	}
 
-	async function login({detail: {values, context: {reset}}}: CustomEvent) {
+	async function login({detail: {values, context}}: CustomEvent) {
 		let rv = await ajax.post({...values, roles: dictionary.roles}, '/user', [401]);
 		if(rv.ok) {
-			reset();
+			if(context) context.reset();
 			const login = await rv.json();
 			dispatch('set-user', login.user);
 			setGlobalUser(login.user);
@@ -61,6 +62,9 @@
 		<Tabs active="login" headerClass="two-items">
 			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>
+				<div class="logins">
+					<Google on:set-user={login} />
+				</div>
 				<Form on:submit={login}>
 					<Field required label name="email" validate="email">
 						<Input type="email" left-icon="at" name="email" />
@@ -85,6 +89,10 @@
 	<Button icon="user" popup={ppp} />
 {/if}
 <style lang="scss" global>
+.user-mgt .logins {
+	width: 100%;
+	text-align: right;
+}
 .right-aligned {
 	text-align: right;
 }

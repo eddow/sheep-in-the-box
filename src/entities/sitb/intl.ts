@@ -1,8 +1,9 @@
 import { languages, textTypes, type Language, type TextType } from '$sitb/constants';
 import { Cascade, Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from '../base';
+import { TABLE_PREFIX }  from "$env/static/private";
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'intl-key'})
 export class IntlKey extends BaseEntity {
 	@Property({type: ()=> String, unique: true})
 	key!: string;
@@ -17,7 +18,7 @@ export class IntlKey extends BaseEntity {
 	texts!: Collection<Intl>
 }
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'intl'})
 @Unique({properties: ['key', 'lng']})
 export class Intl extends BaseEntity {
 	@ManyToOne({entity: ()=> IntlKey, index: true})

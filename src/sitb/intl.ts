@@ -35,7 +35,7 @@ export async function setLanguage(lng: Language, change: boolean = true) {
 	if(!dics[lng]) dics[lng] = {hash: {}, roles: []};
 	dictionary = dics[lng];
 	if(change) {
-		const rv = await ajax.post({language: lng, roles: dics[lng]?.roles}, '/ego'),
+		const rv = await ajax.patch({language: lng, roles: dics[lng]?.roles}, '/user'),
 			content = await rv.json();
 		if(content) gotTree(content);
 		else updateTexts();

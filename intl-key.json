@@ -1,0 +1,820 @@
+[{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0439b"
+  },
+  "roles": "cms",
+  "key": "ttl.internal",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04370"
+  },
+  "roles": "",
+  "key": "form.prompt.isExactly",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433c"
+  },
+  "roles": "",
+  "key": "cmd.preview",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04353"
+  },
+  "roles": "",
+  "key": "fld.type",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435e"
+  },
+  "roles": "",
+  "key": "dropdown.noResults",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437c"
+  },
+  "roles": "",
+  "key": "form.prompt.different",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436c"
+  },
+  "roles": "",
+  "key": "form.prompt.integer",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04390"
+  },
+  "roles": "",
+  "key": "artcl.type.sys",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04379"
+  },
+  "roles": "",
+  "key": "form.prompt.maxLength",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0439c"
+  },
+  "roles": "cms",
+  "key": "ttl.external",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437a"
+  },
+  "roles": "",
+  "key": "form.prompt.size",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04388"
+  },
+  "roles": "",
+  "key": "err.already-name",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437f"
+  },
+  "roles": "",
+  "key": "form.prompt.exactCount",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04394"
+  },
+  "roles": "",
+  "key": "cmd.create",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04395"
+  },
+  "roles": "cms",
+  "key": "msg.article-not-found",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04398"
+  },
+  "roles": "cms",
+  "key": "cmd.import",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433d"
+  },
+  "roles": "",
+  "key": "err.login",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04376"
+  },
+  "roles": "",
+  "key": "form.prompt.doesntContainExactly",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438d"
+  },
+  "roles": "cms",
+  "key": "fld.artcl.type",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04397"
+  },
+  "roles": "",
+  "key": "select.all",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04339"
+  },
+  "roles": "lgdn",
+  "key": "cmd.logout",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04340"
+  },
+  "roles": "",
+  "key": "cmd.delete",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04359"
+  },
+  "roles": "",
+  "key": "ttl.config",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437b"
+  },
+  "roles": "",
+  "key": "form.prompt.match",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04380"
+  },
+  "roles": "",
+  "key": "form.prompt.maxCount",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437e"
+  },
+  "roles": "",
+  "key": "form.prompt.minCount",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433a"
+  },
+  "roles": "",
+  "key": "cmd.login",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434a"
+  },
+  "roles": "srv",
+  "key": "mail.chg-pw.topic",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04335"
+  },
+  "roles": "",
+  "key": "msg.mail-sent",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0439a"
+  },
+  "roles": "cms",
+  "key": "fld.variable",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438f"
+  },
+  "roles": "",
+  "key": "artcl.type.rcp",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04329"
+  },
+  "roles": "adm",
+  "key": "role.none",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04348"
+  },
+  "roles": "srv",
+  "key": "mail.chg-pw.txt",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434c"
+  },
+  "roles": "",
+  "key": "fld.pass",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04356"
+  },
+  "roles": "trad",
+  "key": "fld.trad.grp.unused",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04355"
+  },
+  "roles": "trad",
+  "key": "ttl.translations",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04361"
+  },
+  "roles": "",
+  "key": "form.text.unspecifiedRule",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04399"
+  },
+  "roles": "cms",
+  "key": "fld.artcl",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04333"
+  },
+  "roles": "",
+  "key": "ttl.pw.new",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432c"
+  },
+  "roles": "dev",
+  "key": "role.lgdn",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433e"
+  },
+  "roles": "",
+  "key": "err.internal",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434b"
+  },
+  "roles": "",
+  "key": "ttl.pw.set",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04364"
+  },
+  "roles": "",
+  "key": "form.prompt.range",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432b"
+  },
+  "roles": "adm",
+  "key": "role.adm",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04360"
+  },
+  "roles": "",
+  "key": "form.text.and",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04386"
+  },
+  "roles": "cms",
+  "key": "fld.title",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438a"
+  },
+  "roles": "",
+  "key": "ttl.images",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04331"
+  },
+  "roles": "adm",
+  "key": "fld.role",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432f"
+  },
+  "roles": "dev",
+  "key": "fld.key",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04346"
+  },
+  "roles": "srv",
+  "key": "mail.chg-pw.html",
+  "type": "html"
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435a"
+  },
+  "roles": "adm",
+  "key": "ttl.users",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435b"
+  },
+  "roles": "",
+  "key": "dropdown.addResult",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435c"
+  },
+  "roles": "",
+  "key": "dropdown.count",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04365"
+  },
+  "roles": "",
+  "key": "form.prompt.maxValue",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04367"
+  },
+  "roles": "",
+  "key": "form.prompt.empty",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436e"
+  },
+  "roles": "",
+  "key": "form.prompt.number",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04378"
+  },
+  "roles": "",
+  "key": "form.prompt.exactLength",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436a"
+  },
+  "roles": "",
+  "key": "form.prompt.url",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04384"
+  },
+  "roles": "",
+  "key": "cmd.cancel",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04328"
+  },
+  "roles": "",
+  "key": "cmd.register",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04375"
+  },
+  "roles": "",
+  "key": "form.prompt.doesntContain",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04368"
+  },
+  "roles": "",
+  "key": "form.prompt.checked",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04373"
+  },
+  "roles": "",
+  "key": "form.prompt.contain",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432d"
+  },
+  "roles": "adm",
+  "key": "role.trad",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04336"
+  },
+  "roles": "",
+  "key": "err.pw.wrong",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04352"
+  },
+  "roles": "",
+  "key": "cmd.pw",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432a"
+  },
+  "roles": "adm",
+  "key": "role.dev",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04363"
+  },
+  "roles": "",
+  "key": "form.text.leavingMessage",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04383"
+  },
+  "roles": "",
+  "key": "cmd.ok",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04382"
+  },
+  "roles": "",
+  "key": "cmd.or",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04389"
+  },
+  "roles": "",
+  "key": "cmd.rename",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438b"
+  },
+  "roles": "cms",
+  "key": "cmd.artcl.new",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433f"
+  },
+  "roles": "dev",
+  "key": "msg.delete-key",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434d"
+  },
+  "roles": "",
+  "key": "fld.pass.new",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04369"
+  },
+  "roles": "",
+  "key": "form.prompt.email",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436b"
+  },
+  "roles": "",
+  "key": "form.prompt.regExp",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04372"
+  },
+  "roles": "",
+  "key": "form.prompt.notExactly",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04393"
+  },
+  "roles": "",
+  "key": "fld.name",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04396"
+  },
+  "roles": "adm",
+  "key": "role.cms",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0432e"
+  },
+  "roles": "dev",
+  "key": "err.key.dup",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04332"
+  },
+  "roles": "",
+  "key": "cmd.pw.new",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04345"
+  },
+  "roles": "dev",
+  "key": "role.srv",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04343"
+  },
+  "roles": "",
+  "key": "ttl.preview",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438c"
+  },
+  "roles": "",
+  "key": "ttl.new.elipsis",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04342"
+  },
+  "roles": "dev",
+  "key": "fld.template",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04351"
+  },
+  "roles": "",
+  "key": "msg.pw.code",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04358"
+  },
+  "roles": "trad",
+  "key": "fld.trad.grp.work",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04357"
+  },
+  "roles": "trad",
+  "key": "fld.trad.grp.ref",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435f"
+  },
+  "roles": "",
+  "key": "table.empty",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04362"
+  },
+  "roles": "",
+  "key": "form.text.unspecifiedField",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04377"
+  },
+  "roles": "",
+  "key": "form.prompt.minLength",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04392"
+  },
+  "roles": "",
+  "key": "artcl.type.ctlg",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0438e"
+  },
+  "roles": "",
+  "key": "artcl.type.blog",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0433b"
+  },
+  "roles": "",
+  "key": "cmd.save",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04347"
+  },
+  "roles": "srv",
+  "key": "mail.register.txt",
+  "type": "tpl"
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0435d"
+  },
+  "roles": "",
+  "key": "dropdown.maxSelections",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0437d"
+  },
+  "roles": "",
+  "key": "form.prompt.creditCard",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04374"
+  },
+  "roles": "",
+  "key": "form.prompt.containExactly",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04391"
+  },
+  "roles": "",
+  "key": "artcl.type.pres",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04338"
+  },
+  "roles": "lgdn",
+  "key": "cmd.configure",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436d"
+  },
+  "roles": "",
+  "key": "form.prompt.decimal",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0436f"
+  },
+  "roles": "",
+  "key": "form.prompt.is",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04381"
+  },
+  "roles": "",
+  "key": "form.prompt.addErrors",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04385"
+  },
+  "roles": "",
+  "key": "cmd.close",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04330"
+  },
+  "roles": "dev",
+  "key": "fld.text",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04334"
+  },
+  "roles": "",
+  "key": "err.pw.conf",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04349"
+  },
+  "roles": "srv",
+  "key": "mail.register.topic",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04350"
+  },
+  "roles": "",
+  "key": "err.pw.code",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04354"
+  },
+  "roles": "",
+  "key": "fld.email",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434f"
+  },
+  "roles": "",
+  "key": "fld.pass.cnf",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04344"
+  },
+  "roles": "srv",
+  "key": "mail.register.html",
+  "type": "html"
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04366"
+  },
+  "roles": "",
+  "key": "form.prompt.minValue",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04371"
+  },
+  "roles": "",
+  "key": "form.prompt.not",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04387"
+  },
+  "roles": "",
+  "key": "ttl.content.edit",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04337"
+  },
+  "roles": "",
+  "key": "msg.pw.changed",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a04341"
+  },
+  "roles": "",
+  "key": "ttl.text-keys",
+  "type": ""
+},{
+  "_id": {
+    "$oid": "644d191e16d1a42036a0434e"
+  },
+  "roles": "",
+  "key": "fld.pass.cur",
+  "type": ""
+}]

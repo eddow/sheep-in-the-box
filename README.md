@@ -27,3 +27,4 @@ Copy the `src/params` folder
 - DB garbage collection (sessions, pw recovery, ...)
 - row-model -> property (not store in context) ?
 - on:beforeUnload generic management - listenable ?
+- ImageManager.svelte : `{imageEndPoint}` in template is not updated when `imageEndPoint` changes

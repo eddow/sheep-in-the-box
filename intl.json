@@ -1,0 +1,1495 @@
+[{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04359"
+  },
+  "lng": "en",
+  "text": "Configuration"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434d"
+  },
+  "lng": "en",
+  "text": "New passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ab"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04333"
+  },
+  "lng": "en",
+  "text": "Create passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432f"
+  },
+  "lng": "en",
+  "text": "Key"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0439e"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04331"
+  },
+  "lng": "en",
+  "text": "Role"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ad"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433e"
+  },
+  "lng": "en",
+  "text": "Internal error"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ea"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04372"
+  },
+  "lng": "en",
+  "text": "{name} cannot be set to exactly \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437c"
+  },
+  "lng": "en",
+  "text": "{name} must have a different value than {ruleValue} field"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04425"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04397"
+  },
+  "lng": "en",
+  "text": "All"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04429"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0439b"
+  },
+  "lng": "en",
+  "text": "Internal"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043aa"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04329"
+  },
+  "lng": "fr",
+  "text": "Publique"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04352"
+  },
+  "lng": "en",
+  "text": "Set passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435e"
+  },
+  "lng": "en",
+  "text": "No results found."
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04369"
+  },
+  "lng": "en",
+  "text": "{name} must be a valid e-mail"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04378"
+  },
+  "lng": "en",
+  "text": "{name} must be exactly {ruleValue} characters"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ff"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433a"
+  },
+  "lng": "fr",
+  "text": "Connexion"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441f"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04391"
+  },
+  "lng": "en",
+  "text": "Presentation"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04426"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04398"
+  },
+  "lng": "en",
+  "text": "Import"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04432"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438a"
+  },
+  "lng": "en",
+  "text": "Images"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434b"
+  },
+  "lng": "en",
+  "text": "Set the passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04354"
+  },
+  "lng": "fr",
+  "text": "E-Mail"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043cb"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04344"
+  },
+  "lng": "en",
+  "text": "<p>Hello,</p><p>\n\nPlease register <a href=\"{code-url}\" target=\"_blank\">here</a>.</p><p>\n\nCiao!</p>"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043cf"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04337"
+  },
+  "lng": "en",
+  "text": "Passphrase changed"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436e"
+  },
+  "lng": "en",
+  "text": "{name} must be set to a number"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437b"
+  },
+  "lng": "en",
+  "text": "{name} must match {ruleValue} field"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04407"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04341"
+  },
+  "lng": "en",
+  "text": "Text entries"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440f"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435e"
+  },
+  "lng": "fr",
+  "text": "Aucun résultat."
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04411"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04336"
+  },
+  "lng": "fr",
+  "text": "Mauvais mot de passe"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0443d"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04344"
+  },
+  "lng": "ro",
+  "text": "Clic [aici]({code-ulr})"
+},{
+  "_id": {
+    "$oid": "644d70948804369dcf5e9e48"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04328"
+  },
+  "lng": "fr",
+  "text": "S'enregistrer"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432b"
+  },
+  "lng": "en",
+  "text": "Administrator"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433a"
+  },
+  "lng": "en",
+  "text": "Log in"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436d"
+  },
+  "lng": "en",
+  "text": "{name} must be a decimal number"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04427"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04399"
+  },
+  "lng": "en",
+  "text": "Article"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0443b"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04348"
+  },
+  "lng": "ro",
+  "text": "aici: {code-url}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04433"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04346"
+  },
+  "lng": "fr",
+  "text": "<p>Bonjour,</p><p>\n\nVeuillez changer votre mot de passe <a href=\"{code-url}\" target=\"_blank\">ici</a>.</p><p>\n\nBisous!</p>"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ba"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433c"
+  },
+  "lng": "en",
+  "text": "Preview"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04346"
+  },
+  "lng": "en",
+  "text": "<p>Hello,</p><p>\n\nPlease change your passphrase <a href=\"{code-url}\" target=\"_blank\">here</a>.</p><p>\n\nCiao!</p>"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04368"
+  },
+  "lng": "en",
+  "text": "{name} must be checked"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436b"
+  },
+  "lng": "en",
+  "text": "{name} is not formatted correctly"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04416"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438a"
+  },
+  "lng": "fr",
+  "text": "Images"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441d"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438f"
+  },
+  "lng": "en",
+  "text": "Receipy"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441c"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438e"
+  },
+  "lng": "en",
+  "text": "Blog"
+},{
+  "_id": {
+    "$oid": "644d70068804369dcf5e9dc2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04384"
+  },
+  "lng": "fr",
+  "text": "Annuler"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04332"
+  },
+  "lng": "en",
+  "text": "Set new passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04356"
+  },
+  "lng": "en",
+  "text": "Unused"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04331"
+  },
+  "lng": "fr",
+  "text": "Rôle"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04355"
+  },
+  "lng": "fr",
+  "text": "Traductions"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043eb"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04373"
+  },
+  "lng": "en",
+  "text": "{name} must contain \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437f"
+  },
+  "lng": "en",
+  "text": "{name} must have exactly {ruleValue} choices"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043fb"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04383"
+  },
+  "lng": "en",
+  "text": "Ok"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04405"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04351"
+  },
+  "lng": "en",
+  "text": "New passphrase set"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04403"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432a"
+  },
+  "lng": "fr",
+  "text": "Dévelopeur"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04422"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04394"
+  },
+  "lng": "en",
+  "text": "Create"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04436"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04389"
+  },
+  "lng": "en",
+  "text": "Rename"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433b"
+  },
+  "lng": "fr",
+  "text": "Sauver"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435f"
+  },
+  "lng": "en",
+  "text": "No data to show"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436f"
+  },
+  "lng": "en",
+  "text": "{name} must be \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04370"
+  },
+  "lng": "en",
+  "text": "{name} must be exactly \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04401"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434c"
+  },
+  "lng": "fr",
+  "text": "Mot de passe"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04418"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04360"
+  },
+  "lng": "fr",
+  "text": "et"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04419"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438b"
+  },
+  "lng": "en",
+  "text": "New article"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441e"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04390"
+  },
+  "lng": "en",
+  "text": "System"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043bd"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04350"
+  },
+  "lng": "en",
+  "text": "Code unexistent"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432a"
+  },
+  "lng": "en",
+  "text": "Developer"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432d"
+  },
+  "lng": "en",
+  "text": "Translator"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04347"
+  },
+  "lng": "en",
+  "text": "Hello,\n\nPlease register here: {code-url}\n\nCiao!"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04348"
+  },
+  "lng": "en",
+  "text": "Hello,\n\nPlease change your passphrase here: {code-url}\n\nCiao!"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043fa"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04382"
+  },
+  "lng": "en",
+  "text": "or"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04413"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434f"
+  },
+  "lng": "fr",
+  "text": "Confirmation"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441a"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438c"
+  },
+  "lng": "en",
+  "text": "New ..."
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04424"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04396"
+  },
+  "lng": "en",
+  "text": "Content manager"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442d"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04382"
+  },
+  "lng": "fr",
+  "text": "ou"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04435"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04358"
+  },
+  "lng": "fr",
+  "text": "Travail"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ae"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04342"
+  },
+  "lng": "en",
+  "text": "Tpl"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043be"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04343"
+  },
+  "lng": "en",
+  "text": "Preview"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0439f"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432e"
+  },
+  "lng": "en",
+  "text": "The key already exists"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043bc"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434e"
+  },
+  "lng": "en",
+  "text": "Current passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435a"
+  },
+  "lng": "en",
+  "text": "Users"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043cd"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433f"
+  },
+  "lng": "en",
+  "text": "This will remove all the information and all the translations for this key."
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04345"
+  },
+  "lng": "en",
+  "text": "Server-side"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434c"
+  },
+  "lng": "en",
+  "text": "Passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043da"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04362"
+  },
+  "lng": "en",
+  "text": "This field"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043dd"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04365"
+  },
+  "lng": "en",
+  "text": "{name} must have a maximum value of {ruleValue}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04379"
+  },
+  "lng": "en",
+  "text": "{name} cannot be longer than {ruleValue} characters"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043fd"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04344"
+  },
+  "lng": "fr",
+  "text": "<p>Bonjour,</p><p>\n\nEnregistrez vous <a href=\"{code-url}\" target=\"_blank\">ici</a>.</p><p>\n\nBisous!</p>"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440a"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433d"
+  },
+  "lng": "fr",
+  "text": "Mauvais login"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04409"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04347"
+  },
+  "lng": "fr",
+  "text": "Bonjour,\n\nEnregistrez vous ici: {code-url}.\n\nBisous!"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442e"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04384"
+  },
+  "lng": "en",
+  "text": "Cancel"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04437"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04346"
+  },
+  "lng": "ro",
+  "text": "[aici]({code-ulr})"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a0"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04329"
+  },
+  "lng": "en",
+  "text": "Public"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043af"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433d"
+  },
+  "lng": "en",
+  "text": "Wrong login"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04353"
+  },
+  "lng": "en",
+  "text": "Type"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043bb"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04329"
+  },
+  "lng": "ro",
+  "text": "Public"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04338"
+  },
+  "lng": "fr",
+  "text": "Configurer"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436c"
+  },
+  "lng": "en",
+  "text": "{name} must be an integer"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043df"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04367"
+  },
+  "lng": "en",
+  "text": "{name} must have a value"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0436a"
+  },
+  "lng": "en",
+  "text": "{name} must be a valid url"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043e9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04371"
+  },
+  "lng": "en",
+  "text": "{name} cannot be set to \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ed"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04375"
+  },
+  "lng": "en",
+  "text": "{name} cannot contain \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ef"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04377"
+  },
+  "lng": "en",
+  "text": "{name} must be at least {ruleValue} characters"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04408"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04339"
+  },
+  "lng": "en",
+  "text": "Log out"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04428"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0439a"
+  },
+  "lng": "en",
+  "text": "Variable"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04354"
+  },
+  "lng": "en",
+  "text": "E-Mail"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043de"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04366"
+  },
+  "lng": "en",
+  "text": "{name} must have a minimum value of {ruleValue}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04400"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04355"
+  },
+  "lng": "en",
+  "text": "Translations"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04412"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04386"
+  },
+  "lng": "fr",
+  "text": "Titre"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04415"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04342"
+  },
+  "lng": "fr",
+  "text": "Patron"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442a"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0439c"
+  },
+  "lng": "en",
+  "text": "External"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442b"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04349"
+  },
+  "lng": "fr",
+  "text": "Enregistrement à SitB"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442c"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04385"
+  },
+  "lng": "en",
+  "text": "Close"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04431"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04388"
+  },
+  "lng": "en",
+  "text": "The name already exists"
+},{
+  "_id": {
+    "$oid": "644d1a7616d1a42036a0443e"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435c"
+  },
+  "lng": "en",
+  "text": "{count} selected"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04328"
+  },
+  "lng": "en",
+  "text": "Register"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04335"
+  },
+  "lng": "en",
+  "text": "An email has been sent to {email}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437a"
+  },
+  "lng": "en",
+  "text": "{name} must have a length between {min} and {max} characters"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043fc"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433e"
+  },
+  "lng": "fr",
+  "text": "Erreur interne"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04402"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432e"
+  },
+  "lng": "fr",
+  "text": "La clef existe déjà"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440d"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435d"
+  },
+  "lng": "en",
+  "text": "Max {maxCount} selections"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04410"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04337"
+  },
+  "lng": "fr",
+  "text": "Mot de passe changé"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04420"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04392"
+  },
+  "lng": "en",
+  "text": "Catalog"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04421"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04393"
+  },
+  "lng": "en",
+  "text": "Name"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04423"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04395"
+  },
+  "lng": "en",
+  "text": "Article not found"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04334"
+  },
+  "lng": "en",
+  "text": "Wrong confirmation"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043a1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432c"
+  },
+  "lng": "en",
+  "text": "Registered user"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ac"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04330"
+  },
+  "lng": "en",
+  "text": "Text"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b2"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0433b"
+  },
+  "lng": "en",
+  "text": "Save"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043cc"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432b"
+  },
+  "lng": "fr",
+  "text": "Administrateur"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ec"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04374"
+  },
+  "lng": "en",
+  "text": "{name} must contain exactly \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04404"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04353"
+  },
+  "lng": "fr",
+  "text": "Type"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440c"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04356"
+  },
+  "lng": "fr",
+  "text": "Inutilisé"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0441b"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0438d"
+  },
+  "lng": "en",
+  "text": "Type d'article"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04430"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04387"
+  },
+  "lng": "en",
+  "text": "Content editor"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c3"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04336"
+  },
+  "lng": "en",
+  "text": "Wrong passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b1"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04340"
+  },
+  "lng": "en",
+  "text": "Delete"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04349"
+  },
+  "lng": "en",
+  "text": "Registering to SitB"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043bf"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434f"
+  },
+  "lng": "en",
+  "text": "Passphrase confirmation"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ca"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434a"
+  },
+  "lng": "en",
+  "text": "Changing your SitB passphrase"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ce"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04338"
+  },
+  "lng": "en",
+  "text": "Configure"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043db"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04363"
+  },
+  "lng": "en",
+  "text": "There are unsaved changes on this page which will be discarded if you continue."
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f5"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437d"
+  },
+  "lng": "en",
+  "text": "{name} must be a valid credit card number"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0442f"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04386"
+  },
+  "lng": "en",
+  "text": "Title"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0443c"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04350"
+  },
+  "lng": "fr",
+  "text": "Code inexistant"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043b9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04357"
+  },
+  "lng": "en",
+  "text": "Reference"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043c7"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04335"
+  },
+  "lng": "fr",
+  "text": "Un email a été envoyé à {email}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d4"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04358"
+  },
+  "lng": "en",
+  "text": "Work"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04360"
+  },
+  "lng": "en",
+  "text": "and"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043dc"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04364"
+  },
+  "lng": "en",
+  "text": "{name} must be in a range from {min} to {max}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f6"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0437e"
+  },
+  "lng": "en",
+  "text": "{name} must have at least {ruleValue} choices"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f8"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04380"
+  },
+  "lng": "en",
+  "text": "{name} must have {ruleValue} or less choices"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043f9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04381"
+  },
+  "lng": "en",
+  "text": "{name}: {error}"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043fe"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434a"
+  },
+  "lng": "fr",
+  "text": "Changer votre mot de passe"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04406"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434d"
+  },
+  "lng": "fr",
+  "text": "Nouveau mot de passe"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440b"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432f"
+  },
+  "lng": "fr",
+  "text": "Clef"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0440e"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04345"
+  },
+  "lng": "fr",
+  "text": "Côté serveur"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04414"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04388"
+  },
+  "lng": "fr",
+  "text": "Le nom existe déjà"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04417"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04334"
+  },
+  "lng": "fr",
+  "text": "Mauvaise confirmation"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04434"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04348"
+  },
+  "lng": "fr",
+  "text": "Bonjour,\n\nVeuillez changer votre mot de passe ici: {code-ulr}\n\nBisous!"
+},{
+  "_id": {
+    "$oid": "644d3da38804369dcf5e7968"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04333"
+  },
+  "lng": "fr",
+  "text": "Création de mot de passe"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043d9"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04361"
+  },
+  "lng": "en",
+  "text": "Please enter a valid value"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a043ee"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04376"
+  },
+  "lng": "en",
+  "text": "{name} cannot contain exactly \"{ruleValue}\""
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a0443a"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0432d"
+  },
+  "lng": "fr",
+  "text": "Traducteur"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04439"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04357"
+  },
+  "lng": "fr",
+  "text": "Référence"
+},{
+  "_id": {
+    "$oid": "644d1a7516d1a42036a04438"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a04347"
+  },
+  "lng": "ro",
+  "text": "aici: {code-url}"
+},{
+  "_id": {
+    "$oid": "644d1a7616d1a42036a0443f"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0435b"
+  },
+  "lng": "en",
+  "text": "Add <b>{term}</b>"
+},{
+  "_id": {
+    "$oid": "64a54a2444fc0f15f23e0b8a"
+  },
+  "key": {
+    "$oid": "644d191e16d1a42036a0434b"
+  },
+  "lng": "fr",
+  "text": "Établir le mot de passe"
+}]

@@ -8,8 +8,9 @@ import { parmed } from "$sitb/intl";
 import { getText } from "./intl";
 import { stringCookies } from "$sitb/cookies";
 import { serialize } from "@mikro-orm/core";
-import { analyseRoles } from "$sitb/user";
+import { analyseRoles, type IdCheck } from "$sitb/user";
 import em from "./db";
+import { googleLogin } from "$sitb/components/root/signin/Google.server";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? +LOGGEDIN_TIMEOUT : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? +REGISTRATION_TIMEOUT : 1*60*60)*1000
@@ -47,9 +48,17 @@ export async function authed(event: RequestEvent<Partial<Record<string, string>>
 	return event.locals.user = serialize(rv.user);
 }
 
-export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, email: string, password: string) {
+async function extLogin(email: string|undefined, language: Language) {
+	return (email||null) && (
+		(await users.findOne({email})) ||
+		await users.upsert({email, language, roles: 'new'})
+	);
+}
+
+export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, {email, pass, gglToken}: IdCheck) {
 	const authKey = md5(crypto.randomUUID());
-	const user = await users.findOne({email, password: md5(password)});
+	let user = email && pass ? await users.findOne({email, password: md5(pass)}) :
+		await extLogin(gglToken ? await googleLogin(gglToken) : undefined, event.locals.language);
 	if(!user) return null;
 	await sessions.upsert({user: user._id, authKey, ts: Date.now()});
 	stringCookies.session = authKey;

@@ -16,7 +16,7 @@
 </script>
 
 <div class="ui main container">
-	<h3 class="ui top attached segment">{$I('ttl.pw.new')}</h3>
+	<h3 class="ui top attached segment">{$I('ttl.pw.set')}</h3>
 	<Form on:submit={submit} class="two column doubling stackable grid attached vertical bottom aligned basic segment">
 		<Col><Field label required name="passCur"><Input type="password" /></Field></Col>
 		<Col><Field label required name="passNew" validate="different[passCur]"><Input type="password" /></Field></Col>

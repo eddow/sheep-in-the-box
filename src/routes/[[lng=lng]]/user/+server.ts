@@ -1,13 +1,14 @@
 import { json } from '@sveltejs/kit';
-import { login, logout, register } from "$sitb/server/user";
+import { login, logout, patchUser, register } from "$sitb/server/user";
 import { flat, tree } from '$sitb/server/intl';
 import type { RequestEvent } from './$types';
 import { nodulesData } from '$sitb/server/root-loader';
+import { setCookie } from '$sitb/cookies';
 
 export async function POST(event: RequestEvent) {	//login
-	const {email, pass, roles} = await event.request.json();
+	const {roles, email, pass, gglToken} = await event.request.json();
 	// roles is the list of roles for whom the client already has the dictionary
-	let user = await login(event, email, pass);
+	let user = await login(event, {email, pass, gglToken});
 	if(!user) {
 		logout(event);
 		return json(event.locals.language, {status: 401});
@@ -22,4 +23,18 @@ export async function POST(event: RequestEvent) {	//login
 export async function PUT(event: RequestEvent) {	//register
 	const {email} = await event.request.json();
 	return json(register(event, email));
+}
+
+export async function PATCH (event: RequestEvent) {	// set language
+	const {language, roles} = await event.request.json();
+	event.locals.language = language;
+	const user = event.locals.user,
+		toSendRoles = (<string>user?.roles)?.split(' ').concat(['']).filter((r: string)=> !roles?.includes(r)) || [''], rv: any = {};
+	if(user) {
+		patchUser(user.email, {language});
+	} else
+		setCookie('language', language);
+	if(toSendRoles.length)
+		return json({roles: toSendRoles, tree: tree(await flat(language, toSendRoles))});
+	return json(false)
 }

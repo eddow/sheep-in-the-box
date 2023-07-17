@@ -1,8 +1,9 @@
 import { type Language, type ArticleType, articleTypes } from '$sitb/constants';
 import { Cascade, Collection, Entity, Enum, Index, ManyToOne, OneToMany, Property, Unique } from '@mikro-orm/core';
 import { BaseEntity } from '../base';
+import { TABLE_PREFIX }  from "$env/static/private";
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'article'})
 export class Article extends BaseEntity {
 	@Property({unique: true, type: ()=> String})
 	slug!: string
@@ -16,7 +17,7 @@ export class Article extends BaseEntity {
 	images!: Collection<ArticleImage>
 }
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'article-text'})
 @Unique({properties: ['article', 'lng']})
 export class ArticleText extends BaseEntity {
 	@ManyToOne({entity: ()=> Article, index: true})
@@ -35,7 +36,7 @@ export class ArticleText extends BaseEntity {
 	ts!: number;
 }
 
-@Entity()
+@Entity({tableName: TABLE_PREFIX+'article-image'})
 @Unique({properties: ['article', 'name']})
 export class ArticleImage extends BaseEntity {
 	@ManyToOne({entity: ()=> Article, index: true})

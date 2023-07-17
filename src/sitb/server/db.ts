@@ -13,7 +13,7 @@ const orm = await MikroORM.init({
 	...config({MONGODB_URI}),
 	findOneOrFailHandler(entityName: string, where: any) {
 		throw error(404, dev ? `Entity ${entityName} not found for query ${JSON.stringify(where)}` : 'Not found');
-	},/*
+	},
 	dynamicImportProvider(id: string) {
 		let fn = /\/entities\/(.*)\.ts$/.exec(id);
 		if(!fn) throw 'Dynamically import entities';
@@ -23,7 +23,7 @@ const orm = await MikroORM.init({
 		if(sitbed.length === 2 && sitbed[0] === 'sitb')
 			return import(`../../entities/sitb/${sitbed[1]}.ts`);
 		throw Error(`Unreachable entity: ${fn[1]}`);
-	}*/
+	}
 })
 // Create the new migrations, then apply them
 /*const migrator = orm.getMigrator()

@@ -7,6 +7,12 @@ import { setPrefOperations, Side } from "./preferences";
 import globic from "./globic";
 import { frwrdReadable } from "./stores/frwrdStore";
 
+export interface IdCheck {
+	email?: string;
+	pass?: string;
+	gglToken?: string;
+}
+
 export function* allGroups(rex: RegExp, hay: string, grpIndex: number) {
 	let m = rex.exec(hay);
 	while(m) {

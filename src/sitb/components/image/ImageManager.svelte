@@ -137,6 +137,7 @@
 		</div>
 	{/each}
 </div>
+{imageEndPoint}
 <ModalForm large model={editedPicture} save={save}>
 	<Field name="name" validate="regExp[/^[\w-]*$/]">
 		<Input bind:value={newName}>
@@ -152,9 +153,7 @@
 		</Input>
 	</Field>
 	<div class="imgr-image-preview">
-		{#if editedPicture}
-			<img src={imageEndPoint} alt={editedPicture?.name}>
-		{/if}
+		<img src={imageEndPoint} alt={editedPicture?.name}>
 	</div>
 </ModalForm>
 <style lang="scss" global>
