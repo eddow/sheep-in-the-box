@@ -10,7 +10,7 @@ import { frwrdReadable } from "./stores/frwrdStore";
 export interface IdCheck {
 	email?: string;
 	pass?: string;
-	gglToken?: string;
+	provider?: string;
 }
 
 export function* allGroups(rex: RegExp, hay: string, grpIndex: number) {

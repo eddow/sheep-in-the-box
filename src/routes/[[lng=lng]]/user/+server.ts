@@ -6,14 +6,14 @@ import { nodulesData } from '$sitb/server/root-loader';
 import { setCookie } from '$sitb/cookies';
 
 export async function POST(event: RequestEvent) {	//login
-	const {roles, email, pass, gglToken} = await event.request.json();
+	const req = await event.request.json();
 	// roles is the list of roles for whom the client already has the dictionary
-	let user = await login(event, {email, pass, gglToken});
+	let user = await login(event, req);
 	if(!user) {
 		logout(event);
 		return json(event.locals.language, {status: 401});
 	}
-	const toSendRoles = (user.roles?.split('|')||[]).concat(['']).filter(r=> !roles.includes(r)), rv: any = {user};
+	const toSendRoles = (user.roles?.split('|')||[]).concat(['']).filter(r=> !req.roles.includes(r)), rv: any = {user};
 	if(toSendRoles.length)
 		rv.dictionary = {roles: toSendRoles, tree: tree(await flat(user.language, toSendRoles))}
 	rv.nodules = await nodulesData(event);

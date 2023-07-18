@@ -10,7 +10,9 @@ import { stringCookies } from "$sitb/cookies";
 import { serialize } from "@mikro-orm/core";
 import { analyseRoles, type IdCheck } from "$sitb/user";
 import em from "./db";
-import { googleLogin } from "$sitb/components/root/signin/Google.server";
+import { socialsLogin } from "svelte-social/server";
+import { clientIds } from "$lib/auth/ids";
+import { clientSecrets } from "$lib/auth/secrets.server";
 
 const liTimeout = (LOGGEDIN_TIMEOUT ? +LOGGEDIN_TIMEOUT : 5*60) * 1000,
 	regTimeout = (REGISTRATION_TIMEOUT ? +REGISTRATION_TIMEOUT : 1*60*60)*1000
@@ -55,10 +57,12 @@ async function extLogin(email: string|undefined, language: Language) {
 	);
 }
 
-export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, {email, pass, gglToken}: IdCheck) {
-	const authKey = md5(crypto.randomUUID());
+export async function login(event: RequestEvent<Partial<Record<string, string>>, string | null>, detail: IdCheck) {
+	const authKey = md5(crypto.randomUUID()),
+		{email, pass} = detail;
+	debugger;
 	let user = email && pass ? await users.findOne({email, password: md5(pass)}) :
-		await extLogin(gglToken ? await googleLogin(gglToken) : undefined, event.locals.language);
+		await extLogin((await socialsLogin(detail, clientIds, clientSecrets))?.email, event.locals.language);
 	if(!user) return null;
 	await sessions.upsert({user: user._id, authKey, ts: Date.now()});
 	stringCookies.session = authKey;

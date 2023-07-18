@@ -6,7 +6,8 @@
 	import { Input, Form, Field, Tabs, Page, Button, Header, Popup, Dropdown, LinkItem, Menu, toast, type PopupSettings } from "svemantic";
 	import { setGlobalUser } from '$sitb/user';
 	import { nodulesData } from '$sitb/nodules';
-	import Google from './signin/Google.svelte';
+	import { Socials } from "svelte-social/client";
+	import { clientIds } from '$lib/auth/ids';
 
 	const dispatch = createEventDispatcher();
 
@@ -18,10 +19,10 @@
 		}
 	}
 
-	async function login({detail: {values, context}}: CustomEvent) {
-		let rv = await ajax.post({...values, roles: dictionary.roles}, '/user', [401]);
+	async function login({detail}: CustomEvent) {
+		let rv = await ajax.post({...(detail.values||detail), roles: dictionary.roles}, '/user', [401]);
 		if(rv.ok) {
-			if(context) context.reset();
+			if(detail.context) detail.context.reset();
 			const login = await rv.json();
 			dispatch('set-user', login.user);
 			setGlobalUser(login.user);
@@ -63,7 +64,7 @@
 			<Page key="login">
 				<Header slot="header">{$I('cmd.login')}</Header>
 				<div class="logins">
-					<Google on:set-user={login} />
+					<Socials inline ids={clientIds} on:token={login} />
 				</div>
 				<Form on:submit={login}>
 					<Field required label name="email" validate="email">

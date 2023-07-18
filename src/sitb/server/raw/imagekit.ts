@@ -1,8 +1,8 @@
-import { error } from "@sveltejs/kit";
+import { IMAGEKIT_PATH } from "$env/static/private";
 import ImageKit from "imagekit";
 import type { ImageKitOptions } from 'imagekit/dist/libs/interfaces';
 
-const path = '/sitb/';
+const path = IMAGEKIT_PATH;
 export default function ikAccess(options: ImageKitOptions) : raw.Access {
 	const imagekit = new ImageKit(options);
 	return {

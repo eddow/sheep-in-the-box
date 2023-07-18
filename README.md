@@ -7,17 +7,21 @@ Nothing to see here, I use this repo for sharing w/ pals and "saving" my work.
 Create a new sveltekit project
 link in the files:
 ```
-./src/routes/[[lng=lng]/(sitb) -> /sheep-in-the-box/src/routes/[[lng=lng]]
+./src/routes/[[lng=lng]/(sitb) -> /sheep-in-the-box/src/routes/[[lng=lng]]/(sitb)
 ./src/sitb -> /sheep-in-the-box/src/sitb
 
 ```
 The `sitb` folder must be referenced as `$sitb` in `svelte.config.js` *and* be a dirrect sibbling of `nodules` (be in `/src/`)
 Copy the `src/params` folder
 
-### `./src/routes/+layout`
+### `./src/routes/[[lng=lng]]/+layout`
 - `.ts` should return data from `import loadSideR from "$sitb/root-loader";`
 - `.server.ts` should return data from `import locals2data from "$sitb/server/root-loader";`
 - `.svelte` can include the language/user menu button from `import Menu from '$sitb/components/root/Menu.svelte';`
+
+### `svelte-social`
+
+If using `svelte-social` (Login with google/facebook/...), copy the `src/routes/auth` folder - as well as the `src/lib/auth` while configuring your keys
 
 ### `./src
 # TODO
